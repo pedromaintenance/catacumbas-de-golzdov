@@ -1,5 +1,5 @@
 /* Catacumbas de Golzdov — PWA 1.0.0 */
-const CACHE = 'golzdov-offline-v1';
+const CACHE = 'golzdov-offline-v2';
 const PRECACHE = [
   './', './index.html', './manifest.webmanifest',
   './icons/icon-192.png', './icons/icon-512.png'
