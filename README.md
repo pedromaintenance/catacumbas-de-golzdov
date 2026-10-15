@@ -1,6 +1,25 @@
-# Catacumbas de Golzdov — aplicativo instalável offline (PWA)
+# Catacumbas de Golzdov — roguelike offline (PWA)
 
 Esta versão é um PWA de verdade: instala a partir do GitHub Pages e funciona depois **sem conexão**, inclusive depois de fechar e reabrir o aplicativo.
+
+## Evolução 2.0 (em desenvolvimento)
+
+A evolução está documentada e acompanhada em:
+
+- [Documento de Game Design 2.0](docs/GAME_DESIGN_2.0.md) — visão, classes, relíquias, facções, inimigos, combate, modo de jogo e arquitetura.
+- [Roadmap 2.0](docs/ROADMAP_2.0.md) — etapas, checklists, critérios de aceite e registro do que foi realizado.
+
+A versão 1.1 introduz migração de saves e geração com seed persistida sem alterar as regras essenciais. O armazenamento local mantém as chaves legadas para que o progresso não suma após atualizar o PWA.
+
+### Verificações de desenvolvimento
+
+Execute, com Node.js 22 ou superior:
+
+```sh
+node --test tests/smoke.test.cjs
+```
+
+A suíte verifica sintaxe, coerência do cache offline, migração do formato v1, reprodução por seed e conectividade de 1.000 estratos procedurais. O GitHub Actions executa a suíte automaticamente em push e pull requests.
 
 ## Publicação no GitHub Pages
 
@@ -40,4 +59,4 @@ Esta versão é um PWA de verdade: instala a partir do GitHub Pages e funciona d
 
 ## Atualizações futuras
 
-Para publicar nova versão do jogo, atualize o `index.html`, altere `golzdov-offline-v1` nos arquivos `index.html` e `sw.js` para um novo número de versão (por exemplo `golzdov-offline-v2`) e publique. O aplicativo atualizará seu cache quando voltar à internet. O salvamento em `localStorage` é preservado enquanto o armazenamento do site não for apagado.
+Para publicar uma nova versão distribuída, atualize os arquivos do jogo e **aumente a versão da constante `CACHE` em `sw.js`** (por exemplo, `golzdov-offline-v4`). A verificação de prontidão procura automaticamente os recursos precacheados e não precisa repetir o nome do cache no `index.html`. O jogo deverá atualizar-se quando o service worker novo for instalado e ativado; feche e reabra o PWA após a atualização, se necessário. As chaves legadas do `localStorage` continuam sendo usadas; o estado recebe `schemaVersion` e migração para preservar saves anteriores.
