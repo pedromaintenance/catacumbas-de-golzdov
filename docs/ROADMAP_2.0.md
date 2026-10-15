@@ -8,23 +8,32 @@ Atualizado em: 14/10/2026. Planejamento detalhado: [GAME_DESIGN_2.0.md](GAME_DES
 
 - 14/10/2026: diagnóstico técnico no repositório (5 estratos, 3 classes, 10 relíquias, 7 inimigos comuns + chefe, 2 finais); priorização de builds e diferenças qualitativas entre partidas.
 - 14/10/2026: documento mestre de design criado.
+- 14/10/2026: fundações implementadas na branch de trabalho: versão 2 do formato de save, migração dos saves v1, seed persistida, RNG de simulação, cache offline v3, correção da checagem de prontidão e documentação no README.
+- 14/10/2026: teste de execução instrumentada aprovado (nova corrida, seed repetida, migração v1, salvar/retomar); 1.000 mapas simulados, 200 por estrato, sem perda de conectividade, inimigos ou itens inacessíveis.
+- 14/10/2026: suíte persistente em tests/smoke.test.cjs e workflow de CI adicionados; **a execução real de CI no GitHub ainda precisa ser conferida**.
 - 14/10/2026: implementação das fundações técnicas iniciada na branch de trabalho.
 
 ## 1.1 — Fundações (em andamento)
 
 - [x] Documentar arquitetura atual, lacunas de replay e escopo.
 - [x] Definir critérios de aceitação para as releases.
-- [ ] Corrigir divergência no nome de cache entre worker e interface offline.
-- [ ] Publicar nova versão de cache para que usuários instalados recebam os arquivos corrigidos.
-- [ ] Preservar chaves locais de save e metaprogressão existentes.
-- [ ] Introduzir schemaVersion e migração de saves anteriores.
-- [ ] Permitir exportação/importação de saves legados com validação.
-- [ ] Introduzir seed e RNG determinístico de simulação com estado persistido.
-- [ ] Executar testes de sintaxe e lógica básica, inclusive retorno de uma expedição.
-- [ ] Verificar PWA instalado: inicialização online, fechamento, modo avião, retorno e atualização.
+- [x] Corrigir divergência no nome de cache entre worker e interface offline.
+- [x] Publicar nova versão de cache para que usuários instalados recebam os arquivos corrigidos.
+- [x] Preservar chaves locais de save e metaprogressão existentes.
+- [x] Introduzir schemaVersion e migração de saves anteriores.
+- [x] Permitir exportação/importação de saves legados com validação.
+- [x] Introduzir seed e RNG determinístico de simulação com estado persistido.
+- [x] Executar testes de sintaxe e lógica básica, inclusive retorno de uma expedição.
+- [ ] Verificar PWA instalado **em dispositivo real**: inicialização online, fechamento, modo avião, retorno e atualização.
 - [ ] Publicar notas de release 1.1.
 
 **Pronto quando:** campanha atual preservada, saves legados carregáveis, RNG reproduzível para ações equivalentes, serviço offline coerente e nenhum bloqueio na jogabilidade.
+
+### Observações da 1.1
+
+- A migração de saves v1 recebe uma seed nova no momento da conversão porque as versões antigas não tinham um estado aleatório persistido; assim, o histórico anterior permanece, mas a sequência futura não pode ser reproduzida retroativamente.
+- O teste instrumentado é uma validação lógica, não substitui o teste manual de PWA instalado no celular.
+- O teste das 1.000 gerações cobre **o algoritmo atual**; depois das novas salas procedurais, repetir a mesma bateria.
 
 ## 1.2 — Novas Builds (pendente)
 
