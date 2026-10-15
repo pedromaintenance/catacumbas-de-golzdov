@@ -13,6 +13,8 @@ Atualizado em: 14/10/2026. Planejamento detalhado: [GAME_DESIGN_2.0.md](GAME_DES
 - 14/10/2026: suíte persistente em tests/smoke.test.cjs e workflow de CI adicionados; **a execução real de CI no GitHub ainda precisa ser conferida**.
 - 14/10/2026: 1.1 integrada à main pelo PR #2, com suíte de GitHub Actions concluída com sucesso.
 - 14/10/2026: início da 1.2: nove talentos de classe (três por classe), escolha progressiva, efeitos sobre combate, histórico de talentos no inventário e proteção dos saves existentes. O sistema genérico de eventos de efeitos e as sinergias de relíquias seguem pendentes.
+- 14/10/2026: [PR #3](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/3) integrado à main e verificado pelo GitHub Actions com resultado **success**; entrega inicial da 1.2 disponível no jogo.
+- Próximas tarefas rastreadas: [#4 — efeitos e relíquias sinérgicas](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/4) e [#5 — validar PWA offline no celular](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/5).
 - 14/10/2026: implementação das fundações técnicas iniciada na branch de trabalho.
 
 ## 1.1 — Fundações (em andamento)
