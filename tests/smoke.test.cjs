@@ -57,10 +57,10 @@ function boot() {
   assert.equal(scripts[0].split(hook).length, 2, 'ponto de instrumentação único');
   const instrumented = scripts[0].replace(
     hook,
-    "showScreen('home');renderClasses();globalThis.__testHooks={get:()=>G,startNew,resume,migrateRun,generateFloor,save};requestAnimationFrame(render);"
+    "showScreen('home');renderClasses();globalThis.__testHooks={get:()=>G,startNew,resume,migrateRun,generateFloor,save,learnTalent,levelModal,receiveDamage,hideModal,chooseClass:id=>{selectedClass=id},talents:CLASS_TALENTS};requestAnimationFrame(render);"
   );
   vm.runInNewContext(instrumented, sandbox, { filename: 'index.html', timeout: 10000 });
-  return { hooks: sandbox.__testHooks, storage };
+  return { hooks: sandbox.__testHooks, storage, elements };
 }
 
 function connected(run) {
@@ -84,7 +84,7 @@ test('os scripts embutidos são válidos e cache PWA não depende de versão dup
   assert.equal(scripts.length, 2);
   for (const script of scripts) assert.doesNotThrow(() => new vm.Script(script));
   assert.match(html, /caches\.match\(new URL\(file, location\.href\)\)/);
-  assert.match(worker, /const CACHE = 'golzdov-offline-v3'/);
+  assert.match(worker, /const CACHE = 'golzdov-offline-v4'/);
 });
 
 test('a mesma seed reproduz masmorra, itens e inimigos', () => {
@@ -112,11 +112,50 @@ test('save v1 local migra sem perder o progresso, seed ou meta legados', () => {
   hooks.resume();
   const run = hooks.get();
   assert.equal(run.schemaVersion, 2);
+  assert.deepEqual(Array.from(run.hero.talents), []);
+  assert.deepEqual(Array.from(run.hero.upgrades), []);
   assert.ok(run.seed > 0 && run.rngState > 0);
   assert.deepEqual(Array.from(run.map), old.map);
   assert.deepEqual(JSON.parse(storage.get('carcaca_golzdov_meta_v1')), oldMeta);
   hooks.save();
   assert.equal(JSON.parse(storage.get('carcaca_golzdov_run_v1')).schemaVersion, 2);
+});
+
+test('nove talentos existem, são ofertados e persistem nas três classes', () => {
+  for (const cls of ['vigia', 'arcanista', 'errante']) {
+    const { hooks, elements } = boot();
+    hooks.chooseClass(cls);
+    hooks.startNew();
+    assert.equal(hooks.talents[cls].length, 3);
+    hooks.get().hero.xp = hooks.get().hero.nextXP;
+    hooks.levelModal();
+    const firstOffer = elements.get('modal').innerHTML;
+    for (const talent of hooks.talents[cls]) {
+      assert.ok(firstOffer.includes(talent.title), cls + ': falta ' + talent.title);
+    }
+    hooks.learnTalent(hooks.talents[cls][0]);
+    assert.ok(hooks.get().hero.talents.includes(hooks.talents[cls][0].id));
+    hooks.get().hero.xp = hooks.get().hero.nextXP;
+    hooks.levelModal();
+    const nextOffer = elements.get('modal').innerHTML;
+    assert.ok(nextOffer.includes(hooks.talents[cls][1].title));
+    assert.ok(nextOffer.includes(hooks.talents[cls][2].title));
+    assert.ok(!nextOffer.includes(hooks.talents[cls][0].title));
+  }
+});
+
+test('Último Juramento salva de uma morte por estrato, mas não de duas', () => {
+  const { hooks } = boot();
+  hooks.startNew();
+  hooks.learnTalent(hooks.talents.vigia[2]);
+  hooks.hideModal(true);
+  hooks.get().hero.hp = 1;
+  hooks.receiveDamage(100, 'Teste');
+  assert.equal(hooks.get().hero.hp, 1);
+  assert.equal(hooks.get().hero.lastOathUsed, true);
+  assert.equal(hooks.get().hero.oathWeakened, true);
+  hooks.receiveDamage(100, 'Teste');
+  assert.equal(hooks.get().over, true);
 });
 
 test('1.000 estratos gerados mantêm escada, inimigos e itens alcançáveis', () => {
