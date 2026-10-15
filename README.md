@@ -9,7 +9,7 @@ A evolução está documentada e acompanhada em:
 - [Documento de Game Design 2.0](docs/GAME_DESIGN_2.0.md) — visão, classes, relíquias, facções, inimigos, combate, modo de jogo e arquitetura.
 - [Roadmap 2.0](docs/ROADMAP_2.0.md) — etapas, checklists, critérios de aceite e registro do que foi realizado.
 
-A versão 1.1 introduz migração de saves e geração com seed persistida sem alterar as regras essenciais. O armazenamento local mantém as chaves legadas para que o progresso não suma após atualizar o PWA.
+A versão 1.1 introduziu migração de saves e geração com seed persistida sem alterar as regras essenciais. O primeiro incremento da 1.2 acrescenta **9 talentos de classe**, efeitos específicos no combate e escolhas de evolução. O armazenamento local mantém as chaves legadas para que o progresso não suma após atualizar o PWA.
 
 ### Verificações de desenvolvimento
 
@@ -19,7 +19,7 @@ Execute, com Node.js 22 ou superior:
 node --test tests/smoke.test.cjs
 ```
 
-A suíte verifica sintaxe, coerência do cache offline, migração do formato v1, reprodução por seed e conectividade de 1.000 estratos procedurais. O GitHub Actions executa a suíte automaticamente em push e pull requests.
+A suíte verifica sintaxe, coerência do cache offline, migração do formato v1, reprodução por seed, talentos iniciais e conectividade de 1.000 estratos procedurais. O GitHub Actions executa a suíte automaticamente em push e pull requests.
 
 ## Publicação no GitHub Pages
 
@@ -59,4 +59,4 @@ A suíte verifica sintaxe, coerência do cache offline, migração do formato v1
 
 ## Atualizações futuras
 
-Para publicar uma nova versão distribuída, atualize os arquivos do jogo e **aumente a versão da constante `CACHE` em `sw.js`** (por exemplo, `golzdov-offline-v4`). A verificação de prontidão procura automaticamente os recursos precacheados e não precisa repetir o nome do cache no `index.html`. O jogo deverá atualizar-se quando o service worker novo for instalado e ativado; feche e reabra o PWA após a atualização, se necessário. As chaves legadas do `localStorage` continuam sendo usadas; o estado recebe `schemaVersion` e migração para preservar saves anteriores.
+Para publicar uma nova versão distribuída, atualize os arquivos do jogo e **aumente a versão da constante `CACHE` em `sw.js`** (por exemplo, `golzdov-offline-v5`). A verificação de prontidão procura automaticamente os recursos precacheados e não precisa repetir o nome do cache no `index.html`. O jogo deverá atualizar-se quando o service worker novo for instalado e ativado; feche e reabra o PWA após a atualização, se necessário. As chaves legadas do `localStorage` continuam sendo usadas; o estado recebe `schemaVersion` e migração para preservar saves anteriores.
