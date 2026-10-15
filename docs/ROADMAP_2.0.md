@@ -11,6 +11,8 @@ Atualizado em: 14/10/2026. Planejamento detalhado: [GAME_DESIGN_2.0.md](GAME_DES
 - 14/10/2026: fundações implementadas na branch de trabalho: versão 2 do formato de save, migração dos saves v1, seed persistida, RNG de simulação, cache offline v3, correção da checagem de prontidão e documentação no README.
 - 14/10/2026: teste de execução instrumentada aprovado (nova corrida, seed repetida, migração v1, salvar/retomar); 1.000 mapas simulados, 200 por estrato, sem perda de conectividade, inimigos ou itens inacessíveis.
 - 14/10/2026: suíte persistente em tests/smoke.test.cjs e workflow de CI adicionados; **a execução real de CI no GitHub ainda precisa ser conferida**.
+- 14/10/2026: 1.1 integrada à main pelo PR #2, com suíte de GitHub Actions concluída com sucesso.
+- 14/10/2026: início da 1.2: nove talentos de classe (três por classe), escolha progressiva, efeitos sobre combate, histórico de talentos no inventário e proteção dos saves existentes. O sistema genérico de eventos de efeitos e as sinergias de relíquias seguem pendentes.
 - 14/10/2026: implementação das fundações técnicas iniciada na branch de trabalho.
 
 ## 1.1 — Fundações (em andamento)
@@ -35,16 +37,22 @@ Atualizado em: 14/10/2026. Planejamento detalhado: [GAME_DESIGN_2.0.md](GAME_DES
 - O teste instrumentado é uma validação lógica, não substitui o teste manual de PWA instalado no celular.
 - O teste das 1.000 gerações cobre **o algoritmo atual**; depois das novas salas procedurais, repetir a mesma bateria.
 
-## 1.2 — Novas Builds (pendente)
+## 1.2 — Novas Builds (em andamento)
 
 - [ ] Definir contrato de efeitos (onAttack/onKill/onDodge/onTurnStart/onEnterRoom).
 - [ ] Catálogo declarativo de talentos com ID e requisitos.
-- [ ] 3 talentos para Vigia; 3 para Arcanista; 3 para Errante.
-- [ ] Escolha entre 3 talentos válidos em cada avanço de nível.
+- [x] 3 talentos para Vigia; 3 para Arcanista; 3 para Errante.
+- [x] Escolha entre 3 talentos válidos em cada avanço de nível.
 - [ ] Regras de exclusividade, repetição, raridade e balanceamento.
 - [ ] Reimaginar 6 relíquias com efeitos comportamentais.
 - [ ] Criar 3 sinergias entre relíquias.
 - [ ] Testar 3 builds viáveis e diferentes por classe, inclusive chefes.
+
+### Observações da 1.2
+
+- O primeiro avanço oferece três talentos de classe. Os avanços seguintes oferecem os talentos ainda disponíveis e melhorias universais; até dois talentos de classe podem ser aprendidos por expedição.
+- Os talentos desta primeira fatia foram implementados com ganchos pontuais de combate para minimizar regressões. O sistema declarativo de efeitos, modificadores permanentes das habilidades e as sinergias continuam na fila.
+- O limite de dois talentos de classe é provisório e deve ser reavaliado quando cada especialização ganhar talentos aprofundados.
 
 ## 1.3 — Catacumbas Vivas (pendente)
 
