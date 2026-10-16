@@ -1,0 +1,2806 @@
+{
+  "origin": "index.html main após P1A, antes da extração de navegação",
+  "geometry": "width=35,height=35; relics=[]; 14 alvos na ordem herói, vizinhos, escada, altar, 5 salas, 4 inimigos e cantos",
+  "samples": [
+    {
+      "seed": 305419896,
+      "floor": 1,
+      "hero": {
+        "x": 18,
+        "y": 15
+      },
+      "seenHash": "a4d8fe3b",
+      "visibleHash": "756e3c15",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 305419896,
+      "floor": 2,
+      "hero": {
+        "x": 18,
+        "y": 15
+      },
+      "seenHash": "a4d8fe3b",
+      "visibleHash": "756e3c15",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 305419896,
+      "floor": 3,
+      "hero": {
+        "x": 18,
+        "y": 15
+      },
+      "seenHash": "a4d8fe3b",
+      "visibleHash": "756e3c15",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 305419896,
+      "floor": 4,
+      "hero": {
+        "x": 18,
+        "y": 15
+      },
+      "seenHash": "a4d8fe3b",
+      "visibleHash": "756e3c15",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 305419896,
+      "floor": 5,
+      "hero": {
+        "x": 18,
+        "y": 15
+      },
+      "seenHash": "a4d8fe3b",
+      "visibleHash": "756e3c15",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 1,
+      "floor": 1,
+      "hero": {
+        "x": 6,
+        "y": 18
+      },
+      "seenHash": "a40a9f84",
+      "visibleHash": "a180756d",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 1,
+      "floor": 2,
+      "hero": {
+        "x": 6,
+        "y": 18
+      },
+      "seenHash": "a40a9f84",
+      "visibleHash": "a180756d",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 1,
+      "floor": 3,
+      "hero": {
+        "x": 6,
+        "y": 18
+      },
+      "seenHash": "a40a9f84",
+      "visibleHash": "a180756d",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 1,
+      "floor": 4,
+      "hero": {
+        "x": 6,
+        "y": 18
+      },
+      "seenHash": "a40a9f84",
+      "visibleHash": "a180756d",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 1,
+      "floor": 5,
+      "hero": {
+        "x": 6,
+        "y": 18
+      },
+      "seenHash": "a40a9f84",
+      "visibleHash": "a180756d",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 4294967295,
+      "floor": 1,
+      "hero": {
+        "x": 28,
+        "y": 17
+      },
+      "seenHash": "b05239fb",
+      "visibleHash": "7cf7a11d",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 4294967295,
+      "floor": 2,
+      "hero": {
+        "x": 28,
+        "y": 17
+      },
+      "seenHash": "b05239fb",
+      "visibleHash": "7cf7a11d",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 4294967295,
+      "floor": 3,
+      "hero": {
+        "x": 28,
+        "y": 17
+      },
+      "seenHash": "b05239fb",
+      "visibleHash": "7cf7a11d",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 4294967295,
+      "floor": 4,
+      "hero": {
+        "x": 28,
+        "y": 17
+      },
+      "seenHash": "b05239fb",
+      "visibleHash": "7cf7a11d",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 4294967295,
+      "floor": 5,
+      "hero": {
+        "x": 28,
+        "y": 17
+      },
+      "seenHash": "b05239fb",
+      "visibleHash": "7cf7a11d",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 1831565813,
+      "floor": 1,
+      "hero": {
+        "x": 15,
+        "y": 6
+      },
+      "seenHash": "ea94be53",
+      "visibleHash": "c26c9239",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        true,
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 1831565813,
+      "floor": 2,
+      "hero": {
+        "x": 15,
+        "y": 6
+      },
+      "seenHash": "ea94be53",
+      "visibleHash": "c26c9239",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        true,
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 1831565813,
+      "floor": 3,
+      "hero": {
+        "x": 15,
+        "y": 6
+      },
+      "seenHash": "ea94be53",
+      "visibleHash": "c26c9239",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        true,
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 1831565813,
+      "floor": 4,
+      "hero": {
+        "x": 15,
+        "y": 6
+      },
+      "seenHash": "ea94be53",
+      "visibleHash": "c26c9239",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        true,
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 1831565813,
+      "floor": 5,
+      "hero": {
+        "x": 15,
+        "y": 6
+      },
+      "seenHash": "ea94be53",
+      "visibleHash": "c26c9239",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        true,
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 826366246,
+      "floor": 1,
+      "hero": {
+        "x": 11,
+        "y": 13
+      },
+      "seenHash": "0ea1be22",
+      "visibleHash": "17d9771a",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 826366246,
+      "floor": 2,
+      "hero": {
+        "x": 11,
+        "y": 13
+      },
+      "seenHash": "0ea1be22",
+      "visibleHash": "17d9771a",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 826366246,
+      "floor": 3,
+      "hero": {
+        "x": 11,
+        "y": 13
+      },
+      "seenHash": "0ea1be22",
+      "visibleHash": "17d9771a",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 826366246,
+      "floor": 4,
+      "hero": {
+        "x": 11,
+        "y": 13
+      },
+      "seenHash": "0ea1be22",
+      "visibleHash": "17d9771a",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 826366246,
+      "floor": 5,
+      "hero": {
+        "x": 11,
+        "y": 13
+      },
+      "seenHash": "0ea1be22",
+      "visibleHash": "17d9771a",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 4276994270,
+      "floor": 1,
+      "hero": {
+        "x": 18,
+        "y": 26
+      },
+      "seenHash": "8a622d8d",
+      "visibleHash": "05c50d68",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 4276994270,
+      "floor": 2,
+      "hero": {
+        "x": 18,
+        "y": 26
+      },
+      "seenHash": "8a622d8d",
+      "visibleHash": "05c50d68",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 4276994270,
+      "floor": 3,
+      "hero": {
+        "x": 18,
+        "y": 26
+      },
+      "seenHash": "8a622d8d",
+      "visibleHash": "05c50d68",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 4276994270,
+      "floor": 4,
+      "hero": {
+        "x": 18,
+        "y": 26
+      },
+      "seenHash": "8a622d8d",
+      "visibleHash": "05c50d68",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 4276994270,
+      "floor": 5,
+      "hero": {
+        "x": 18,
+        "y": 26
+      },
+      "seenHash": "8a622d8d",
+      "visibleHash": "05c50d68",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 3237998081,
+      "floor": 1,
+      "hero": {
+        "x": 9,
+        "y": 4
+      },
+      "seenHash": "4b44db4b",
+      "visibleHash": "630fb8a1",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 3237998081,
+      "floor": 2,
+      "hero": {
+        "x": 9,
+        "y": 4
+      },
+      "seenHash": "4b44db4b",
+      "visibleHash": "630fb8a1",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 3237998081,
+      "floor": 3,
+      "hero": {
+        "x": 9,
+        "y": 4
+      },
+      "seenHash": "4b44db4b",
+      "visibleHash": "630fb8a1",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 3237998081,
+      "floor": 4,
+      "hero": {
+        "x": 9,
+        "y": 4
+      },
+      "seenHash": "4b44db4b",
+      "visibleHash": "630fb8a1",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 3237998081,
+      "floor": 5,
+      "hero": {
+        "x": 9,
+        "y": 4
+      },
+      "seenHash": "4b44db4b",
+      "visibleHash": "630fb8a1",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 3735928559,
+      "floor": 1,
+      "hero": {
+        "x": 30,
+        "y": 15
+      },
+      "seenHash": "5c8d2df0",
+      "visibleHash": "034fe4e8",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 3735928559,
+      "floor": 2,
+      "hero": {
+        "x": 30,
+        "y": 15
+      },
+      "seenHash": "5c8d2df0",
+      "visibleHash": "034fe4e8",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 3735928559,
+      "floor": 3,
+      "hero": {
+        "x": 30,
+        "y": 15
+      },
+      "seenHash": "5c8d2df0",
+      "visibleHash": "034fe4e8",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 3735928559,
+      "floor": 4,
+      "hero": {
+        "x": 30,
+        "y": 15
+      },
+      "seenHash": "5c8d2df0",
+      "visibleHash": "034fe4e8",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 3735928559,
+      "floor": 5,
+      "hero": {
+        "x": 30,
+        "y": 15
+      },
+      "seenHash": "5c8d2df0",
+      "visibleHash": "034fe4e8",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 65537,
+      "floor": 1,
+      "hero": {
+        "x": 25,
+        "y": 8
+      },
+      "seenHash": "26e6e8e3",
+      "visibleHash": "c2537e34",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 65537,
+      "floor": 2,
+      "hero": {
+        "x": 25,
+        "y": 8
+      },
+      "seenHash": "26e6e8e3",
+      "visibleHash": "c2537e34",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 65537,
+      "floor": 3,
+      "hero": {
+        "x": 25,
+        "y": 8
+      },
+      "seenHash": "26e6e8e3",
+      "visibleHash": "c2537e34",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 65537,
+      "floor": 4,
+      "hero": {
+        "x": 25,
+        "y": 8
+      },
+      "seenHash": "26e6e8e3",
+      "visibleHash": "c2537e34",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 65537,
+      "floor": 5,
+      "hero": {
+        "x": 25,
+        "y": 8
+      },
+      "seenHash": "26e6e8e3",
+      "visibleHash": "c2537e34",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 2147483648,
+      "floor": 1,
+      "hero": {
+        "x": 26,
+        "y": 15
+      },
+      "seenHash": "8a16e8cc",
+      "visibleHash": "ee4b288b",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 2147483648,
+      "floor": 2,
+      "hero": {
+        "x": 26,
+        "y": 15
+      },
+      "seenHash": "8a16e8cc",
+      "visibleHash": "ee4b288b",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 2147483648,
+      "floor": 3,
+      "hero": {
+        "x": 26,
+        "y": 15
+      },
+      "seenHash": "8a16e8cc",
+      "visibleHash": "ee4b288b",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 2147483648,
+      "floor": 4,
+      "hero": {
+        "x": 26,
+        "y": 15
+      },
+      "seenHash": "8a16e8cc",
+      "visibleHash": "ee4b288b",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "seed": 2147483648,
+      "floor": 5,
+      "hero": {
+        "x": 26,
+        "y": 15
+      },
+      "seenHash": "8a16e8cc",
+      "visibleHash": "ee4b288b",
+      "los": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "paths": [
+        [],
+        [
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        null,
+        null,
+        [],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    }
+  ]
+}
