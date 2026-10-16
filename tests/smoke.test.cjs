@@ -61,6 +61,7 @@ function boot() {
   );
   vm.runInNewContext(fs.readFileSync(path.join(ROOT, 'relic-effects.js'), 'utf8'), sandbox, { filename: 'relic-effects.js', timeout: 10000 });
   vm.runInNewContext(fs.readFileSync(path.join(ROOT, 'relic-offers.js'), 'utf8'), sandbox, { filename: 'relic-offers.js', timeout: 10000 });
+  for (const name of ['core/rng.js', 'core/dungeon.js']) vm.runInNewContext(fs.readFileSync(path.join(ROOT,name), 'utf8'), sandbox, { filename:name, timeout:10000 });
   vm.runInNewContext(instrumented, sandbox, { filename: 'index.html', timeout: 10000 });
   return { hooks: sandbox.__testHooks, storage, elements };
 }
@@ -86,8 +87,13 @@ test('os scripts embutidos são válidos e cache PWA não depende de versão dup
   assert.equal(scripts.length, 2);
   for (const script of scripts) assert.doesNotThrow(() => new vm.Script(script));
   assert.match(html, /caches\.match\(new URL\(file, location\.href\)\)/);
-  assert.match(worker, /const CACHE = 'golzdov-offline-v8'/);
+  assert.match(worker, /const CACHE = 'golzdov-offline-v9'/);
   assert.match(worker, /'\.\/gamepad\.js'/);
+  for (const file of ['core/rng.js', 'core/dungeon.js']) {
+    assert.match(html, new RegExp('<script src="\\./'+file.replace('/', '\\/')+'"></script>'));
+    assert.ok(worker.includes("'./"+file+"'"));
+    assert.ok(html.includes("'./"+file+"'"));
+  }
   assert.match(html, /<script src="\.\/gamepad\.js"><\/script>/);
   assert.match(html, /<script src="\.\/relic-effects\.js"><\/script>/);
   assert.match(worker, /'\.\/relic-effects\.js'/);
