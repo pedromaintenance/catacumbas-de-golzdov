@@ -63,7 +63,9 @@ function dispatch(run,action){
       return result(run,'applied',events);
     }
     case 'ATTACK':{
-      const enemy=run.enemies.find(e=>e.id===action.enemyId&&e.hp>0);
+      // Legado: referências já mortas ainda executam a rolagem e consomem o turno.
+      // A busca de alvos pela UI evita esse caso; manter paridade com o handler direto.
+      const enemy=run.enemies.find(e=>e.id===action.enemyId);
       if(!enemy)return result(run,'no-target');
       const range=action.melee?1:p.range;
       const distance=Math.abs(p.x-enemy.x)+Math.abs(p.y-enemy.y);
