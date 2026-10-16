@@ -8,7 +8,7 @@ const ROOT=path.join(__dirname,'..');
 const html=fs.readFileSync(path.join(ROOT,'index.html'),'utf8');
 const fixture=JSON.parse(fs.readFileSync(path.join(ROOT,'tests/fixtures/legacy-combat-golden.json'),'utf8'));
 const script=[...html.matchAll(/<script>([\s\S]*?)<\/script>/g)][0][1];
-const loaded=['core/rng.js','core/dungeon.js','core/navigation.js','core/combat.js','core/skills.js','core/enemies.js','core/turns.js','core/actions.js','core/loot.js','core/rewards.js','relic-effects.js','relic-offers.js'];
+const loaded=['core/rng.js','core/dungeon.js','core/navigation.js','core/combat.js','core/skills.js','core/enemies.js','core/turns.js','core/actions.js','core/loot.js','core/rewards.js','core/defense.js','relic-effects.js','relic-offers.js'];
 
 function makeRuntime(){
  const elements=new Map(),storage=new Map();

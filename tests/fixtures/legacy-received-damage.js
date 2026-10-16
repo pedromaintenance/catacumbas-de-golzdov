@@ -1,0 +1,2 @@
+/* Captura literal da build 1.3.3 antes da refatoração P1C.3B.3B.2. */
+function receiveDamage(value,msg){let p=G.hero,damage=window.GolzdovCombat.incomingDamage(G,value,{muralha:hasTalent('v_muralha')});damage=relicEvent('onDefend',{damage}).damage;p.hp=Math.max(0,p.hp-damage);log(`${msg} −${damage} vida.`,'♥');beep(95,.15,'sawtooth');relicEvent('onHurt',{damage});if(p.hp<=0&&hasTalent('v_juramento')&&!p.lastOathUsed){p.hp=1;p.lastOathUsed=true;p.oathWeakened=true;log('Último Juramento: você resiste ao golpe fatal, mas sua guarda enfraquece.','◆');}else if(p.hp<=0)die();}
