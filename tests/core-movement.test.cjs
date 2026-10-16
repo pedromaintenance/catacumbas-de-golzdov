@@ -69,7 +69,7 @@ function play(runtime,cls,seed,scenario){
  const meta=runtime.storage.get('carcaca_golzdov_meta_v1')||null;
  return JSON.stringify({run:g,save,meta});
 }
-test('384 cenários de movimento originais e novos têm estado e save idênticos',()=>{
+test('408 cenários de movimento originais e novos têm estado e save idênticos',()=>{
  const old=boot(true),modern=boot(false);let count=0;
  for(const cls of ['vigia','arcanista','errante'])for(const seed of SEEDS)for(const scenario of SCENARIOS){
   assert.equal(play(modern,cls,seed,scenario),play(old,cls,seed,scenario),
