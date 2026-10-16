@@ -1,7 +1,7 @@
-/* Catacumbas de Golzdov — PWA 1.2.4 — subrotas protegidas para Phaser */
-const CACHE = 'golzdov-offline-v8';
+/* Catacumbas de Golzdov — PWA 1.2.5 — núcleo extraído compatível com Phaser */
+const CACHE = 'golzdov-offline-v9';
 const PRECACHE = [
-  './', './index.html', './gamepad.js', './relic-effects.js', './relic-offers.js', './manifest.webmanifest',
+  './', './index.html', './core/rng.js', './core/dungeon.js', './gamepad.js', './relic-effects.js', './relic-offers.js', './manifest.webmanifest',
   './icons/icon-192.png', './icons/icon-512.png'
 ];
 
