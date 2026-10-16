@@ -12,17 +12,6 @@ function requireRng(){
   if(!root.GolzdovCoreRng)throw Error('Carregue core/rng.js antes de core/skills.js.');
   return root.GolzdovCoreRng;
 }
-function checkTarget(run,skill,x,y,{isVisible,lineClear,enemyAt}){
-  const p=run.hero;
-  if(dist(p,{x,y})>skill.range||!isVisible(x,y)||!lineClear(p.x,p.y,x,y))
-    return {status:'unreachable',enemy:null};
-  const enemy=enemyAt(x,y);
-  if(!(p.classId==='arcanista'&&skill===run.skillCatalog[1])&&!enemy)
-    return {status:'empty',enemy:null};
-  if(p.mana<skill.cost)return {status:'no-focus',enemy};
-  return {status:'ready',enemy};
-}
-// O catálogo precisa ser passado explicitamente; nunca duplicar mana, alcance ou seleção.
 function validateTarget(run,which,x,y,{skills,isVisible,lineClear,enemyAt}){
   const skill=skills[which],p=run.hero;
   if(dist(p,{x,y})>skill.range||!isVisible(x,y)||!lineClear(p.x,p.y,x,y))
