@@ -2,6 +2,7 @@
 
 **Status:** proposta técnica, nenhuma migração implementada ainda.
 **Data do diagnóstico:** 15/10/2026.
+**Acompanhamento GitHub:** [issue #11 — migração Phaser](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/11); [issue #12 — corrigir roteamento PWA](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/12).
 **Objetivo:** migrar a apresentação, a composição das cenas e a entrada para Phaser 4 sem alterar silenciosamente as regras do roguelike, perder os saves ou bloquear o GitHub Pages.
 
 > **Regra de ouro:** cada incremento de código só entra na `main` depois dos testes. A versão estável em `/catacumbas-de-golzdov/` deve permanecer jogável; a versão Phaser será testada em `/catacumbas-de-golzdov/phaser/`. Este caminho experimental é planejado, **não está publicado ainda**.
