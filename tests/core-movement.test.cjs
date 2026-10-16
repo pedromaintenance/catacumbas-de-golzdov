@@ -5,7 +5,7 @@ const ROOT=path.join(__dirname,'..');
 const html=fs.readFileSync(path.join(ROOT,'index.html'),'utf8');
 const legacy=fs.readFileSync(path.join(ROOT,'tests/fixtures/legacy-movement.js'),'utf8');
 const js=[...html.matchAll(/<script>([\s\S]*?)<\/script>/g)][0][1];
-const modules=['core/rng.js','core/dungeon.js','core/navigation.js','core/combat.js','core/skills.js','core/enemies.js','core/turns.js','core/actions.js','relic-effects.js','relic-offers.js'];
+const modules=['core/rng.js','core/dungeon.js','core/navigation.js','core/combat.js','core/skills.js','core/enemies.js','core/turns.js','core/actions.js','core/loot.js','core/rewards.js','relic-effects.js','relic-offers.js'];
 function boot(old){
  const dom=new Map(),storage=new Map();
  function element(id){
@@ -28,7 +28,7 @@ function boot(old){
  for(const f of modules)vm.runInNewContext(fs.readFileSync(path.join(ROOT,f),'utf8'),context,{filename:f,timeout:10000});
  let script=js;
  if(old){
-  const start=script.indexOf('function doMove('),end=script.indexOf('function collect(',start);
+  const start=script.indexOf('function doMove('),end=script.indexOf('function applyGameEvents(',start);
   assert.ok(start>=0&&end>start);
   script=script.slice(0,start)+legacy+'\n'+script.slice(end);
  }
@@ -105,6 +105,6 @@ test('inimigo na rota transfere ataque sem permitir passo ou duplicar turno',()=
  assert.equal(run.hero.x,10);assert.equal(run.steps,3);assert.equal(run.rngState,321);
 });
 test('a versão de teste aparece no menu inicial de forma acessível',()=>{
- assert.match(html,/<small id="build-version"[^>]*>BUILD 1\.3\.1 · CACHE V15 · P1C\.3B\.2<\/small>/);
+ assert.match(html,/<small id="build-version"[^>]*>BUILD 1\.3\.2 · CACHE V16 · P1C\.3B\.3A<\/small>/);
  assert.match(html,/\.build-version\{display:block/);
 });

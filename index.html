@@ -56,7 +56,7 @@
       <div class="meta-line"><span id="meta-record">MELHOR EXPEDIÇÃO · —</span><span id="meta-wins">0 VITÓRIAS</span></div>
       <button id="start-btn" class="primary-button">INICIAR EXPEDIÇÃO <span>◆</span></button>
       <button id="continue-btn" class="secondary-button hidden">CONTINUAR EXPEDIÇÃO <span>↗</span></button>
-      <div class="home-help">5 ESTRATOS · 3 CLASSES · MORTE PERMANENTE<br><span id="offline-status" role="status" aria-live="polite">◌ PREPARANDO JOGO OFFLINE…</span><small id="build-version" class="build-version" aria-label="Versão do jogo">BUILD 1.3.1 · CACHE V15 · P1C.3B.2</small></div>
+      <div class="home-help">5 ESTRATOS · 3 CLASSES · MORTE PERMANENTE<br><span id="offline-status" role="status" aria-live="polite">◌ PREPARANDO JOGO OFFLINE…</span><small id="build-version" class="build-version" aria-label="Versão do jogo">BUILD 1.3.2 · CACHE V16 · P1C.3B.3A</small></div>
       <div class="home-aux"><button id="help-home" class="plain-button">COMO JOGAR <span>⌄</span></button><button id="import-btn" class="plain-button">IMPORTAR SAVE <span>↥</span></button></div>
     </div>
   </section>
@@ -100,6 +100,8 @@
 <script src="./core/enemies.js"></script>
 <script src="./core/turns.js"></script>
 <script src="./core/actions.js"></script>
+<script src="./core/loot.js"></script>
+<script src="./core/rewards.js"></script>
 <script src="./gamepad.js"></script>
 <script src="./relic-effects.js"></script>
 <script src="./relic-offers.js"></script>
@@ -230,7 +232,11 @@ function doMove(dx,dy){
     else if(event.type==='enter-room')relicEvent('onEnterRoom',{roomIndex:event.roomIndex});
     else if(event.type==='collect-at-player'){
       const item=G.items.find(i=>i.x===G.hero.x&&i.y===G.hero.y);
-      if(item){G.items=G.items.filter(i=>i!==item);collect(item);}
+      if(item){
+        const offered=item.kind==='relic'&&window.GolzdovRelicOffers.available(RELICS,G.hero).length>0;
+        const picked=window.GolzdovActions.dispatch(G,{type:'COLLECT',hasRelicOffers:!!offered});
+        applyGameEvents(picked.events);
+      }
     }
     else if(event.type==='turn'){
       if(G.over)return;
@@ -247,7 +253,19 @@ function doMove(dx,dy){
     }
   }
 }
-function collect(i){const p=G.hero;switch(i.kind){case 'coins':p.coins+=i.value;G.treasure+=i.value;log(`Você encontra ${i.value} lascas de âmbar ósseo.`, '◈');break;case 'potion':p.potions++;log('Um frasco de seiva curativa sobreviveu à ruína.','✚');break;case 'mana':p.mana=clamp(p.mana+6,0,p.maxmana);log('Um cristal restitui 6 pontos de foco.','✧');break;case 'heal':p.hp=clamp(p.hp+9,0,p.maxhp);log('Ossos quentes devolvem 9 pontos de vida.','♥');break;case 'trap':{let damage=rand(3,7)+G.floor;receiveDamage(damage,'Uma inscrição explode sob seus pés!');break;}case 'relic':{if(window.GolzdovRelicOffers.available(RELICS,p).length){G.pendingRelicOffer={source:'relicario',offers:null};log('Um relicário revela duas inscrições. Você escolherá uma delas.','✥');}else{p.coins+=12;log('Um relicário vazio guarda 12 lascas.','◈');}break;}case 'weapon':{let up=rand(1,2);p.atk+=up;p.weapon=pick(['Lâmina das Costelas','Arco de Osso','Martelo Fendido','Bastão da Sombra','Presa Polida']);log(`Arma: ${p.weapon}. Ataque +${up}!`,'⚔');break;}case 'armor':{p.def++;p.armor=pick(['Placas Ancestrais','Colete de Ferro Negro','Cota de Vértebras','Manto de Osso']);log(`${p.armor}: defesa +1!`,'◆');break;}}beep(i.kind==='trap'?115:590,.11);}
+function applyGameEvents(events){
+  for(const event of events){
+    if(event.type==='log')log(event.text,event.icon);
+    else if(event.type==='sound')beep(event.frequency,event.duration);
+    else if(event.type==='damage')receiveDamage(event.value,event.message);
+    else if(event.type==='relic-event')relicEvent(event.event,{enemy:event.enemy,kind:event.kind});
+    else if(event.type==='boss-down')G.bossDown=true;
+  }
+}
+function collect(item){
+  const offered=item.kind==='relic'&&window.GolzdovRelicOffers.available(RELICS,G.hero).length>0;
+  applyGameEvents(window.GolzdovLoot.resolve(G,item,{hasRelicOffers:!!offered}));
+}
 function applyRelic(r){const p=G.hero;if(p.relics.includes(r.id))return;const previous=new Set(relicSynergies().map(pair=>pair.id));p.relics.push(r.id);switch(r.effect){case 'attack':p.atk+=2;break;case 'health':p.maxhp+=10;p.hp=clamp(p.hp+10,0,p.maxhp);break;case 'mana':p.maxmana+=7;p.mana=clamp(p.mana+7,0,p.maxmana);break;case 'dodge':p.dodge+=12;break;case 'defense':p.def+=2;break;case 'crit':p.crit+=15;break;case 'curse':p.atk+=4;p.maxhp=Math.max(1,p.maxhp-7);p.hp=clamp(p.hp,1,p.maxhp);break;}const combo=relicSynergies().find(pair=>!previous.has(pair.id));if(combo){log(`SINERGIA DESPERTA: ${combo.name}. ${combo.desc}`,'✥');toast(`✥ ${combo.name}`);}else toast(`✥ ${r.name}`);}
 // Relíquias podem ser trocadas, mas nenhuma troca é aplicada até o jogador confirmar.
 function removeRelic(id){
@@ -333,7 +351,7 @@ function relicEvent(event,details={}){if(!G)return details;const p=G.hero;const 
   window.GolzdovRelicEffects?.dispatch(event,ctx);return ctx;}
 function heroHit(e,damage,label,source='skill',critical=false){if(!e||e.hp<=0)return;const ctx=relicEvent('onAttack',{enemy:e,damage,kind:source,critical,wasSmoldering:(e.smolder||0)>0});hitEnemy(e,Math.max(1,Math.floor(ctx.damage)),label,source);}
 function hitEnemy(e,dmg,kind,source='effect'){if(!e||e.hp<=0)return;e.hp-=dmg;log(`${kind}: ${ENEMIES[e.type].name} sofre ${dmg} de dano.`,'⚔');if(e.hp<=0)killEnemy(e,source);}
-function killEnemy(e,source='effect'){const d=ENEMIES[e.type];G.kills++;G.hero.xp+=d.xp;G.hero.coins+=d.gold;G.treasure+=d.gold;G.hero.mana=clamp(G.hero.mana+1,0,G.hero.maxmana);G.enemies=G.enemies.filter(x=>x!==e);relicEvent('onKill',{enemy:e,kind:source});log(`${d.name} cai. +${d.xp} experiência, +${d.gold} âmbar.`,'✥');if(e.type==='boss'){G.bossDown=true;}}
+function killEnemy(e,source='effect'){applyGameEvents(window.GolzdovRewards.defeat(G,e,ENEMIES,source));}
 function skill(which){if(!canPlay())return;stopAuto();const p=G.hero,c=CLASSES[p.classId],s=c.skills[which];if(p.mana<s.cost){log(`Foco insuficiente. Precisa de ${s.cost} pontos.`,'✧');beep(125);return;}if(s.target){aim=aim===which?null:which;updateAim();if(aim!==null){toast(`Selecione um alvo para ${s.name}`);beep(505);}}else{aim=null;updateAim();const outcome=window.GolzdovSkills.instant(G,which,{skills:c.skills,hit:heroHit,onRoot:relicEvent});if(outcome.message)log(outcome.message,outcome.icon);beep(480,.14);worldTurn();updateHUD();save();}}
 function castOn(x,y){if(!canPlay()||aim===null)return;const c=CLASSES[G.hero.classId];const outcome=window.GolzdovSkills.targeted(G,aim,x,y,{skills:c.skills,isVisible,lineClear,enemyAt,hit:heroHit});if(outcome.status==='unreachable'){log('A magia não consegue alcançar esse ponto.','✧');beep(125);return;}if(outcome.status==='empty'){log('Toque em um inimigo para usar essa habilidade.','✧');return;}if(outcome.status==='no-focus'){aim=null;updateAim();return;}if(outcome.message)log(outcome.message,outcome.icon);aim=null;updateAim();beep(730,.17,'triangle');worldTurn();updateHUD();save();}
 function executeUtilityAction(type){if(!canPlay())return;stopAuto();aim=null;updateAim();const result=window.GolzdovActions.dispatch(G,{type});for(const event of result.events){if(event.type==='log')log(event.text,event.icon);else if(event.type==='sound')beep(event.frequency,event.duration);else if(event.type==='turn')worldTurn();}if(result.consumesTurn){updateHUD();save();}}
@@ -489,7 +507,7 @@ showScreen('home');renderClasses();requestAnimationFrame(render);
     say('MODO APP INDISPONÍVEL NESTE NAVEGADOR', 'offline-error');
     return;
   }
-  const FILES = ['./', './index.html', './core/rng.js', './core/dungeon.js', './core/navigation.js', './core/combat.js', './core/skills.js', './core/enemies.js', './core/turns.js', './core/actions.js', './gamepad.js', './relic-effects.js', './relic-offers.js', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
+  const FILES = ['./', './index.html', './core/rng.js', './core/dungeon.js', './core/navigation.js', './core/combat.js', './core/skills.js', './core/enemies.js', './core/turns.js', './core/actions.js', './core/loot.js', './core/rewards.js', './gamepad.js', './relic-effects.js', './relic-offers.js', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
   async function checkReady() {
     // Look up active precached assets without duplicating the SW cache version here.
     const all = await Promise.all(FILES.map(file => caches.match(new URL(file, location.href))));
