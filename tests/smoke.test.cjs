@@ -87,7 +87,7 @@ test('os scripts embutidos são válidos e cache PWA não depende de versão dup
   assert.equal(scripts.length, 2);
   for (const script of scripts) assert.doesNotThrow(() => new vm.Script(script));
   assert.match(html, /caches\.match\(new URL\(file, location\.href\)\)/);
-  assert.match(worker, /const CACHE = 'golzdov-offline-v14'/);
+  assert.match(worker, /const CACHE = 'golzdov-offline-v15'/);
   assert.match(worker, /'\.\/gamepad\.js'/);
   for (const file of ['core/rng.js', 'core/dungeon.js', 'core/navigation.js', 'core/combat.js', 'core/skills.js', 'core/enemies.js', 'core/turns.js', 'core/actions.js']) {
     assert.match(html, new RegExp('<script src="\\./'+file.replace('/', '\\/')+'"></script>'));

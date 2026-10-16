@@ -17,7 +17,7 @@
 
 .home-aux{display:flex;align-items:center;justify-content:center;gap:8px}.home-aux .plain-button{font-size:9px}.footer-actions button:disabled{opacity:.4}.modal .choice:disabled{opacity:.42}
 
-.home-help #offline-status{display:inline-block;color:#aab7a7;letter-spacing:.65px;min-height:1em}.home-help #offline-status.offline-ready{color:#b8d7ae}.home-help #offline-status.offline-error{color:#d7a1a2}
+.home-help #offline-status{display:inline-block;color:#aab7a7;letter-spacing:.65px;min-height:1em}.home-help #offline-status.offline-ready{color:#b8d7ae}.home-help #offline-status.offline-error{color:#d7a1a2}.build-version{display:block;margin-top:7px;color:#a38d79;font:9px/1.4 system-ui,sans-serif;letter-spacing:.1em}
 
 .gamepad-focused{outline:2px solid #e8c38c!important;outline-offset:3px;box-shadow:0 0 0 4px #b9965e33,0 0 22px #b9965e66!important;}
 .gamepad-status{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 6px);transform:translateX(-50%);z-index:30;pointer-events:none;border:1px solid #997e58;background:#16181ee9;color:#edd5a9;border-radius:5px;padding:4px 9px;font:10px/1.3 system-ui,sans-serif;letter-spacing:.12em;white-space:nowrap;box-shadow:0 4px 18px #0008;}
@@ -56,7 +56,7 @@
       <div class="meta-line"><span id="meta-record">MELHOR EXPEDIÇÃO · —</span><span id="meta-wins">0 VITÓRIAS</span></div>
       <button id="start-btn" class="primary-button">INICIAR EXPEDIÇÃO <span>◆</span></button>
       <button id="continue-btn" class="secondary-button hidden">CONTINUAR EXPEDIÇÃO <span>↗</span></button>
-      <div class="home-help">5 ESTRATOS · 3 CLASSES · MORTE PERMANENTE<br><span id="offline-status" role="status" aria-live="polite">◌ PREPARANDO JOGO OFFLINE…</span></div>
+      <div class="home-help">5 ESTRATOS · 3 CLASSES · MORTE PERMANENTE<br><span id="offline-status" role="status" aria-live="polite">◌ PREPARANDO JOGO OFFLINE…</span><small id="build-version" class="build-version" aria-label="Versão do jogo">BUILD 1.3.1 · CACHE V15 · P1C.3B.2</small></div>
       <div class="home-aux"><button id="help-home" class="plain-button">COMO JOGAR <span>⌄</span></button><button id="import-btn" class="plain-button">IMPORTAR SAVE <span>↥</span></button></div>
     </div>
   </section>
@@ -217,7 +217,36 @@ function enemyAt(x,y){return G.enemies.find(e=>e.hp>0&&e.x===x&&e.y===y);}
 function canPlay(){return G&&!G.over&&$('overlay').classList.contains('hidden');}
 function stopAuto(){if(autoTimer!==null){clearTimeout(autoTimer);autoTimer=null;}}
 function move(dx,dy){if(!canPlay())return;stopAuto();aim=null;gamepadAim=null;updateAim();doMove(dx,dy);}
-function doMove(dx,dy){if(!G||G.over)return;const p=G.hero,x=p.x+dx,y=p.y+dy;if(!walk(x,y)){beep(120,.035);return;}const e=enemyAt(x,y);if(e){attack(e,true);return;}p.x=x;p.y=y;G.steps++;beep(190,.028);const roomIndex=G.rooms.findIndex(room=>x>=room.x&&x<room.x+room.w&&y>=room.y&&y<room.y+room.h);if(roomIndex>=0&&!G.visitedRooms.includes(roomIndex)){G.visitedRooms.push(roomIndex);relicEvent('onEnterRoom',{roomIndex});}const item=G.items.find(i=>i.x===x&&i.y===y);if(item){G.items=G.items.filter(i=>i!==item);collect(item);}if(G.over)return;const inShrine=G.shrine&&G.shrine.x===x&&G.shrine.y===y&&!G.altarUsed;let onStairs=G.stairs.x===x&&G.stairs.y===y;reveal();worldTurn();if(G.over)return;if(G.pendingRelicOffer){if($('overlay').classList.contains('hidden'))showPendingRelicOffer();}else if(inShrine){G.altarUsed=true;shrineModal();}else if(onStairs){stairsModal();}updateHUD();save();}
+function doMove(dx,dy){
+  if(!G||G.over)return;
+  const outcome=window.GolzdovActions.dispatch(G,{type:'MOVE',dx,dy,width:W,height:H});
+  let inShrine=false,onStairs=false;
+  for(const event of outcome.events){
+    if(event.type==='sound')beep(event.frequency,event.duration);
+    else if(event.type==='attack'){
+      const enemy=G.enemies.find(e=>e.id===event.enemyId&&e.hp>0);
+      if(enemy)attack(enemy,true);
+    }
+    else if(event.type==='enter-room')relicEvent('onEnterRoom',{roomIndex:event.roomIndex});
+    else if(event.type==='collect-at-player'){
+      const item=G.items.find(i=>i.x===G.hero.x&&i.y===G.hero.y);
+      if(item){G.items=G.items.filter(i=>i!==item);collect(item);}
+    }
+    else if(event.type==='turn'){
+      if(G.over)return;
+      inShrine=!!(G.shrine&&G.shrine.x===G.hero.x&&G.shrine.y===G.hero.y&&!G.altarUsed);
+      onStairs=G.stairs.x===G.hero.x&&G.stairs.y===G.hero.y;
+      reveal();worldTurn();
+    }
+    else if(event.type==='post-move'){
+      if(G.over)return;
+      if(G.pendingRelicOffer){if($('overlay').classList.contains('hidden'))showPendingRelicOffer();}
+      else if(inShrine){G.altarUsed=true;shrineModal();}
+      else if(onStairs)stairsModal();
+      updateHUD();save();
+    }
+  }
+}
 function collect(i){const p=G.hero;switch(i.kind){case 'coins':p.coins+=i.value;G.treasure+=i.value;log(`Você encontra ${i.value} lascas de âmbar ósseo.`, '◈');break;case 'potion':p.potions++;log('Um frasco de seiva curativa sobreviveu à ruína.','✚');break;case 'mana':p.mana=clamp(p.mana+6,0,p.maxmana);log('Um cristal restitui 6 pontos de foco.','✧');break;case 'heal':p.hp=clamp(p.hp+9,0,p.maxhp);log('Ossos quentes devolvem 9 pontos de vida.','♥');break;case 'trap':{let damage=rand(3,7)+G.floor;receiveDamage(damage,'Uma inscrição explode sob seus pés!');break;}case 'relic':{if(window.GolzdovRelicOffers.available(RELICS,p).length){G.pendingRelicOffer={source:'relicario',offers:null};log('Um relicário revela duas inscrições. Você escolherá uma delas.','✥');}else{p.coins+=12;log('Um relicário vazio guarda 12 lascas.','◈');}break;}case 'weapon':{let up=rand(1,2);p.atk+=up;p.weapon=pick(['Lâmina das Costelas','Arco de Osso','Martelo Fendido','Bastão da Sombra','Presa Polida']);log(`Arma: ${p.weapon}. Ataque +${up}!`,'⚔');break;}case 'armor':{p.def++;p.armor=pick(['Placas Ancestrais','Colete de Ferro Negro','Cota de Vértebras','Manto de Osso']);log(`${p.armor}: defesa +1!`,'◆');break;}}beep(i.kind==='trap'?115:590,.11);}
 function applyRelic(r){const p=G.hero;if(p.relics.includes(r.id))return;const previous=new Set(relicSynergies().map(pair=>pair.id));p.relics.push(r.id);switch(r.effect){case 'attack':p.atk+=2;break;case 'health':p.maxhp+=10;p.hp=clamp(p.hp+10,0,p.maxhp);break;case 'mana':p.maxmana+=7;p.mana=clamp(p.mana+7,0,p.maxmana);break;case 'dodge':p.dodge+=12;break;case 'defense':p.def+=2;break;case 'crit':p.crit+=15;break;case 'curse':p.atk+=4;p.maxhp=Math.max(1,p.maxhp-7);p.hp=clamp(p.hp,1,p.maxhp);break;}const combo=relicSynergies().find(pair=>!previous.has(pair.id));if(combo){log(`SINERGIA DESPERTA: ${combo.name}. ${combo.desc}`,'✥');toast(`✥ ${combo.name}`);}else toast(`✥ ${r.name}`);}
 // Relíquias podem ser trocadas, mas nenhuma troca é aplicada até o jogador confirmar.
