@@ -38,7 +38,7 @@ function boot(old){
  }
  const hook="showScreen('home');renderClasses();requestAnimationFrame(render);";
  assert.equal(js.split(hook).length,2);
- js=js.replace(hook,"showScreen('home');renderClasses();globalThis.__skills={get:()=>G,getAim:()=>aim,startNew,hideModal,skill,castOn,reveal,waitTurn,drink,doMove,attack,chooseClass:id=>{selectedClass=id}};requestAnimationFrame(render);");
+ js=js.replace(hook,"showScreen('home');renderClasses();globalThis.__skills={get:()=>G,getAim:()=>aim,getSave:()=>localStorage.getItem('carcaca_golzdov_run_v1'),getMeta:()=>localStorage.getItem('carcaca_golzdov_meta_v1'),startNew,hideModal,skill,castOn,reveal,waitTurn,drink,doMove,attack,chooseClass:id=>{selectedClass=id}};requestAnimationFrame(render);");
  vm.runInNewContext(js,sandbox,{filename:old?'legacy-original-skills.js':'migrated-skills.js',timeout:10000});
  return sandbox.__skills;
 }
@@ -75,7 +75,7 @@ function play(h,cls,floor,seed,plan){
   else if(act==='drink')h.drink();
   else if(act==='move')h.doMove(0,1);
   else if(act==='attack'){const foe=g.enemies.find(e=>e.hp>0);if(foe)h.attack(foe,false);}
-  states.push(JSON.stringify({run:g,aim:h.getAim()}));
+  states.push(JSON.stringify({run:g,aim:h.getAim(),save:h.getSave(),meta:h.getMeta()}));
   if(g.over)break;
  }
  return states;
