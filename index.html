@@ -99,6 +99,7 @@
 <script src="./core/skills.js"></script>
 <script src="./core/enemies.js"></script>
 <script src="./core/turns.js"></script>
+<script src="./core/actions.js"></script>
 <script src="./gamepad.js"></script>
 <script src="./relic-effects.js"></script>
 <script src="./relic-offers.js"></script>
@@ -306,8 +307,9 @@ function hitEnemy(e,dmg,kind,source='effect'){if(!e||e.hp<=0)return;e.hp-=dmg;lo
 function killEnemy(e,source='effect'){const d=ENEMIES[e.type];G.kills++;G.hero.xp+=d.xp;G.hero.coins+=d.gold;G.treasure+=d.gold;G.hero.mana=clamp(G.hero.mana+1,0,G.hero.maxmana);G.enemies=G.enemies.filter(x=>x!==e);relicEvent('onKill',{enemy:e,kind:source});log(`${d.name} cai. +${d.xp} experiência, +${d.gold} âmbar.`,'✥');if(e.type==='boss'){G.bossDown=true;}}
 function skill(which){if(!canPlay())return;stopAuto();const p=G.hero,c=CLASSES[p.classId],s=c.skills[which];if(p.mana<s.cost){log(`Foco insuficiente. Precisa de ${s.cost} pontos.`,'✧');beep(125);return;}if(s.target){aim=aim===which?null:which;updateAim();if(aim!==null){toast(`Selecione um alvo para ${s.name}`);beep(505);}}else{aim=null;updateAim();const outcome=window.GolzdovSkills.instant(G,which,{skills:c.skills,hit:heroHit,onRoot:relicEvent});if(outcome.message)log(outcome.message,outcome.icon);beep(480,.14);worldTurn();updateHUD();save();}}
 function castOn(x,y){if(!canPlay()||aim===null)return;const c=CLASSES[G.hero.classId];const outcome=window.GolzdovSkills.targeted(G,aim,x,y,{skills:c.skills,isVisible,lineClear,enemyAt,hit:heroHit});if(outcome.status==='unreachable'){log('A magia não consegue alcançar esse ponto.','✧');beep(125);return;}if(outcome.status==='empty'){log('Toque em um inimigo para usar essa habilidade.','✧');return;}if(outcome.status==='no-focus'){aim=null;updateAim();return;}if(outcome.message)log(outcome.message,outcome.icon);aim=null;updateAim();beep(730,.17,'triangle');worldTurn();updateHUD();save();}
-function drink(){if(!canPlay())return;stopAuto();aim=null;updateAim();const p=G.hero;if(!p.potions){log('Sua bolsa está vazia.','✚');return;}if(p.hp===p.maxhp){log('Você já está com a vida completa.','✚');return;}p.potions--;let value=17+p.level*2;p.hp=clamp(p.hp+value,0,p.maxhp);log(`Você bebe uma poção: +${value} de vida.`,'♥');beep(620,.14);worldTurn();updateHUD();save();}
-function waitTurn(){if(!canPlay())return;stopAuto();aim=null;updateAim();const p=G.hero;p.mana=clamp(p.mana+1,0,p.maxmana);log('Você respira fundo e restaura 1 ponto de foco.','◈');worldTurn();updateHUD();save();}
+function executeUtilityAction(type){if(!canPlay())return;stopAuto();aim=null;updateAim();const result=window.GolzdovActions.dispatch(G,{type});for(const event of result.events){if(event.type==='log')log(event.text,event.icon);else if(event.type==='sound')beep(event.frequency,event.duration);else if(event.type==='turn')worldTurn();}if(result.consumesTurn){updateHUD();save();}}
+function drink(){executeUtilityAction('POTION');}
+function waitTurn(){executeUtilityAction('WAIT');}
 function receiveDamage(value,msg){let p=G.hero,damage=window.GolzdovCombat.incomingDamage(G,value,{muralha:hasTalent('v_muralha')});damage=relicEvent('onDefend',{damage}).damage;p.hp=Math.max(0,p.hp-damage);log(`${msg} −${damage} vida.`,'♥');beep(95,.15,'sawtooth');relicEvent('onHurt',{damage});if(p.hp<=0&&hasTalent('v_juramento')&&!p.lastOathUsed){p.hp=1;p.lastOathUsed=true;p.oathWeakened=true;log('Último Juramento: você resiste ao golpe fatal, mas sua guarda enfraquece.','◆');}else if(p.hp<=0)die();}
 function enemyStep(e){return window.GolzdovEnemies.step(G,e,ENEMIES,{walkable:walk,lineClear,enemyAt,onMelee:enemyHit,onReceiveDamage:receiveDamage});}
 function enemyHit(e){const def=ENEMIES[e.type],result=window.GolzdovCombat.enemyMelee(G,e);if(result.dodge){log(`Você esquiva do ataque de ${def.name}.`,'➶');relicEvent('onDodge',{enemy:e});beep(520,.05);return;}receiveDamage(result.damage,`${def.name} atinge você.`);}
@@ -458,7 +460,7 @@ showScreen('home');renderClasses();requestAnimationFrame(render);
     say('MODO APP INDISPONÍVEL NESTE NAVEGADOR', 'offline-error');
     return;
   }
-  const FILES = ['./', './index.html', './core/rng.js', './core/dungeon.js', './core/navigation.js', './core/combat.js', './core/skills.js', './core/enemies.js', './core/turns.js', './gamepad.js', './relic-effects.js', './relic-offers.js', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
+  const FILES = ['./', './index.html', './core/rng.js', './core/dungeon.js', './core/navigation.js', './core/combat.js', './core/skills.js', './core/enemies.js', './core/turns.js', './core/actions.js', './gamepad.js', './relic-effects.js', './relic-offers.js', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
   async function checkReady() {
     // Look up active precached assets without duplicating the SW cache version here.
     const all = await Promise.all(FILES.map(file => caches.match(new URL(file, location.href))));
