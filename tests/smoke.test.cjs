@@ -279,7 +279,7 @@ test('oferta dupla gratuita fica pendente no save e pode ser retomada',()=>{
   assert.equal(offered.length,2);
   hooks.save();
   const resumed=hooks.migrateRun(JSON.parse(storage.get('carcaca_golzdov_run_v1')));
-  assert.deepEqual(Array.from(resumed.pendingRelicOffer.offers),offered);
+  assert.deepEqual(Array.from(resumed.pendingRelicOffer.offers),Array.from(offered));
 });
 
 test('mercador oferece os mesmos dois itens até compra, sem reroll gratuito',()=>{
