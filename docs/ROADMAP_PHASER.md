@@ -1,6 +1,6 @@
 # Roadmap de migração — Catacumbas de Golzdov → Phaser 4
 
-**Status:** P0–P1C.3B.3A concluídos na `main`. [PR #26](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/26): **69/69 testes verdes**, incluindo 336 replays de coleta/abates e 408 de movimento. Build **1.3.2 / cache v16** publicada no código principal; P1C.3B.3B (ataques/eventos terminais) e P2–P6 pendentes. Preview Phaser só quando jogável.
+**Status:** P0–P1C.3B.3A concluídos na `main`. [PR #26](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/26): **69/69 testes verdes**, incluindo 336 replays de coleta/abates e 408 de movimento. Build **1.3.2 / cache v16** publicada no código principal; [P1C.3B.3B — ataques/eventos terminais](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/27) e P2–P6 pendentes. Preview Phaser só quando jogável.
 **Data do diagnóstico:** 15/10/2026.
 **Acompanhamento GitHub:** [issue #11 — migração Phaser](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/11); [issue #12 — corrigir roteamento PWA](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/12).
 **Objetivo:** migrar a apresentação, a composição das cenas e a entrada para Phaser 4 sem alterar silenciosamente as regras do roguelike, perder os saves ou bloquear o GitHub Pages.
@@ -173,7 +173,7 @@ docs/
 - [x] **336 replays** dedicados: 240 de coleta (3 classes × 8 seeds × 10 cenários) + 96 de abates (3 classes × 8 seeds × 4 cenários); 408 replays anteriores de movimento permanecem como regressão integrada.
 - [x] Bump do PWA para `golzdov-offline-v16` e menu **BUILD 1.3.2 · CACHE V16 · P1C.3B.3A**.
 - [x] Publicar no código principal após CI verde ([PR #26](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/26)); **verificação manual do Pages/PWA ainda pendente**.
-- [ ] **P1C.3B.3B:** extrair resolução completa de `ATTACK`, efeitos de dano, vitória, morte e fila de eventos; replay de sequências antes da preview Phaser.
+- [ ] **[P1C.3B.3B](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/27):** extrair resolução completa de `ATTACK`, efeitos de dano, vitória, morte e fila de eventos; replay de sequências antes da preview Phaser.
 
 **Integração concluída:** [PR #26](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/26), merge `ec6e707` em `main`; [CI #38957375374](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/38957375374): **69/69 testes aprovados**, incluindo 336 replays de coleta/recompensas, 408 replays de movimento e regressões de RNG, saves e PWA. A build fica na rota raiz; **ainda não existe preview Phaser jogável**. Teste real de Pages, gamepad e cache antigo instalado continua pendente.
 
