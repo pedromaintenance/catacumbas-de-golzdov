@@ -1,6 +1,6 @@
 # Roadmap de migração — Catacumbas de Golzdov → Phaser 4
 
-**Status:** P0–P1C.3B.2 integrados à `main`. PR #24: 61 testes verdes; PR #25: **65 testes verdes**, incluindo 408 replays de movimento. A versão **BUILD 1.3.1 · CACHE V15** está no código principal para teste no Pages. P1C.3B.3 e P2–P6 pendentes; a preview Phaser jogável será publicada apenas após P2B.
+**Status:** P0–P1C.3B.2 concluídos na `main` (última CI: 65/65). P1C.3B.3A (loot e recompensas) implementado para CI e publicação; P1C.3B.3B (ataques/eventos terminais), P2–P6 pendentes. Preview Phaser só quando jogável.
 **Data do diagnóstico:** 15/10/2026.
 **Acompanhamento GitHub:** [issue #11 — migração Phaser](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/11); [issue #12 — corrigir roteamento PWA](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/12).
 **Objetivo:** migrar a apresentação, a composição das cenas e a entrada para Phaser 4 sem alterar silenciosamente as regras do roguelike, perder os saves ou bloquear o GitHub Pages.
@@ -163,6 +163,20 @@ docs/
 - [ ] Extrair combate, IA, turnos e dispatch(action) sem dependências gráficas (P1C).
 
 **Integração:** [PR #17](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/17) integrado à main, commit `b8c8fa4`, GitHub Actions `success`. Goldens de 50 cenários e 1.000 masmorras verdes. O jogo original continua jogável; preview Phaser ainda não publicada.
+### P1C.3B.3A — Coleta e recompensas por eventos (16/10/2026)
+
+- [x] Congelar `collect(item)` e `killEnemy(enemy,source)` originais **antes** da refatoração em `tests/fixtures/legacy-loot-rewards.js`.
+- [x] Criar `core/loot.js`: coleta dos oito tipos de itens (âmbar, poção, mana, cura, armadilha, relicário, arma e armadura), com RNG xorshift compartilhado e eventos ordenados `log`, `damage`, `sound` sem DOM, Canvas, Phaser ou armazenamento.
+- [x] Criar `core/rewards.js`: experiência, âmbar, foco, remoção do inimigo e eventos ordenados de `onKill`, log e `boss-down`; manter efeitos de relíquias **antes** da derrota do chefe ser finalizada, como no jogo anterior.
+- [x] Adicionar `COLLECT` a `GolzdovActions.dispatch`: remover do mundo somente o primeiro item sob o herói; não gastar turno extra, recursos ou RNG para ações sem item.
+- [x] Adaptar `doMove`, `collect` e `killEnemy` para consumir eventos preservando dano, sons, logs, armadilhas fatais, relíquias, recompensas e saves; nenhuma nova chave de armazenamento.
+- [x] **336 replays** dedicados: 240 de coleta (3 classes × 8 seeds × 10 cenários) + 96 de abates (3 classes × 8 seeds × 4 cenários); 408 replays anteriores de movimento permanecem como regressão integrada.
+- [x] Bump do PWA para `golzdov-offline-v16` e menu **BUILD 1.3.2 · CACHE V16 · P1C.3B.3A**.
+- [ ] Publicar somente após CI verde e conferir manualmente atualização no Pages/PWA.
+- [ ] **P1C.3B.3B:** extrair resolução completa de `ATTACK`, efeitos de dano, vitória, morte e fila de eventos; replay de sequências antes da preview Phaser.
+
+**Critério de aceite:** 336 replays do comportamento original e regressões anteriores verdes; `core/loot.js` e `core/rewards.js` não devem acessar renderer ou storage. A build testável continua na rota raiz, **não** em `/phaser/`.
+
 ### P1C.3B.2 — Movimento por eventos + identificação da versão (16/10/2026)
 
 - [x] Preservar `doMove(dx,dy)` original em `tests/fixtures/legacy-movement.js`, anterior à refatoração.
@@ -172,7 +186,7 @@ docs/
 - [x] Validar que movimentos inválidos/diagonais não gastam turno, RNG nem recursos; bater em um inimigo delega ao ataque preexistente.
 - [x] Exibir no menu inicial **BUILD 1.3.1 · CACHE V15 · P1C.3B.2** para diferenciar atualização realmente carregada, sem tocar no save.
 - [x] Bump do service worker para `golzdov-offline-v15` e atualização das regressões de cache.
-- [ ] Integrar somente após CI verde e validar visualmente no Pages e no PWA instalado (recarregar online antes).
+- [x] Integrar após CI verde (PR #25, 65/65); validação visual no Pages e no PWA instalado ainda pendente.
 - [ ] **P1C.3B.3**: migrar ataques direcionados, coleta, recompensas e estados finais para eventos de domínio; replay multi-turno antes da primeira preview Phaser.
 
 **Integrado:** [PR #25](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/25), commit `c30f052` em `main`. [CI #38955997010](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/38955997010) **65/65 testes verdes**, incluindo 408 replays idênticos. A página de produção pode receber a versão PWA v15 após publicação/atualização do cache. A engine Phaser **ainda não** é jogável em `/phaser/`.
@@ -251,7 +265,8 @@ docs/
 | P1C.3A | **Concluído** — IA e `worldTurn` compartilhados | 660 replays, 57/57 testes e [PR #23](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/23) |
 | P1C.3B.1 | **Concluído**: WAIT/POTION e eventos ordenados | 192 replays, PR #24 e CI 61/61 |
 | P1C.3B.2 | **Concluído**: MOVE, salas, coleta delegada e build visível | PR #25, 408 replays, CI **65/65**, build 1.3.1 |
-| P1C.3B.3 | Ataque, coleta, recompensas e finais via eventos puros | Replays de sequências, saves v1/v2 e 3 classes |
+| P1C.3B.3A | Coleta, recompensas e chefe via eventos; build 1.3.2 em revisão | 336 replays de loot/recompensas + regressões completas |
+| P1C.3B.3B | ATTACK, dano, fim de run e replay de ações | Replays de sequências, saves v1/v2, três classes |
 | P2A | Cena Phaser com câmera, texturas e mapa; usar o mesmo estado do núcleo | Preview não substitui a versão legada |
 | P2B | Movimento, combate básico, HUD, controle e save isolado na preview | Primeira build realmente jogável em `/phaser/` |
 | P3–P6 | Paridade completa, UI/polimento, PWA e lançamento | Playtests reais e plano de rollback |
