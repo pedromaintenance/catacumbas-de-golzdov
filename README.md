@@ -22,9 +22,9 @@ node --test tests/*.test.cjs
 
 A suíte verifica sintaxe, coerência do cache offline, migração de saves antigos, seed, talentos, conectividade de 1.000 mapas comandos de controle Xbox com gamepad simulado e as relíquias/sinergias da atualização 1.2B. O GitHub Actions executa a suíte automaticamente em push e pull requests.
 
-## Próxima arquitetura: Phaser 4 (planejamento)
+## Próxima arquitetura: Phaser 4 (preparação P0)
 
-A migração de engine foi [planejada separadamente](docs/ROADMAP_PHASER.md), mas **a versão Phaser ainda não está implementada nem publicada**. A versão atual continua neste endereço. Uma preview jogável será adicionada à subpasta `/phaser/` após corrigir o service worker, criar a build Vite e passar nos testes. O plano mantém o save da versão atual intacto durante os testes. Acompanhe a [issue #11](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/11).
+A migração de engine foi [planejada separadamente](docs/ROADMAP_PHASER.md), mas **a versão Phaser ainda não está implementada nem publicada**. A versão atual continua neste endereço. O service worker do jogo atual já foi corrigido para não responder às navegações de `/phaser/` com o HTML legado (cache offline v8). Uma preview jogável só será adicionada à subpasta `/phaser/` depois de criar o projeto Phaser/Vite e passar nos testes. A rota experimental **ainda não contém o jogo Phaser**. O plano mantém o save da versão atual intacto durante os testes. Atualize o jogo principal conectado à internet para permitir que o PWA instalado receba o service worker novo. Acompanhe a [issue #11](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/11).
 
 ## Relicários e raridades — versão 1.2C
 
