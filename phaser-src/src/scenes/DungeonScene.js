@@ -1,82 +1,179 @@
 import Phaser from 'phaser';
-import {createPreviewWorld,WIDTH,HEIGHT} from '../world.js';
-
+import {initialPreviewRun,previewAction,previewVisible} from '../preview-engine.js';
+import {loadPreview,savePreview,clearPreview} from '../preview-save.js';
+import {ENEMIES,WIDTH,HEIGHT} from '../world.js';
 const TILE=28;
-const COLORS={
-  rock:0x10131c,stone:0x232937,grid:0x303749,
-  floor:0x272734,threshold:0x555366,
-  hero:0xffd9a1,halo:0xa47247,enemy:0xc57580,
-  stair:0xd3b06b,shrine:0x93acb5,relic:0xb58ec6,
-  item:0xc9aa84,trap:0x934d55
+const P={
+ rock:0x11131d,wall:0x2c3343,floor:0x302b38,grid:0x4f4555,
+ ghost:0x1b1d27,hero:0xf3c996,halo:0x947251,enemy:0xce777e,
+ stair:0xd7aa67,shrine:0x81b9be,relic:0xc8a1ce,item:0xe2bb80,trap:0xc45b61
 };
-function seedFromUrl(){
-  const args=new URLSearchParams(location.search);
-  const n=Number(args.get('seed'));
-  return Number.isSafeInteger(n)&&n>0?(n>>>0):0x52c4a190;
-}
-function floorFromUrl(){
-  const n=Number(new URLSearchParams(location.search).get('floor'));
-  return Number.isInteger(n)?Math.min(5,Math.max(1,n)):1;
-}
-function xy(run,p){return [p.x*TILE+TILE/2,p.y*TILE+TILE/2];}
-
+const title=['Costelas do Silêncio','Medula Fraturada','Veias Petrificadas','Salão das Vértebras','O Nome Sepultado'];
+const el=id=>document.getElementById(id);
+const storage=()=>{try{return window.localStorage;}catch(_){return null;}};
+const fixedSeed=()=>{
+ const s=new URLSearchParams(location.search).get('seed');
+ const n=s===null?NaN:Number(s);
+ return Number.isSafeInteger(n)&&n>0?(n>>>0):0x52c4a190;
+};
+const startFloor=()=>{
+ const n=Number(new URLSearchParams(location.search).get('floor'));
+ return Number.isInteger(n)&&n>=1&&n<=5?n:1;
+};
 export class DungeonScene extends Phaser.Scene{
-  constructor(){super('DungeonScene');}
-  create(){
-    const {run,visible}=createPreviewWorld(seedFromUrl(),floorFromUrl());
-    this.previewRun=run;
-    this.cameras.main.setBackgroundColor('#10111a');
-    const tileGraphics=this.add.graphics();
-    tileGraphics.fillStyle(COLORS.rock);
-    tileGraphics.fillRect(0,0,WIDTH*TILE,HEIGHT*TILE);
-    for(let y=0;y<HEIGHT;y++)for(let x=0;x<WIDTH;x++){
-      const cell=y*WIDTH+x;
-      if(!visible.has(cell))continue; // P2A: visibilidade do core, sem atualizar frames.
-      const walk=run.map[cell]===1;
-      const alternate=((x*7+y*13)%5===0);
-      tileGraphics.fillStyle(walk?(alternate?COLORS.threshold:COLORS.floor):COLORS.stone);
-      tileGraphics.fillRect(x*TILE,y*TILE,TILE,TILE);
-      if(walk){
-        tileGraphics.lineStyle(1,COLORS.grid,.35);
-        tileGraphics.strokeRect(x*TILE+.5,y*TILE+.5,TILE-1,TILE-1);
-      }else{
-        tileGraphics.fillStyle(COLORS.rock,.55);
-        tileGraphics.fillRect(x*TILE+4,y*TILE+5,TILE-8,4);
-      }
-    }
-    const pin=(pos,char,color)=>{
-      if(!pos||!visible.has(pos.y*WIDTH+pos.x))return;
-      const [x,y]=xy(run,pos);
-      this.add.text(x,y,char,{fontFamily:'monospace',fontSize:'18px',color:'#e5d4bd'})
-        .setOrigin(.5).setTint(color).setDepth(4);
-    };
-    pin(run.stairs,'⇣',COLORS.stair);
-    pin(run.shrine,'✥',COLORS.shrine);
-    for(const item of run.items){
-      const symbol=item.kind==='relic'?'✧':item.kind==='trap'?'×':'◆';
-      const color=item.kind==='relic'?COLORS.relic:item.kind==='trap'?COLORS.trap:COLORS.item;
-      pin(item,symbol,color);
-    }
-    for(const enemy of run.enemies){
-      if(enemy.hp<=0||!visible.has(enemy.y*WIDTH+enemy.x))continue;
-      const [x,y]=xy(run,enemy);
-      const circle=this.add.circle(x,y,8,COLORS.enemy).setDepth(5);
-      circle.setStrokeStyle(2,0xf5c9c4,.7);
-    }
-    const [hx,hy]=xy(run,run.hero);
-    const hero=this.add.container(hx,hy).setDepth(10);
-    hero.add(this.add.circle(0,0,13,COLORS.halo,.24));
-    hero.add(this.add.rectangle(0,0,14,16,COLORS.hero).setStrokeStyle(2,0x43352f));
-    hero.add(this.add.rectangle(0,-4,4,5,0x412d28));
-    this.cameras.main.setBounds(0,0,WIDTH*TILE,HEIGHT*TILE);
-    this.cameras.main.startFollow(hero,true,.12,.12);
-    this.cameras.main.roundPixels=true;
-    const status=document.getElementById('scene-status');
-    if(status)status.textContent='MAPA GERADO · ESTADO COMPARTILHADO · SEM TURNOS';
-    const seed=document.getElementById('scene-seed');
-    if(seed)seed.textContent='ESTRATO '+run.floor+' · SEED '+run.seed.toString(16).toUpperCase().padStart(8,'0');
-    const resize=()=>this.cameras.main.setZoom(Math.min(1.5,Math.max(.8,this.scale.width/720)));
-    resize();this.scale.on('resize',resize);
-    this.events.once(Phaser.Scenes.Events.SHUTDOWN,()=>this.scale.off('resize',resize));
+ constructor(){super('DungeonScene');this.run=null;this.lastPadAt=0;}
+ create(){
+  const existing=loadPreview(storage());
+  this.run=existing||initialPreviewRun(fixedSeed(),startFloor());
+  this.previewRun=this.run;
+  this.visible=previewVisible(this.run);
+  this.mapG=this.add.graphics().setDepth(0);
+  this.entityG=this.add.graphics().setDepth(3);
+  this.hero=this.add.container(0,0).setDepth(10);
+  this.hero.add(this.add.circle(0,0,13,P.halo,.28));
+  this.hero.add(this.add.rectangle(0,0,15,17,P.hero).setStrokeStyle(2,0x39272a));
+  this.hero.add(this.add.rectangle(0,-5,5,5,0x39272a));
+  this.cameras.main.setBounds(0,0,WIDTH*TILE,HEIGHT*TILE);
+  this.cameras.main.startFollow(this.hero,true,.17,.17);
+  this.cameras.main.roundPixels=true;
+  this.cameras.main.setBackgroundColor('#0e1018');
+  const resize=()=>this.cameras.main.setZoom(Math.max(.85,Math.min(1.6,this.scale.width/650)));
+  resize();this.scale.on('resize',resize);
+  const onKey=e=>{
+   const key=e.key.toLowerCase(),movement={
+    arrowup:[0,-1],w:[0,-1],arrowdown:[0,1],s:[0,1],
+    arrowleft:[-1,0],a:[-1,0],arrowright:[1,0],d:[1,0]
+   };
+   if(movement[key]){e.preventDefault();this.perform({type:'MOVE',dx:movement[key][0],dy:movement[key][1]});}
+   else if(key===' '||key==='.') {e.preventDefault();this.perform({type:'WAIT'});}
+   else if(key==='h'||key==='p')this.perform({type:'POTION'});
+   else if(key==='f'||key==='enter'){e.preventDefault();this.attackNearest();}
+  };
+  document.addEventListener('keydown',onKey);
+  const buttons=[];
+  for(const button of document.querySelectorAll('[data-preview-action]')){
+   const listener=()=>this.command(button.dataset.previewAction);
+   button.addEventListener('click',listener);buttons.push([button,listener]);
   }
+  const pointerClick=pointer=>{
+   if(this.run.over)return;
+   const x=Math.floor(pointer.worldX/TILE),y=Math.floor(pointer.worldY/TILE);
+   if(x<0||y<0||x>=WIDTH||y>=HEIGHT)return;
+   const p=this.run.hero,enemy=this.run.enemies.find(e=>e.hp>0&&e.x===x&&e.y===y);
+   const distance=Math.abs(x-p.x)+Math.abs(y-p.y);
+   if(enemy&&distance<=p.range)return this.perform({type:'ATTACK',enemyId:enemy.id});
+   if(distance===1)this.perform({type:'MOVE',dx:x-p.x,dy:y-p.y});
+  };
+  this.input.on('pointerdown',pointerClick);
+  this.events.once(Phaser.Scenes.Events.SHUTDOWN,()=>{
+   document.removeEventListener('keydown',onKey);
+   for(const [button,listener] of buttons)button.removeEventListener('click',listener);
+   this.scale.off('resize',resize);
+   this.input.off('pointerdown',pointerClick);
+  });
+  this.draw();
+  this.sync();
+  savePreview(storage(),this.run);
+ }
+ command(command){
+  const dirs={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};
+  if(dirs[command])this.perform({type:'MOVE',dx:dirs[command][0],dy:dirs[command][1]});
+  if(command==='wait')this.perform({type:'WAIT'});
+  if(command==='potion')this.perform({type:'POTION'});
+  if(command==='attack')this.attackNearest();
+  if(command==='restart')this.restart();
+ }
+ restart(){
+  clearPreview(storage());
+  this.run=initialPreviewRun(fixedSeed(),startFloor());
+  this.previewRun=this.run;
+  this.visible=previewVisible(this.run);
+  savePreview(storage(),this.run);
+  this.draw();this.sync();
+ }
+ attackNearest(){
+  if(this.run.over)return;
+  const hero=this.run.hero;
+  const options=this.run.enemies.filter(e=>e.hp>0&&this.visible.has(e.y*WIDTH+e.x))
+   .sort((a,b)=>(Math.abs(a.x-hero.x)+Math.abs(a.y-hero.y))-(Math.abs(b.x-hero.x)+Math.abs(b.y-hero.y)));
+  const enemy=options.find(e=>Math.abs(e.x-hero.x)+Math.abs(e.y-hero.y)<=hero.range);
+  if(enemy)this.perform({type:'ATTACK',enemyId:enemy.id});
+  else this.report('Nenhum inimigo visível ao alcance do ataque.');
+ }
+ perform(action){
+  if(this.run.over){this.report('Expedição encerrada. Inicie outra.');return;}
+  const result=previewAction(this.run,action);
+  this.visible=previewVisible(this.run);
+  if(result.consumesTurn||result.events.length){
+   savePreview(storage(),this.run);
+  }
+  if(result.status==='blocked')this.report('Uma parede de ossos impede a passagem.');
+  if(result.status==='out-of-range')this.report('O inimigo está fora do alcance.');
+  this.draw();this.sync();
+ }
+ report(message){if(el('scene-status'))el('scene-status').textContent=message;}
+ draw(){
+  const run=this.run,hero=run.hero;
+  this.mapG.clear();this.entityG.clear();
+  this.mapG.fillStyle(P.rock).fillRect(0,0,WIDTH*TILE,HEIGHT*TILE);
+  for(let y=0;y<HEIGHT;y++)for(let x=0;x<WIDTH;x++){
+   const key=y*WIDTH+x;
+   if(!run.seen[key])continue;
+   const isNow=this.visible.has(key),walk=run.map[key]===1;
+   const color=!isNow?P.ghost:walk?((x+y*3)%6===0?0x413745:P.floor):P.wall;
+   this.mapG.fillStyle(color).fillRect(x*TILE,y*TILE,TILE,TILE);
+   if(walk&&isNow){
+    this.mapG.lineStyle(1,P.grid,.36).strokeRect(x*TILE+.5,y*TILE+.5,TILE-1,TILE-1);
+   }else if(isNow){
+    this.mapG.fillStyle(P.rock,.65).fillRect(x*TILE+4,y*TILE+5,TILE-8,4);
+   }
+  }
+  const pin=(point,color,size=6)=>{
+   if(!point||!this.visible.has(point.y*WIDTH+point.x))return;
+   this.entityG.fillStyle(color).fillRect(point.x*TILE+TILE/2-size/2,point.y*TILE+TILE/2-size/2,size,size);
+  };
+  pin(run.stairs,P.stair,12);pin(run.shrine,P.shrine,10);
+  for(const item of run.items)pin(item,item.kind==='trap'?P.trap:item.kind==='relic'?P.relic:P.item,7);
+  for(const enemy of run.enemies)if(enemy.hp>0&&this.visible.has(enemy.y*WIDTH+enemy.x)){
+   const cx=enemy.x*TILE+TILE/2,cy=enemy.y*TILE+TILE/2;
+   this.entityG.fillStyle(P.enemy).fillCircle(cx,cy,8);
+   this.entityG.lineStyle(1,0xf1bfc0).strokeCircle(cx,cy,8);
+  }
+  this.hero.setPosition(hero.x*TILE+TILE/2,hero.y*TILE+TILE/2);
+ }
+ sync(){
+  const g=this.run,p=g.hero;
+  const pairs={
+   'hero-hp':p.hp+' / '+p.maxhp,
+   'hero-focus':p.mana+' / '+p.maxmana,
+   'hero-level':String(p.level),
+   'run-turn':String(g.turn),
+   'run-floor':g.floor+' / 5',
+   'hero-potions':String(p.potions),
+   'run-kills':String(g.kills),
+   'scene-seed':g.seed.toString(16).toUpperCase().padStart(8,'0')
+  };
+  for(const [id,value] of Object.entries(pairs))if(el(id))el(id).textContent=value;
+  if(el('scene-heading'))el('scene-heading').textContent=title[g.floor-1];
+  if(el('scene-status'))el('scene-status').textContent=g.over
+   ?g.previewOutcome==='victory'?'VITÓRIA NO RECORTE P2B — reinicie para outra expedição.':'FIM DA EXPEDIÇÃO — reinicie para tentar novamente.'
+   :(g.previewLog?.at(-1)||'Explore os corredores do osso.');
+  if(el('recent-log'))el('recent-log').textContent=(g.previewLog||[]).slice(-3).join(' · ');
+ }
+ update(time){
+  if(time-this.lastPadAt<175||this.run.over)return;
+  const pad=navigator.getGamepads?.()?.find(p=>p&&p.connected);
+  if(!pad)return;
+  const pressed=i=>!!pad.buttons[i]?.pressed;
+  const axis=(a)=>pad.axes[a]||0;
+  let cmd=null;
+  if(pressed(12)||axis(1)<-.55)cmd='up';
+  else if(pressed(13)||axis(1)>.55)cmd='down';
+  else if(pressed(14)||axis(0)<-.55)cmd='left';
+  else if(pressed(15)||axis(0)>.55)cmd='right';
+  else if(pressed(0))cmd='attack';
+  else if(pressed(2))cmd='potion';
+  else if(pressed(5))cmd='wait';
+  if(cmd){this.lastPadAt=time;this.command(cmd);}
+ }
 }
