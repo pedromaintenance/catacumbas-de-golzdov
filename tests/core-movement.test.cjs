@@ -105,6 +105,6 @@ test('inimigo na rota transfere ataque sem permitir passo ou duplicar turno',()=
  assert.equal(run.hero.x,10);assert.equal(run.steps,3);assert.equal(run.rngState,321);
 });
 test('a versão de teste aparece no menu inicial de forma acessível',()=>{
- assert.match(html,/<small id="build-version"[^>]*>BUILD 1\.3\.5 · CACHE V19 · P1C\.3B\.3B\.2B<\/small>/);
+ assert.match(html,/<small id="build-version"[^>]*>BUILD 1\.3\.6 · CACHE V20 · P1C\.3B\.3B\.2C<\/small>/);
  assert.match(html,/\.build-version\{display:block/);
 });
