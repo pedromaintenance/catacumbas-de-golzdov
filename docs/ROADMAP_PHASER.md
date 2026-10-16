@@ -1,6 +1,6 @@
 # Roadmap de migração — Catacumbas de Golzdov → Phaser 4
 
-**Status:** P0, P1A, P1B, P1C.1 e P1C.2 integrados. P1C.3A integrado à `main` e validado (57/57 testes); P1C.3B.1 (WAIT/POTION e eventos) em revisão, enquanto P1C.3B.2/B.3 seguem pendentes na [issue #22](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/22). Preview Phaser jogável apenas após P2B.
+**Status:** P0–P1C.3A concluídos. P1C.3B.1 (WAIT/POTION) integrado à main pelo PR #24, com 61 testes verdes. P1C.3B.2 (MOVE + versão visível no menu) implementado para validação; P1C.3B.3 e P2–P6 pendentes. Preview Phaser jogável apenas após P2B.
 **Data do diagnóstico:** 15/10/2026.
 **Acompanhamento GitHub:** [issue #11 — migração Phaser](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/11); [issue #12 — corrigir roteamento PWA](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/12).
 **Objetivo:** migrar a apresentação, a composição das cenas e a entrada para Phaser 4 sem alterar silenciosamente as regras do roguelike, perder os saves ou bloquear o GitHub Pages.
@@ -163,6 +163,20 @@ docs/
 - [ ] Extrair combate, IA, turnos e dispatch(action) sem dependências gráficas (P1C).
 
 **Integração:** [PR #17](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/17) integrado à main, commit `b8c8fa4`, GitHub Actions `success`. Goldens de 50 cenários e 1.000 masmorras verdes. O jogo original continua jogável; preview Phaser ainda não publicada.
+### P1C.3B.2 — Movimento por eventos + identificação da versão (16/10/2026)
+
+- [x] Preservar `doMove(dx,dy)` original em `tests/fixtures/legacy-movement.js`, anterior à refatoração.
+- [x] Acrescentar `MOVE` ao `GolzdovActions.dispatch`: verificar direção cardinal, paredes/limites, colisões com inimigos, coordenadas, passos e salas visitadas sem acessar DOM/Phaser.
+- [x] Retornar eventos ordenados de movimentação, ataque delegado, descoberta de sala, coleta e conclusão de turno. O adaptador do legado ainda executa os efeitos de relíquias/loot, modal, som e salvamento na mesma ordem antiga.
+- [x] Cobrir **408 replays pareados** (3 classes × 8 seeds × 17 cenários): salas novas/visitadas, bloqueios, inimigos, moedas, poção, foco, cura, armadilhas/fatalidade, relicários, armas, armaduras, altar e escadas.
+- [x] Validar que movimentos inválidos/diagonais não gastam turno, RNG nem recursos; bater em um inimigo delega ao ataque preexistente.
+- [x] Exibir no menu inicial **BUILD 1.3.1 · CACHE V15 · P1C.3B.2** para diferenciar atualização realmente carregada, sem tocar no save.
+- [x] Bump do service worker para `golzdov-offline-v15` e atualização das regressões de cache.
+- [ ] Integrar somente após CI verde e validar visualmente no Pages e no PWA instalado (recarregar online antes).
+- [ ] **P1C.3B.3**: migrar ataques direcionados, coleta, recompensas e estados finais para eventos de domínio; replay multi-turno antes da primeira preview Phaser.
+
+**Critério de aceite:** 408 replays idênticos de movimento e loot + suíte de regressão geral verde. Publicar na rota raiz do Pages após aprovação; isso ainda **não** publica a engine Phaser em `/phaser/`.
+
 ### P1C.3B.1 — Despachante de ações e eventos (16/10/2026)
 
 - [x] Congelar as funções `drink()` e `waitTurn()` do jogo original antes de alterá-las, em `tests/fixtures/legacy-utility-actions.js`.
@@ -175,7 +189,7 @@ docs/
 - [ ] **P1C.3B.3** — sequências completas de ações, recompensas e finais comparadas ao legado em três classes e cinco estratos.
 - [ ] Playtest real de navegador, controle Xbox e PWA previamente instalado.
 
-**Aceite P1C.3B.1:** 192 replays idênticos e GitHub Actions verde. Incremento de motor, sem página `/phaser/` jogável; só integrar na `main` se a regressão passar.
+**P1C.3B.1 concluído:** [PR #24](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/24) integrado à main, commit `6d67da7`, [CI #38952682930](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/38952682930) com **61/61 testes verdes** e 192 replays. O incremento de motor não cria página `/phaser/` jogável.
 
 ### P1C.3A — IA e sequência de turnos (16/10/2026)
 
@@ -224,8 +238,9 @@ docs/
 | --- | --- | --- |
 | P1C.2 | **Concluído**: seis habilidades, custos de foco, talentos, raiz, sono e AOE | [PR #21](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/21) e 53/53 testes verdes |
 | P1C.3A | **Concluído** — IA e `worldTurn` compartilhados | 660 replays, 57/57 testes e [PR #23](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/23) |
-| P1C.3B.1 | `dispatch(run,action)`, WAIT/POTION e eventos ordenados (em revisão) | 192 replays e CI verde |
-| P1C.3B.2/B.3 | Movimento, ataque, coleta, recompensas e finais via eventos | Replays completos, saves v1/v2 e 3 classes |
+| P1C.3B.1 | **Concluído**: WAIT/POTION e eventos ordenados | 192 replays, PR #24 e CI 61/61 |
+| P1C.3B.2 | MOVE, entrada de salas, coleta delegada e build visível (em revisão) | 408 replays, versão 1.3.1 e CI verde |
+| P1C.3B.3 | Ataque, coleta, recompensas e finais via eventos puros | Replays de sequências, saves v1/v2 e 3 classes |
 | P2A | Cena Phaser com câmera, texturas e mapa; usar o mesmo estado do núcleo | Preview não substitui a versão legada |
 | P2B | Movimento, combate básico, HUD, controle e save isolado na preview | Primeira build realmente jogável em `/phaser/` |
 | P3–P6 | Paridade completa, UI/polimento, PWA e lançamento | Playtests reais e plano de rollback |
@@ -350,4 +365,4 @@ Em cada PR registrar:
 - Critério objetivo para liberar merge e regressão coberta.
 - Atualização de `docs/ROADMAP_PHASER.md` e ligação ao roadmap de conteúdo `docs/ROADMAP_2.0.md`.
 
-**Progresso:** P0, P1A ([PR #15](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/15)), P1B ([PR #17](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/17)), P1C.1 ([PR #19](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/19)) e P1C.2 ([PR #21](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/21)) concluídos com CI verde. IA e turnos P1C.3A concluídos ([PR #23](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/23)); despacho WAIT/POTION P1C.3B.1 em revisão, P1C.3B.2/B.3 e P2–P6 pendentes. Verificação real do Pages/PWA e Xbox físico ainda pendentes.
+**Progresso:** P0, P1A ([PR #15](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/15)), P1B ([PR #17](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/17)), P1C.1 ([PR #19](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/19)) e P1C.2 ([PR #21](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/21)) concluídos com CI verde. IA e turnos P1C.3A concluídos ([PR #23](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/23)); despacho WAIT/POTION P1C.3B.1 concluído ([PR #24](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/24)); MOVE P1C.3B.2 em revisão, P1C.3B.3 e P2–P6 pendentes. Verificação real do Pages/PWA e Xbox físico ainda pendentes.
