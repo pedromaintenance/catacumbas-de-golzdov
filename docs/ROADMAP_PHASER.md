@@ -1,6 +1,6 @@
 # Roadmap de migração — Catacumbas de Golzdov → Phaser 4
 
-**Status:** P0, P1A e P1B concluídos; P1C.1 implementado para validação no PR; P1C.2/P1C.3 e P2–P6 pendentes. Preview Phaser só será publicada quando P2B estiver jogável.
+**Status:** P0, P1A, P1B e P1C.1 integrados à `main` com testes verdes. Próximo: [P1C.2 — habilidades e estados](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/20), depois P1C.3 (IA/dispatch). Preview Phaser só será publicada quando P2B estiver jogável.
 **Data do diagnóstico:** 15/10/2026.
 **Acompanhamento GitHub:** [issue #11 — migração Phaser](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/11); [issue #12 — corrigir roteamento PWA](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/12).
 **Objetivo:** migrar a apresentação, a composição das cenas e a entrada para Phaser 4 sem alterar silenciosamente as regras do roguelike, perder os saves ou bloquear o GitHub Pages.
@@ -174,7 +174,7 @@ docs/
 - [ ] Extrair ataques de habilidade, efeitos de talento e composição de turnos completos: **P1C.2**.
 - [ ] Refatorar `enemyStep`/IA, morte e resultado de ações para `dispatch(action, state)`: **P1C.3**.
 
-**Critério de aceite P1C.1:** os snapshots do legado e o RNG devem ser idênticos; todos os testes da CI aprovados. Este incremento **não é a conclusão de P1C e não cria a preview Phaser**. A versão atual permanece jogável no Pages.
+**P1C.1 integrado:** [PR #19](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/19), merge `e275783` em `main`; **50/50 testes aprovados** na [execução CI #38838973493](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/38838973493), incluindo os 192 golden scenarios de combate, os 50 snapshots de dungeon e as regressões de navegação, saves e gamepad. O módulo de combate **não encerra P1C**; a primeira preview Phaser só poderá ser disponibilizada depois de um vertical slice jogável.
 
 ### Próximos passos rastreáveis
 
@@ -306,4 +306,4 @@ Em cada PR registrar:
 - Critério objetivo para liberar merge e regressão coberta.
 - Atualização de `docs/ROADMAP_PHASER.md` e ligação ao roadmap de conteúdo `docs/ROADMAP_2.0.md`.
 
-**Progresso:** P0, P1A ([PR #15](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/15)) e P1B ([PR #17](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/17)) integrados. P1C.1 em validação: módulos RNG, dungeon, navegação e combate básico alimentam o jogo original; P1C.2/P1C.3 e P2–P6 pendentes. Verificação de Pages/PWA físico e Xbox real permanece pendente.
+**Progresso:** P0, P1A ([PR #15](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/15)), P1B ([PR #17](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/17)) e P1C.1 ([PR #19](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/19)) concluídos com CI verde. Núcleo compartilhado contém RNG, dungeon, visão/pathfinding e cálculos básicos de combate. P1C.2 [#20](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/20), P1C.3 e P2–P6 pendentes; verificação real do Pages/PWA e Xbox físico ainda pendentes.
