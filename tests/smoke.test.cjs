@@ -84,7 +84,11 @@ test('os scripts embutidos são válidos e cache PWA não depende de versão dup
   assert.equal(scripts.length, 2);
   for (const script of scripts) assert.doesNotThrow(() => new vm.Script(script));
   assert.match(html, /caches\.match\(new URL\(file, location\.href\)\)/);
-  assert.match(worker, /const CACHE = 'golzdov-offline-v4'/);
+  assert.match(worker, /const CACHE = 'golzdov-offline-v5'/);
+  assert.match(worker, /'\.\/gamepad\.js'/);
+  assert.match(html, /<script src="\.\/gamepad\.js"><\/script>/);
+  assert.match(html, /const FILES = \[.*'\.\/gamepad\.js'/);
+  assert.doesNotThrow(() => new vm.Script(fs.readFileSync(path.join(ROOT, 'gamepad.js'), 'utf8')));
 });
 
 test('a mesma seed reproduz masmorra, itens e inimigos', () => {

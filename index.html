@@ -18,6 +18,10 @@
 .home-aux{display:flex;align-items:center;justify-content:center;gap:8px}.home-aux .plain-button{font-size:9px}.footer-actions button:disabled{opacity:.4}.modal .choice:disabled{opacity:.42}
 
 .home-help #offline-status{display:inline-block;color:#aab7a7;letter-spacing:.65px;min-height:1em}.home-help #offline-status.offline-ready{color:#b8d7ae}.home-help #offline-status.offline-error{color:#d7a1a2}
+
+.gamepad-focused{outline:2px solid #e8c38c!important;outline-offset:3px;box-shadow:0 0 0 4px #b9965e33,0 0 22px #b9965e66!important;}
+.gamepad-status{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 6px);transform:translateX(-50%);z-index:30;pointer-events:none;border:1px solid #997e58;background:#16181ee9;color:#edd5a9;border-radius:5px;padding:4px 9px;font:10px/1.3 system-ui,sans-serif;letter-spacing:.12em;white-space:nowrap;box-shadow:0 4px 18px #0008;}
+@media (max-height:610px){.gamepad-status{top:auto;bottom:calc(env(safe-area-inset-bottom) + 4px);}}
 </style>
 </head>
 <body>
@@ -85,8 +89,10 @@
 
   <div id="overlay" class="overlay hidden" role="dialog" aria-modal="true"><div id="modal" class="modal"></div></div>
   <div id="toast" class="toast hidden"></div>
+  <div id="gamepad-status" class="gamepad-status hidden" role="status" aria-live="polite">🎮 CONTROLE CONECTADO</div>
   <div class="grain"></div>
 </main>
+<script src="./gamepad.js"></script>
 <script>
 'use strict';
 /* Catacumbas de Golzdov — jogo offline, código e arte originais. */
@@ -176,6 +182,7 @@ function migrateRun(run){
   const rngState=((Number.isInteger(run.rngState)?run.rngState:seed)>>>0)||seed;
   return {...run,schemaVersion:RUN_SCHEMA,seed,rngState,hero:{...run.hero,talents:Array.isArray(run.hero.talents)?run.hero.talents:[],upgrades:Array.isArray(run.hero.upgrades)?run.hero.upgrades:[],riposte:run.hero.riposte||0,lastOathUsed:!!run.hero.lastOathUsed,oathWeakened:!!run.hero.oathWeakened},logs:Array.isArray(run.logs)?run.logs:[],seen:Array.isArray(run.seen)&&run.seen.length===W*H?run.seen:Array(W*H).fill(false)};
 }
+let gamepadAim=null;
 let G=null,selectedClass='vigia',overlayLocked=false,aim=null,autoTimer=null, audioOn=false,audioCtx=null,visible=new Set(),shown=false,animId=0,toastTimer=null,cam={tile:30,left:0,top:0,cols:11,rows:11,ox:0,oy:0};
 const ctx=$('field').getContext('2d',{alpha:false});
 function beep(f=380,d=.07,type='sine'){if(!audioOn)return;try{audioCtx=audioCtx||new(window.AudioContext||window.webkitAudioContext)();const t=audioCtx.currentTime,osc=audioCtx.createOscillator(),vol=audioCtx.createGain();osc.type=type;osc.frequency.setValueAtTime(f,t);osc.frequency.exponentialRampToValueAtTime(Math.max(60,f*.65),t+d);vol.gain.setValueAtTime(.06,t);vol.gain.exponentialRampToValueAtTime(.0001,t+d);osc.connect(vol).connect(audioCtx.destination);osc.start(t);osc.stop(t+d+.01);}catch(_){}}
@@ -185,8 +192,8 @@ function renderClasses(){$('class-list').innerHTML=Object.entries(CLASSES).map((
 function log(msg,icon='✦'){if(!G)return;G.logs.unshift({msg,icon,turn:G.turn});G.logs=G.logs.slice(0,70);$('message-text').textContent=msg;$('message-icon').textContent=icon;}
 function toast(msg){$('toast').textContent=msg;$('toast').classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.add('hidden'),1750);}
 function save(){if(G&&!G.over)putStore(SAVE,G);}
-function startNew(){stopAuto();aim=null;hideModal(true);const c=CLASSES[selectedClass];const seed=freshSeed();G={schemaVersion:RUN_SCHEMA,seed,rngState:seed,floor:1,turn:0,over:false,map:[],seen:[],rooms:[],enemies:[],items:[],stairs:null,shrine:null,altarUsed:false,enemyId:0,logs:[],kills:0,steps:0,treasure:0,chainUsed:false,hero:{classId:selectedClass,talents:[],upgrades:[],riposte:0,lastOathUsed:false,oathWeakened:false,x:0,y:0,hp:c.hp,maxhp:c.hp,mana:c.mana,maxmana:c.mana,atk:c.atk,def:c.def,range:c.range,dodge:c.dodge,crit:10,level:1,xp:0,nextXP:22,coins:0,potions:2,weapon:c.weapon,armor:c.armor,relics:[],buff:0}};generateFloor();showScreen('game');log('As costelas do dragão rangem. Encontre a escada marcada em ouro.','✥');updateHUD();save();showStory();beep(190,.18,'triangle');}
-function resume(){const old=migrateRun(getStore(SAVE,null));if(!old){toast('Nenhuma expedição compatível para continuar.');return;}G=old;stopAuto();aim=null;showScreen('game');reveal();log('Você retorna às catacumbas. A escuridão se lembra de você.','✧');updateHUD();}
+function startNew(){stopAuto();aim=null;gamepadAim=null;hideModal(true);const c=CLASSES[selectedClass];const seed=freshSeed();G={schemaVersion:RUN_SCHEMA,seed,rngState:seed,floor:1,turn:0,over:false,map:[],seen:[],rooms:[],enemies:[],items:[],stairs:null,shrine:null,altarUsed:false,enemyId:0,logs:[],kills:0,steps:0,treasure:0,chainUsed:false,hero:{classId:selectedClass,talents:[],upgrades:[],riposte:0,lastOathUsed:false,oathWeakened:false,x:0,y:0,hp:c.hp,maxhp:c.hp,mana:c.mana,maxmana:c.mana,atk:c.atk,def:c.def,range:c.range,dodge:c.dodge,crit:10,level:1,xp:0,nextXP:22,coins:0,potions:2,weapon:c.weapon,armor:c.armor,relics:[],buff:0}};generateFloor();showScreen('game');log('As costelas do dragão rangem. Encontre a escada marcada em ouro.','✥');updateHUD();save();showStory();beep(190,.18,'triangle');}
+function resume(){gamepadAim=null;const old=migrateRun(getStore(SAVE,null));if(!old){toast('Nenhuma expedição compatível para continuar.');return;}G=old;stopAuto();aim=null;showScreen('game');reveal();log('Você retorna às catacumbas. A escuridão se lembra de você.','✧');updateHUD();}
 function idx(x,y){return y*W+x;}
 function inMap(x,y){return x>0&&y>0&&x<W-1&&y<H-1;}
 function walk(x,y){return inMap(x,y)&&G.map[idx(x,y)]===1;}
@@ -213,7 +220,7 @@ function enemiesInSight(){return G.enemies.filter(e=>e.hp>0&&isVisible(e.x,e.y))
 function enemyAt(x,y){return G.enemies.find(e=>e.hp>0&&e.x===x&&e.y===y);}
 function canPlay(){return G&&!G.over&&$('overlay').classList.contains('hidden');}
 function stopAuto(){if(autoTimer!==null){clearTimeout(autoTimer);autoTimer=null;}}
-function move(dx,dy){if(!canPlay())return;stopAuto();aim=null;updateAim();doMove(dx,dy);}
+function move(dx,dy){if(!canPlay())return;stopAuto();aim=null;gamepadAim=null;updateAim();doMove(dx,dy);}
 function doMove(dx,dy){if(!G||G.over)return;const p=G.hero,x=p.x+dx,y=p.y+dy;if(!walk(x,y)){beep(120,.035);return;}const e=enemyAt(x,y);if(e){attack(e,true);return;}p.x=x;p.y=y;G.steps++;beep(190,.028);const item=G.items.find(i=>i.x===x&&i.y===y);if(item){G.items=G.items.filter(i=>i!==item);collect(item);}const inShrine=G.shrine&&G.shrine.x===x&&G.shrine.y===y&&!G.altarUsed;let onStairs=G.stairs.x===x&&G.stairs.y===y;reveal();worldTurn();if(G.over)return;if(inShrine){G.altarUsed=true;shrineModal();}else if(onStairs){stairsModal();}updateHUD();save();}
 function collect(i){const p=G.hero;switch(i.kind){case 'coins':p.coins+=i.value;G.treasure+=i.value;log(`Você encontra ${i.value} lascas de âmbar ósseo.`, '◈');break;case 'potion':p.potions++;log('Um frasco de seiva curativa sobreviveu à ruína.','✚');break;case 'mana':p.mana=clamp(p.mana+6,0,p.maxmana);log('Um cristal restitui 6 pontos de foco.','✧');break;case 'heal':p.hp=clamp(p.hp+9,0,p.maxhp);log('Ossos quentes devolvem 9 pontos de vida.','♥');break;case 'trap':{let damage=rand(3,7)+G.floor;receiveDamage(damage,'Uma inscrição explode sob seus pés!');break;}case 'relic':{const avail=RELICS.filter(r=>!p.relics.includes(r.id));if(avail.length){const r=pick(avail);applyRelic(r);log(`Relíquia encontrada: ${r.name}.`,'✥');}else{p.coins+=12;log('Um relicário vazio guarda 12 lascas.','◈');}break;}case 'weapon':{let up=rand(1,2);p.atk+=up;p.weapon=pick(['Lâmina das Costelas','Arco de Osso','Martelo Fendido','Bastão da Sombra','Presa Polida']);log(`Arma: ${p.weapon}. Ataque +${up}!`,'⚔');break;}case 'armor':{p.def++;p.armor=pick(['Placas Ancestrais','Colete de Ferro Negro','Cota de Vértebras','Manto de Osso']);log(`${p.armor}: defesa +1!`,'◆');break;}}beep(i.kind==='trap'?115:590,.11);}
 function applyRelic(r){const p=G.hero;p.relics.push(r.id);switch(r.effect){case 'attack':p.atk+=2;break;case 'health':p.maxhp+=10;p.hp=clamp(p.hp+10,0,p.maxhp);break;case 'mana':p.maxmana+=7;p.mana=clamp(p.mana+7,0,p.maxmana);break;case 'dodge':p.dodge+=12;break;case 'defense':p.def+=2;break;case 'crit':p.crit+=15;break;}toast(`✥ ${r.name}`);}
@@ -269,7 +276,7 @@ function atlas(){if(!G)return;showModal(`<span class="modal-kicker">CARTOGRAFIA 
 function menu(){if(!G)return;showModal(`<span class="modal-kicker">EXPEDIÇÃO EM ANDAMENTO</span><h2>Um instante <em>antes do abismo.</em></h2><p>O jogo salva automaticamente depois de cada ação. Você pode retornar mais tarde — desde que o navegador mantenha os dados locais.</p><div class="stat-row"><span>Estrato</span><b>${G.floor} / 5</b></div><div class="stat-row"><span>Turnos</span><b>${G.turn}</b></div><div class="footer-actions"><button id="menu-resume">CONTINUAR</button><button id="menu-quit">SALVAR E SAIR</button></div><div class="footer-actions"><button id="menu-guide">CONTROLES</button><button id="menu-export">EXPORTAR SAVE ↓</button></div><div class="footer-actions"><button id="menu-reset" class="danger">ABANDONAR EXPEDIÇÃO</button></div>`,true);$('menu-resume').onclick=hideModal;$('menu-quit').onclick=()=>{save();hideModal(true);showScreen('home');};$('menu-guide').onclick=()=>guide(true);$('menu-export').onclick=exportSave;$('menu-reset').onclick=confirmAbandon;}
 function confirmAbandon(){showModal(`<span class="modal-kicker">SEM VOLTA</span><h2>Abandonar <em>expedição?</em></h2><p>Todo o equipamento, experiência e exploração desta tentativa serão perdidos. Seu recorde permanece.</p><div class="footer-actions"><button id="ab-no">NÃO, CONTINUAR</button><button id="ab-yes" class="danger">ABANDONAR</button></div>`,false);$('ab-no').onclick=hideModalForced;$('ab-yes').onclick=()=>{G.over=true;endMeta(false);deleteStore(SAVE);hideModal(true);showScreen('home');};}
 function hideModalForced(){hideModal(true);}
-function guide(fromGame=false){showModal(`<span class="modal-kicker">MANUAL DO EXPLORADOR</span><h2>Como <em>sobreviver.</em></h2><p>Explore cinco estratos gerados a cada partida. Encontre a <b>escada dourada</b> para descer. No último estrato, derrote o Escrivão Sem Nome.</p><div class="legend-row"><span class="legend-swatch">▲</span> Toque nas setas ou deslize o dedo para andar.</div><div class="legend-row"><span class="legend-swatch">⚔</span> Toque num inimigo ou use ATACAR. Arcos atingem de longe.</div><div class="legend-row"><span class="legend-swatch">✧</span> Ative uma magia e toque no alvo. O foco é limitado.</div><div class="legend-row"><span class="legend-swatch">◆</span> Centro do direcional: esperar e recuperar 1 de foco.</div><div class="legend-row"><span class="legend-swatch">✚</span> Poções curam. Itens no chão são coletados automaticamente.</div><div class="legend-row"><span class="legend-swatch">▦</span> Toque no chão distante para andar automaticamente até lá.</div><p class="micro">No computador, use WASD ou setas. Teclas 1, 2, Espaço, H, M e I também funcionam. Os inimigos agem a cada turno seu. A morte é permanente.</p><div class="footer-actions"><button id="guide-close">${fromGame?'CONTINUAR EXPLORAÇÃO':'ENTENDI'}</button></div>`,true);$('guide-close').onclick=hideModal;}
+function guide(fromGame=false){showModal(`<span class="modal-kicker">MANUAL DO EXPLORADOR</span><h2>Como <em>sobreviver.</em></h2><p>Explore cinco estratos gerados a cada partida. Encontre a <b>escada dourada</b> para descer. No último estrato, derrote o Escrivão Sem Nome.</p><div class="legend-row"><span class="legend-swatch">▲</span> Toque nas setas ou deslize o dedo para andar.</div><div class="legend-row"><span class="legend-swatch">⚔</span> Toque num inimigo ou use ATACAR. Arcos atingem de longe.</div><div class="legend-row"><span class="legend-swatch">✧</span> Ative uma magia e toque no alvo. O foco é limitado.</div><div class="legend-row"><span class="legend-swatch">◆</span> Centro do direcional: esperar e recuperar 1 de foco.</div><div class="legend-row"><span class="legend-swatch">✚</span> Poções curam. Itens no chão são coletados automaticamente.</div><div class="legend-row"><span class="legend-swatch">▦</span> Toque no chão distante para andar automaticamente até lá.</div><p class="micro">No computador, use WASD ou setas. Teclas 1, 2, Espaço, H, M e I também funcionam. Os inimigos agem a cada turno seu. A morte é permanente.</p><span class="modal-kicker">CONTROLE XBOX (BLUETOOTH OU USB)</span><div class="legend-row">🎮 <b>Analógico esquerdo / direcional:</b> andar ou navegar em menus.</div><div class="legend-row">🅰️ <b>A:</b> atacar / confirmar; <b>B:</b> cancelar / voltar.</div><div class="legend-row">🆇 <b>X:</b> habilidade 1; <b>Y:</b> habilidade 2.</div><div class="legend-row"><b>LB / RB:</b> bolsa / mapa; ao mirar, alternar alvos.</div><div class="legend-row"><b>LT / RT:</b> poção / esperar turno.</div><div class="legend-row"><b>View / Menu:</b> registros / pausar.</div><p class="micro">Ao mirar uma habilidade: use o analógico direito ou direcional para mover a mira; A lança e B cancela. O suporte depende da Gamepad API do seu navegador.</p><div class="footer-actions"><button id="guide-close">${fromGame?'CONTINUAR EXPLORAÇÃO':'ENTENDI'}</button></div>`,true);$('guide-close').onclick=hideModal;}
 function findPath(tx,ty){if(!G.seen[idx(tx,ty)]||!walk(tx,ty)||enemyAt(tx,ty))return null;const p=G.hero,queue=[{x:p.x,y:p.y}],seen=new Set([key(p.x,p.y)]),prev=new Map(),dirs=[[0,-1],[1,0],[0,1],[-1,0]];let i=0;while(i<queue.length){const u=queue[i++];if(u.x===tx&&u.y===ty){const arr=[];let k=key(tx,ty);while(k!==key(p.x,p.y)){const a=prev.get(k);if(!a)return null;arr.push(a.dir);k=a.from;}return arr.reverse();}for(const [dx,dy] of dirs){const x=u.x+dx,y=u.y+dy,k=key(x,y);if(!walk(x,y)||!G.seen[k]||seen.has(k)||enemyAt(x,y))continue;seen.add(k);prev.set(k,{from:key(u.x,u.y),dir:[dx,dy]});queue.push({x,y});}}return null;}
 function autoTo(x,y){if(!canPlay())return;const route=findPath(x,y);if(!route?.length){log('Não há caminho conhecido até esse ponto.','⌁');return;}stopAuto();const startHp=G.hero.hp;function step(){if(!canPlay()||G.hero.hp<startHp){stopAuto();return;}if(enemiesInSight().some(e=>dist(e,G.hero)<=3)){stopAuto();log('Movimento interrompido: há um inimigo por perto.','!');return;}const direction=route.shift();if(!direction){stopAuto();return;}doMove(...direction);if(route.length&&canPlay())autoTimer=setTimeout(step,135);else stopAuto();}step();}
 function attackNearest(){if(!canPlay())return;const p=G.hero;const choices=enemiesInSight().filter(e=>dist(e,p)<=p.range&&lineClear(p.x,p.y,e.x,e.y)).sort((a,b)=>dist(a,p)-dist(b,p));if(!choices.length){log('Nenhum inimigo ao alcance de seu ataque básico.','⚔');return;}attack(choices[0]);}
@@ -289,7 +296,7 @@ function drawSprite(type,cx,cy,t,tile){const d=tile,unit=d/20,c=ctx,s=(xx,yy,w,h
 function drawItem(item,cx,cy,t,tile){const c=ctx,s=tile/20,k=item.kind;c.save();c.translate(cx,cy);c.shadowBlur=7;c.shadowColor=k==='trap'?'#c65d64':'#cbb17d';c.fillStyle='#11121788';c.beginPath();c.ellipse(0,tile*.3,tile*.21,tile*.07,0,0,7);c.fill();c.font=`bold ${Math.round(tile*.51)}px Georgia`;c.textAlign='center';c.textBaseline='middle';const ic={coins:'◈',potion:'✚',mana:'✧',heal:'♥',relic:'✥',weapon:'⚔',armor:'◆',trap:'⌁'}[k];c.fillStyle={coins:'#efc374',potion:'#9ebd9d',mana:'#87c2d5',heal:'#d77777',relic:'#dbb2e0',weapon:'#e1d1b0',armor:'#bfc6ca',trap:'#654a50'}[k];c.fillText(ic,0,Math.sin(t*3+cx)*s*.55);c.restore();}
 function drawFloor(cx,cy,tile,x,y,theme,seenNow){const c=ctx,q=seeded(x,y,G.floor),u=tile;c.fillStyle=theme.floor;c.fillRect(cx,cy,u+1,u+1);c.strokeStyle='#080b0e33';c.lineWidth=Math.max(.6,u*.024);c.strokeRect(cx+.8,cy+.8,u-1.5,u-1.5);if(q>.55){c.fillStyle='#ffffff0b';c.fillRect(cx+u*.2,cy+u*.25,u*.1,u*.055);c.fillRect(cx+u*.68,cy+u*.6,u*.12,u*.04);}if(q>.86){c.strokeStyle='#13131680';c.beginPath();c.moveTo(cx+u*.2,cy+u*.24);c.lineTo(cx+u*.47,cy+u*.37);c.lineTo(cx+u*.38,cy+u*.75);c.stroke();}if(G.floor>=3&&q>.94){c.fillStyle='#8d323b44';c.fillRect(cx+u*.25,cy+u*.3,u*.45,u*.25);}if(!seenNow){c.fillStyle='#06070ab3';c.fillRect(cx,cy,u,u);}}
 function drawWall(cx,cy,tile,x,y,theme,seenNow){const c=ctx,u=tile,q=seeded(x,y,G.floor);c.fillStyle='#16171c';c.fillRect(cx,cy,u+1,u+1);c.fillStyle=theme.wall;c.fillRect(cx+u*.04,cy+u*.04,u*.92,u*.73);c.fillStyle=theme.light;c.fillRect(cx+u*.08,cy+u*.07,u*.85,u*.105);c.fillStyle='#11131b';c.fillRect(cx+u*.04,cy+u*.76,u*.92,u*.2);c.strokeStyle='#161719a0';c.lineWidth=1;c.beginPath();c.moveTo(cx+u*(q>.5?.5:.35),cy+u*.15);c.lineTo(cx+u*(q>.5?.5:.35),cy+u*.76);c.stroke();if(q>.79){c.fillStyle='#9f8b7a50';c.fillRect(cx+u*.6,cy+u*.36,u*.11,u*.2);}if(!seenNow){c.fillStyle='#050608bb';c.fillRect(cx,cy,u,u);}}
-function render(tms){animId=requestAnimationFrame(render);if(!shown||!G)return;const c=ctx,canvas=$('field'),dpr=Math.min(devicePixelRatio||1,2),width=canvas.width/dpr,height=canvas.height/dpr;if(width<10)return;c.setTransform(dpr,0,0,dpr,0,0);c.imageSmoothingEnabled=false;c.fillStyle='#08090c';c.fillRect(0,0,width,height);const tile=Math.floor(Math.min(width/11,height/11.5));const cols=Math.ceil(width/tile)+2,rows=Math.ceil(height/tile)+2;const p=G.hero;const left=p.x-Math.floor(cols/2),top=p.y-Math.floor(rows/2);const ox=Math.floor((width-cols*tile)/2),oy=Math.floor((height-rows*tile)/2);cam={tile,cols,rows,left,top,ox,oy};const theme=THEMES[G.floor-1],t=tms/1000;
+function render(tms){animId=requestAnimationFrame(render);gamepad?.poll(tms);if(!shown||!G)return;const c=ctx,canvas=$('field'),dpr=Math.min(devicePixelRatio||1,2),width=canvas.width/dpr,height=canvas.height/dpr;if(width<10)return;c.setTransform(dpr,0,0,dpr,0,0);c.imageSmoothingEnabled=false;c.fillStyle='#08090c';c.fillRect(0,0,width,height);const tile=Math.floor(Math.min(width/11,height/11.5));const cols=Math.ceil(width/tile)+2,rows=Math.ceil(height/tile)+2;const p=G.hero;const left=p.x-Math.floor(cols/2),top=p.y-Math.floor(rows/2);const ox=Math.floor((width-cols*tile)/2),oy=Math.floor((height-rows*tile)/2);cam={tile,cols,rows,left,top,ox,oy};const theme=THEMES[G.floor-1],t=tms/1000;
   for(let ry=0;ry<rows;ry++)for(let rx=0;rx<cols;rx++){const x=left+rx,y=top+ry,cx=ox+rx*tile,cy=oy+ry*tile;if(x<0||y<0||x>=W||y>=H)continue;if(!G.seen[idx(x,y)])continue;const vis=isVisible(x,y);G.map[idx(x,y)]?drawFloor(cx,cy,tile,x,y,theme,vis):drawWall(cx,cy,tile,x,y,theme,vis);}
   const position=(x,y)=>({x:ox+(x-left+.5)*tile,y:oy+(y-top+.5)*tile});
   if(G.stairs&&G.seen[idx(G.stairs.x,G.stairs.y)]){const v=position(G.stairs.x,G.stairs.y),glow=.5+.5*Math.sin(t*2.5);c.fillStyle=`rgba(228,171,86,${isVisible(G.stairs.x,G.stairs.y)?.17+glow*.1:.09})`;c.beginPath();c.arc(v.x,v.y,tile*.6,0,7);c.fill();roundRect(c,v.x-tile*.26,v.y-tile*.29,tile*.52,tile*.58,2,'#2c2223');c.fillStyle='#e6bc72';c.font=`${Math.round(tile*.53)}px Georgia`;c.textAlign='center';c.textBaseline='middle';c.fillText('⇣',v.x,v.y);}
@@ -298,6 +305,14 @@ function render(tms){animId=requestAnimationFrame(render);if(!shown||!G)return;c
   for(const e of G.enemies){if(!isVisible(e.x,e.y))continue;const v=position(e.x,e.y);drawSprite(e.type,v.x,v.y,t,tile);if(e.hp<e.maxhp||e.type==='boss'){c.fillStyle='#140e16';c.fillRect(v.x-tile*.38,v.y-tile*.48,tile*.76,3);c.fillStyle=e.type==='boss'?'#e05d76':'#bb777d';c.fillRect(v.x-tile*.38,v.y-tile*.48,tile*.76*(e.hp/e.maxhp),3);}if(e.stun>0){c.fillStyle='#eac9a0';c.font=`${tile*.31}px Georgia`;c.fillText('✧',v.x+tile*.23,v.y-tile*.25);}}
   if(aim!==null){const r=CLASSES[p.classId].skills[aim].range;for(let y=top;y<top+rows;y++)for(let x=left;x<left+cols;x++){if(!inMap(x,y)||!isVisible(x,y)||!walk(x,y)||dist(p,{x,y})>r)continue;const v=position(x,y);c.fillStyle='#e5aa5f11';c.fillRect(v.x-tile*.49,v.y-tile*.49,tile*.98,tile*.98);}}
   const v=position(p.x,p.y);drawSprite('hero',v.x,v.y,t,tile);
+   if(aim!==null&&gamepadAim&&gamepad?.isConnected()){
+     const target=position(gamepadAim.x,gamepadAim.y),sz=tile*.79;
+     c.fillStyle='#e6c47c24';c.fillRect(target.x-sz/2,target.y-sz/2,sz,sz);
+     c.strokeStyle='#f4d69a';c.lineWidth=Math.max(1.5,tile*.075);
+     c.strokeRect(target.x-sz/2,target.y-sz/2,sz,sz);
+     c.beginPath();c.moveTo(target.x-tile*.12,target.y);c.lineTo(target.x+tile*.12,target.y);
+     c.moveTo(target.x,target.y-tile*.12);c.lineTo(target.x,target.y+tile*.12);c.stroke();
+   }
   const grad=c.createRadialGradient(v.x,v.y,tile*1.2,v.x,v.y,Math.max(width,height)*.72);grad.addColorStop(0,'#00000000');grad.addColorStop(1,'#030408cc');c.fillStyle=grad;c.fillRect(0,0,width,height);
   c.strokeStyle='#c0986350';c.lineWidth=1;c.strokeRect(.5,.5,width-1,height-1);
 }
@@ -307,6 +322,58 @@ let keyThrottle=0;document.addEventListener('keydown',e=>{if(shown&&G&&!G.over){
 $('start-btn').onclick=()=>{showScreen('select');renderClasses();};$('continue-btn').onclick=resume;$('import-btn').onclick=importSave;$('back-home').onclick=()=>showScreen('home');$('begin-run').onclick=startNew;$('help-home').onclick=()=>guide(false);$('sound-home').onclick=()=>{audioOn=!audioOn;refreshHome();beep(700);};$('menu-btn').onclick=menu;$('inventory-btn').onclick=inventory;$('atlas-btn').onclick=atlas;$('journal-btn').onclick=journal;$('descend-btn').onclick=stairsModal;$('cancel-target').onclick=()=>{aim=null;updateAim();};$('attack-btn').onclick=attackNearest;$('skill1-btn').onclick=()=>skill(0);$('skill2-btn').onclick=()=>skill(1);$('potion-btn').onclick=drink;
 const DIRS={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};document.querySelectorAll('[data-dir]').forEach(btn=>{btn.onclick=()=>{if(btn.dataset.dir==='center')waitTurn();else move(...DIRS[btn.dataset.dir]);};});
 $('overlay').addEventListener('click',e=>{if(e.target===$('overlay')&&!overlayLocked)hideModal();});window.addEventListener('resize',resizeCanvas);document.addEventListener('visibilitychange',()=>{if(document.hidden)save();});window.addEventListener('pagehide',save);
+
+ // API do controle desacoplada do jogo; não toca no estado salvo.
+ function gamepadValidTile(x,y){
+   if(!G||aim===null||!inMap(x,y)||!walk(x,y))return false;
+   const p=G.hero,s=CLASSES[p.classId].skills[aim];
+   return dist(p,{x,y})<=s.range&&isVisible(x,y)&&lineClear(p.x,p.y,x,y);
+ }
+ function gamepadChooseTarget(step){
+   if(!G||aim===null)return;
+   const targets=enemiesInSight().filter(e=>gamepadValidTile(e.x,e.y))
+     .sort((a,b)=>Math.atan2(a.y-G.hero.y,a.x-G.hero.x)-Math.atan2(b.y-G.hero.y,b.x-G.hero.x));
+   if(!targets.length){gamepadAim={x:G.hero.x,y:G.hero.y};return;}
+   const current=gamepadAim?targets.findIndex(e=>e.x===gamepadAim.x&&e.y===gamepadAim.y):-1;
+   const index=current<0?(step>0?0:targets.length-1):(current+step+targets.length)%targets.length;
+   gamepadAim={x:targets[index].x,y:targets[index].y};
+ }
+ function gamepadStartAim(){
+   if(aim===null){gamepadAim=null;return;}
+   gamepadAim=null;gamepadChooseTarget(1);
+   toast('MIRA: DIRECIONAL/ANALÓGICO · A CONFIRMA · B CANCELA');
+ }
+ function gamepadDirection(dx,dy){
+   if(aim===null){move(dx,dy);return;}
+   if(!gamepadAim)gamepadStartAim();
+   const next={x:gamepadAim.x+dx,y:gamepadAim.y+dy};
+   if(gamepadValidTile(next.x,next.y))gamepadAim=next;
+ }
+ const gamepad=window.GolzdovGamepad?.create({
+   getContext:()=>!$('overlay').classList.contains('hidden')?'modal':['home','select','game'].find(id=>!$(id).classList.contains('hidden'))||'home',
+   isAiming:()=>shown&&aim!==null&&$('overlay').classList.contains('hidden'),
+   onDirection:gamepadDirection,
+   onConfirm:()=>{if(aim!==null){if(!gamepadAim)gamepadStartAim();if(gamepadAim)castOn(gamepadAim.x,gamepadAim.y);if(aim===null)gamepadAim=null;}
+     else if(G&&G.hero.x===G.stairs.x&&G.hero.y===G.stairs.y)stairsModal();
+     else attackNearest();},
+   onGameBack:()=>{if(aim!==null){aim=null;gamepadAim=null;updateAim();}else menu();},
+   onModalBack:()=>hideModal(),
+   onSelectionBack:()=>showScreen('home'),
+   onSkill:index=>{skill(index);gamepadStartAim();},
+   onLeftShoulder:()=>{if(aim!==null)gamepadChooseTarget(-1);else inventory();},
+   onRightShoulder:()=>{if(aim!==null)gamepadChooseTarget(1);else atlas();},
+   onPotion:drink,
+   onWait:waitTurn,
+   onJournal:journal,
+   onMenu:menu,
+   onConnectionChange:(connected,id)=>{
+     const badge=$('gamepad-status');
+     badge.classList.toggle('hidden',!connected);
+     badge.textContent=connected?(id.toLowerCase().includes('xbox')?'🎮 XBOX CONECTADO':'🎮 CONTROLE CONECTADO'):'';
+     if(connected)toast('Controle conectado! Menu → Controles para ver os comandos.');
+   }
+ });
+
 showScreen('home');renderClasses();requestAnimationFrame(render);
 })();
 
@@ -324,7 +391,7 @@ showScreen('home');renderClasses();requestAnimationFrame(render);
     say('MODO APP INDISPONÍVEL NESTE NAVEGADOR', 'offline-error');
     return;
   }
-  const FILES = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
+  const FILES = ['./', './index.html', './gamepad.js', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
   async function checkReady() {
     // Look up active precached assets without duplicating the SW cache version here.
     const all = await Promise.all(FILES.map(file => caches.match(new URL(file, location.href))));
