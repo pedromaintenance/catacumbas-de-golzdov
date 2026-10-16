@@ -227,6 +227,79 @@ function move(dx,dy){if(!canPlay())return;stopAuto();aim=null;gamepadAim=null;up
 function doMove(dx,dy){if(!G||G.over)return;const p=G.hero,x=p.x+dx,y=p.y+dy;if(!walk(x,y)){beep(120,.035);return;}const e=enemyAt(x,y);if(e){attack(e,true);return;}p.x=x;p.y=y;G.steps++;beep(190,.028);const roomIndex=G.rooms.findIndex(room=>x>=room.x&&x<room.x+room.w&&y>=room.y&&y<room.y+room.h);if(roomIndex>=0&&!G.visitedRooms.includes(roomIndex)){G.visitedRooms.push(roomIndex);relicEvent('onEnterRoom',{roomIndex});}const item=G.items.find(i=>i.x===x&&i.y===y);if(item){G.items=G.items.filter(i=>i!==item);collect(item);}if(G.over)return;const inShrine=G.shrine&&G.shrine.x===x&&G.shrine.y===y&&!G.altarUsed;let onStairs=G.stairs.x===x&&G.stairs.y===y;reveal();worldTurn();if(G.over)return;if(G.pendingRelicOffer){if($('overlay').classList.contains('hidden'))showPendingRelicOffer();}else if(inShrine){G.altarUsed=true;shrineModal();}else if(onStairs){stairsModal();}updateHUD();save();}
 function collect(i){const p=G.hero;switch(i.kind){case 'coins':p.coins+=i.value;G.treasure+=i.value;log(`Você encontra ${i.value} lascas de âmbar ósseo.`, '◈');break;case 'potion':p.potions++;log('Um frasco de seiva curativa sobreviveu à ruína.','✚');break;case 'mana':p.mana=clamp(p.mana+6,0,p.maxmana);log('Um cristal restitui 6 pontos de foco.','✧');break;case 'heal':p.hp=clamp(p.hp+9,0,p.maxhp);log('Ossos quentes devolvem 9 pontos de vida.','♥');break;case 'trap':{let damage=rand(3,7)+G.floor;receiveDamage(damage,'Uma inscrição explode sob seus pés!');break;}case 'relic':{if(window.GolzdovRelicOffers.available(RELICS,p).length){G.pendingRelicOffer={source:'relicario',offers:null};log('Um relicário revela duas inscrições. Você escolherá uma delas.','✥');}else{p.coins+=12;log('Um relicário vazio guarda 12 lascas.','◈');}break;}case 'weapon':{let up=rand(1,2);p.atk+=up;p.weapon=pick(['Lâmina das Costelas','Arco de Osso','Martelo Fendido','Bastão da Sombra','Presa Polida']);log(`Arma: ${p.weapon}. Ataque +${up}!`,'⚔');break;}case 'armor':{p.def++;p.armor=pick(['Placas Ancestrais','Colete de Ferro Negro','Cota de Vértebras','Manto de Osso']);log(`${p.armor}: defesa +1!`,'◆');break;}}beep(i.kind==='trap'?115:590,.11);}
 function applyRelic(r){const p=G.hero;if(p.relics.includes(r.id))return;const previous=new Set(relicSynergies().map(pair=>pair.id));p.relics.push(r.id);switch(r.effect){case 'attack':p.atk+=2;break;case 'health':p.maxhp+=10;p.hp=clamp(p.hp+10,0,p.maxhp);break;case 'mana':p.maxmana+=7;p.mana=clamp(p.mana+7,0,p.maxmana);break;case 'dodge':p.dodge+=12;break;case 'defense':p.def+=2;break;case 'crit':p.crit+=15;break;case 'curse':p.atk+=4;p.maxhp=Math.max(1,p.maxhp-7);p.hp=clamp(p.hp,1,p.maxhp);break;}const combo=relicSynergies().find(pair=>!previous.has(pair.id));if(combo){log(`SINERGIA DESPERTA: ${combo.name}. ${combo.desc}`,'✥');toast(`✥ ${combo.name}`);}else toast(`✥ ${r.name}`);}
+// Relíquias podem ser trocadas, mas nenhuma troca é aplicada até o jogador confirmar.
+function removeRelic(id){
+  const p=G.hero,r=RELICS.find(item=>item.id===id);if(!r||!p.relics.includes(id))return false;
+  p.relics=p.relics.filter(item=>item!==id);
+  switch(r.effect){
+    case 'attack':p.atk-=2;break;
+    case 'health':p.maxhp=Math.max(1,p.maxhp-10);p.hp=clamp(p.hp,1,p.maxhp);break;
+    case 'mana':p.maxmana=Math.max(0,p.maxmana-7);p.mana=clamp(p.mana,0,p.maxmana);break;
+    case 'dodge':p.dodge-=12;p.relicState.echo=0;break;
+    case 'defense':p.def-=2;p.relicState.ward=0;break;
+    case 'crit':p.crit-=15;break;
+    case 'curse':p.atk-=4;p.maxhp+=7;break;
+  }
+  return true;
+}
+function finishRelicDecision(onDone){
+  G.pendingRelicOffer=null;updateHUD();save();if(onDone)onDone();
+}
+function acceptRelicOffer(relic,cost,onDone,removed=[]){
+  const rules=window.GolzdovRelicOffers;
+  if(rules.canFit(G.hero,relic.id,removed)){
+    if(G.hero.coins<cost){toast('Âmbar insuficiente.');return finishRelicDecision(onDone);}
+    const oldCombos=new Set(relicSynergies().map(combo=>combo.id));
+    for(const id of removed)removeRelic(id);
+    G.hero.coins-=cost;applyRelic(relic);
+    if(removed.length)log(`Relíquia trocada: ${removed.map(id=>RELICS.find(r=>r.id===id)?.name||id).join(', ')} por ${relic.name}.`,'✥');
+    const gained=relicSynergies().find(combo=>!oldCombos.has(combo.id));
+    if(gained)toast(`SINERGIA: ${gained.name}`);
+    return finishRelicDecision(onDone);
+  }
+  const options=G.hero.relics.filter(id=>!removed.includes(id)).map(id=>{
+    const old=RELICS.find(r=>r.id===id),meta=rules.info(id);
+    return {icon:old?.icon||'◈',title:`TROCAR: ${old?.name||id}`,desc:`${meta?.name||'LEGADA'} · libera ${meta?.slots||1} espaço(s). A substituição só ocorre ao concluir.`,id};
+  });
+  options.push({icon:'×',title:'CANCELAR TROCA',desc:'Manter todos os equipamentos e não gastar âmbar.',cancel:true});
+  choiceModal('BOLSA CHEIA','O osso exige um sacrifício.',
+    `Para equipar ${relic.name} são necessários ${rules.info(relic.id).slots} espaço(s). ${rules.occupied(G.hero)}/${rules.capacity(G.hero)} ocupados.`,
+    options,choice=>{if(choice.cancel)return finishRelicDecision(onDone);acceptRelicOffer(relic,cost,onDone,[...removed,choice.id]);});
+}
+function showRelicOffer(source='relicario',cost=0,onDone=null){
+  const rules=window.GolzdovRelicOffers,p=G.hero,pending=G.pendingRelicOffer;
+  let ids;
+  if(source==='mercador'&&G.shopOffers)ids=G.shopOffers.filter(id=>!p.relics.includes(id));
+  else if(pending?.offers)ids=pending.offers.filter(id=>!p.relics.includes(id));
+  else{
+    ids=rules.offered(RELICS,p,gameRandom).map(relic=>relic.id);
+    if(source==='mercador')G.shopOffers=ids;
+    else if(pending)pending.offers=ids;
+    save();
+  }
+  const offers=ids.map(id=>RELICS.find(r=>r.id===id)).filter(Boolean);
+  if(!offers.length){
+    if(source!=='mercador'){p.coins+=12;log('Nenhuma relíquia nova: você encontra 12 âmbar.','◈');}
+    return finishRelicDecision(onDone);
+  }
+  const options=offers.map(relic=>{
+    const info=rules.info(relic.id);
+    return {icon:relic.icon,title:`${relic.name} · ${info.name}`,
+      desc:`${relic.desc} Ocupa ${info.slots} espaço(s); bolsa ${rules.occupied(p)}/${rules.capacity(p)}.`,relic};
+  });
+  options.push({icon:'×',title:'RECUSAR',desc:'Conservar seus equipamentos e seu âmbar.',skip:true});
+  choiceModal('RELICÁRIO · '+source.toUpperCase(),'Dois nomes nos ossos.',
+    `Escolha uma relíquia.${cost?' Preço: ◈ '+cost+' âmbar, cobrado apenas na confirmação.':''}`,
+    options,choice=>{if(choice.skip)return finishRelicDecision(onDone);acceptRelicOffer(choice.relic,cost,onDone);});
+}
+function showPendingRelicOffer(){
+  if(!G?.pendingRelicOffer)return;
+  const after=()=>{const p=G.hero;
+    if(G.shrine&&!G.altarUsed&&p.x===G.shrine.x&&p.y===G.shrine.y){G.altarUsed=true;shrineModal();}
+    else if(p.x===G.stairs?.x&&p.y===G.stairs?.y)stairsModal();
+  };
+  showRelicOffer(G.pendingRelicOffer.source,0,after);
+}
 function attack(e,melee=false){if(!canPlay())return;const p=G.hero;let range=melee?1:p.range;if(dist(p,e)>range||(!melee&&!lineClear(p.x,p.y,e.x,e.y))){log('O inimigo está fora do alcance ou atrás de uma parede.','!');beep(140);return;}stopAuto();aim=null;updateAim();if(gameRandom()*100<7){log(`Você erra ${ENEMIES[e.type].name}.`,'⚔');beep(170,.08);}else{const critBonus=hasTalent('e_predador')&&e.root>0?20:0;const crit=gameRandom()*100<p.crit+critBonus;const riposte=hasTalent('v_muralha')?3*(p.riposte||0):0;const damage=Math.max(1,p.atk+rand(0,4)-e.def+riposte)*(crit?2:1);if(riposte)p.riposte=0;heroHit(e,damage,crit?'ACERTO CRÍTICO':'Golpe','basic',crit);beep(crit?720:370,.095,'triangle');}worldTurn();updateHUD();save();}
 function relicSynergies(){return window.GolzdovRelicEffects?.synergiesFor(G?.hero)||[];}
 function relicEvent(event,details={}){if(!G)return details;const p=G.hero;const ctx={run:G,hero:p,
