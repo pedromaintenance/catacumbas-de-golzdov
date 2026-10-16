@@ -50,6 +50,7 @@ Esta entrega é **independente das versões de conteúdo 1.2/1.3**, e não alter
 - 16/10/2026: **P1C.3A integrado** pelo [PR #23](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/23): IA em `core/enemies.js` e turnos em `core/turns.js`, 660 replays idênticos e **57/57 testes verdes**. Cache offline v13.
 - 16/10/2026: **P1C.3B.1 integrado**, [PR #24](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/24), `core/actions.js` para WAIT/POTION, 192 replays e **61 testes verdes**; cache PWA v14.
 - 16/10/2026: **P1C.3B.2 integrado** pelo [PR #25](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/25), commit `c30f052`: comando MOVE no despachante, **408 replays idênticos** de movimentação/coleta/armadilhas/salas, **65 testes verdes**. **BUILD 1.3.1 · CACHE V15** visível para conferir no Pages. Ataque, loot puro e finais P1C.3B.3 pendentes.
+- 16/10/2026: **P1C.3B.3A em validação** — `core/loot.js` e `core/rewards.js` extraem oito tipos de coleta, XP/âmbar, morte e `bossDown`. `COLLECT` não consome um turno extra; **336 replays dedicados** contra código congelado, além dos 408 de movimento. PWA v16, build 1.3.2. Resta ataque/eventos finais P1C.3B.3B para concluir P1C.
 - O jogo atual permanece em `/catacumbas-de-golzdov/`. A futura preview funcional, após build e deploy, será em `/catacumbas-de-golzdov/phaser/`.
 - A engine não muda automaticamente nenhuma das metas de conteúdo de 1.2, 1.3, 2.0 ou 2.1; saves de produção permanecem isolados até migração final.
 
