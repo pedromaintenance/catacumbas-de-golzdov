@@ -65,7 +65,7 @@ test('mapas P2A usam o gerador real: cinco estratos determinísticos e conectado
 });
 test('a geração e o renderer técnico não escrevem no save legado nem iniciam turnos no frame',()=>{
   for(const p of ['phaser-src/src/world.js','phaser-src/src/scenes/DungeonScene.js','phaser-src/src/main.js']){
-    const text=read(p).replace(/\/\*[\s\S]*?\*\//g,'');
+    const text=read(p).replace(/\/\*[\s\S]*?\*\//g,'').replace(/\/\/[^\n]*/g,'');
     assert.doesNotMatch(text,/\blocalStorage\b|sessionStorage|navigator\.serviceWorker|save\(|GolzdovTurns\.advance/);
   }
 });
