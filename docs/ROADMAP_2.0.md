@@ -14,7 +14,8 @@ Atualizado em: 15/10/2026. Planejamento detalhado: [GAME_DESIGN_2.0.md](GAME_DES
 - 14/10/2026: 1.1 integrada à main pelo PR #2, com suíte de GitHub Actions concluída com sucesso.
 - 14/10/2026: início da 1.2: nove talentos de classe (três por classe), escolha progressiva, efeitos sobre combate, histórico de talentos no inventário e proteção dos saves existentes. O sistema genérico de eventos de efeitos e as sinergias de relíquias seguem pendentes.
 - 14/10/2026: [PR #3](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/3) integrado à main e verificado pelo GitHub Actions com resultado **success**; entrega inicial da 1.2 disponível no jogo.
-- Próximas tarefas rastreadas: [#4 — efeitos e relíquias sinérgicas](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/4) e [#5 — validar PWA offline no celular](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/5).
+- Próximas tarefas rastreadas: [#8 — raridade e troca de relíquias](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/8), [#5 — validação do PWA no celular](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/5).
+- Histórico anterior: [#4 — efeitos e relíquias sinérgicas](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/4) e [#5 — validar PWA offline no celular](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/5).
 - 15/10/2026: **1.2B integrada na main pelo [PR #7](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/7)**; GitHub Actions aprovou testes de seis relíquias, três sinergias, migração de saves e regressões. [Issue #4](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/4) concluída. Próximo incremento: [#8 — raridade, escolha de relíquias e balanceamento](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/8).
 - 14/10/2026: implementação das fundações técnicas iniciada na branch de trabalho.
 
@@ -85,6 +86,22 @@ Esta entrega é **independente das versões de conteúdo 1.2/1.3**, e não alter
 - O primeiro avanço oferece três talentos de classe. Os avanços seguintes oferecem os talentos ainda disponíveis e melhorias universais; até dois talentos de classe podem ser aprendidos por expedição.
 - Os talentos desta primeira fatia foram implementados com ganchos pontuais de combate para minimizar regressões. O sistema declarativo de efeitos, modificadores permanentes das habilidades e as sinergias continuam na fila.
 - O limite de dois talentos de classe é provisório e deve ser reavaliado quando cada especialização ganhar talentos aprofundados.
+
+### Incremento 1.2C — Escolhas de Relíquias (15/10/2026)
+
+- [x] Raridades no catálogo: comum, rara, épica, ancestral e amaldiçoada; chances de sorteio ponderadas por raridade.
+- [x] Relicários de chão e altares exibem **duas relíquias distintas**, com opção de recusar.
+- [x] Mercador oferece duas opções fixas por estrato; custo cobrado **somente após** uma escolha confirmada.
+- [x] Quatro espaços por nova expedição; relíquia ancestral ocupa dois. Ao exceder a capacidade, o jogador decide quais itens substituir antes que os efeitos sejam alterados.
+- [x] Nova relíquia amaldiçoada **Nome Roubado** (+4 ataque, −7 vida máxima enquanto equipada).
+- [x] Migrar saves legados sem descartar itens; preservar temporariamente a capacidade de quem já possuía mais de quatro espaços.
+- [x] Persistência de escolhas de relicário ainda não resolvidas; retomada após fechar o aplicativo.
+- [x] Precache do novo catálogo em `relic-offers.js` e incremento do service worker para `golzdov-offline-v7`.
+- [x] Testes de raridades, ofertas determinísticas, trocas transacionais, atributos e saves antigos adicionados à suíte.
+- [ ] Testes de balanceamento com as três classes em partidas completas e revisão das chances/pesos após feedback.
+- [ ] Validar visualmente a experiência no Pages e o controle Xbox real, sem presumir que o teste automático equivale ao playtest.
+
+**Publicação:** integrar à `main` só depois da aprovação do GitHub Actions. O usuário testa a versão distribuída pelo Pages. Rastreabilidade: [issue #8](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/8).
 
 ## 1.3 — Catacumbas Vivas (pendente)
 
