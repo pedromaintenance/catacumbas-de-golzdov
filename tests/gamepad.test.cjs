@@ -118,7 +118,7 @@ test('direcional e analógico têm zona morta e repetição controlada', () => {
   h.pad.axes[0] = 0.4; h.poll(50);
   assert.equal(h.actions.filter(a => a.startsWith('direction:')).length, 0);
   h.pad.axes[0] = 0.91; h.poll(100);
-  h.poll(200); h.poll(350); h.poll(500);
+  h.poll(200); h.poll(350); h.poll(510);
   assert.deepEqual(h.actions.filter(a => a.startsWith('direction:')), [
     'direction:1,0', 'direction:1,0', 'direction:1,0'
   ]);
