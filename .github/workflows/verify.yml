@@ -17,3 +17,17 @@ jobs:
           node-version: '22'
       - name: Testar RNG, saves, cache e geração de mapas
         run: node --test tests/*.test.cjs
+
+      - name: Instalar Phaser/Vite para validar o laboratório P2A
+        run: npm install --prefix phaser-src --no-audit --no-fund
+      - name: Compilar cena Phaser isolada
+        run: npm run --prefix phaser-src build
+      - name: Verificar bundle sem CDN e com base relativa
+        run: node scripts/verify-phaser-dist.cjs
+      - name: Arquivar bundle técnico para inspeção (sem publicar Pages)
+        uses: actions/upload-artifact@v4
+        with:
+          name: golzdov-phaser-p2a
+          path: phaser-src/dist/
+          if-no-files-found: error
+          retention-days: 7
