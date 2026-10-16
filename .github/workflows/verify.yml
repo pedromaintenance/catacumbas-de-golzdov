@@ -16,4 +16,4 @@ jobs:
         with:
           node-version: '22'
       - name: Testar RNG, saves, cache e geração de mapas
-        run: node --test tests/smoke.test.cjs
+        run: node --test tests/*.test.cjs
