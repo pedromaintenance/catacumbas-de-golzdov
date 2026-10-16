@@ -21,6 +21,20 @@ node --test tests/*.test.cjs
 
 A suíte verifica sintaxe, coerência do cache offline, migração de saves antigos, seed, talentos, conectividade de 1.000 mapas comandos de controle Xbox com gamepad simulado e as relíquias/sinergias da atualização 1.2B. O GitHub Actions executa a suíte automaticamente em push e pull requests.
 
+## Relicários e raridades — versão 1.2C
+
+Os relicários encontrados pelo mapa, as bênçãos de relíquias nos altares e o mercador agora oferecem **duas opções diferentes**, em vez de conceder um item sem escolha. Você pode aceitar uma ou recusar. As ofertas usam a seed salva da expedição; o mercador mantém as mesmas opções dentro do mesmo estrato, impedindo rerolls gratuitos.
+
+- **Espaços de bolsa:** quatro para novas partidas. Relíquias ancestrais podem ocupar dois espaços; as demais ocupam um.
+- **Troca segura:** quando a bolsa não tem espaço suficiente, escolha as relíquias a substituir. Caso sejam necessárias duas retiradas, ambas são selecionadas antes de qualquer mudança. Cancelar preserva todos os itens e o âmbar.
+- **Cinco raridades:** comum, rara, épica, ancestral e amaldiçoada, com chances diferentes de aparecer.
+- **Nova relíquia amaldiçoada, Nome Roubado:** +4 ataque, mas −7 pontos de vida máxima enquanto equipada. A penalidade desaparece se você a trocar.
+- **Saves anteriores:** nenhuma relíquia é removida automaticamente. Se uma expedição antiga possuía mais de quatro espaços de equipamento, ela mantém os itens e sua capacidade anterior enquanto essa composição permanecer; a restrição de quatro vale para novas expedições.
+- **Recuperação após fechamento:** se o app for fechado durante uma oferta do chão/altar, a escolha fica pendente no save e reaparece ao continuar.
+- **Mercador:** paga-se pelas relíquias somente depois de confirmar; recusar não consome âmbar.
+
+Os controles por toque, teclado e Xbox continuam disponíveis nos menus de escolha, inclusive na tela de substituição de relíquias.
+
 ## Relíquias e sinergias — atualização 1.2B
 
 Seis relíquias mantêm seus benefícios antigos e agora mudam as decisões de combate:
@@ -67,10 +81,11 @@ O jogo reconhece automaticamente um controle Xbox compatível com a **Gamepad AP
 ## Publicação no GitHub Pages
 
 1. Crie um repositório público (ex.: `catacumbas-de-golzdov`).
-2. Extraia o ZIP e envie os **6 itens** diretamente para a raiz do repositório:
+2. Extraia o ZIP e envie os **7 itens** diretamente para a raiz do repositório:
    - `index.html`
    - `gamepad.js`
    - `relic-effects.js`
+   - `relic-offers.js`
    - `manifest.webmanifest`
    - `sw.js`
    - pasta `icons` (com `icon-192.png` e `icon-512.png`)
@@ -100,10 +115,11 @@ O jogo reconhece automaticamente um controle Xbox compatível com a **Gamepad AP
 | `index.html` | HTML, estilos e motor principal do jogo |
 | `gamepad.js` | Mapeamento Xbox, navegação por foco e repetição de direções |
 | `relic-effects.js` | Despachante declarativo de efeitos de relíquias, bônus e sinergias |
+| `relic-offers.js` | Catálogo de raridades, limite de espaços e seleção reproduzível de ofertas |
 | `manifest.webmanifest` | Nome, ícone e aparência do aplicativo instalado |
 | `sw.js` | Armazena os arquivos no dispositivo e atende offline |
 | `icons/icon-192.png`, `icons/icon-512.png` | Ícones na tela inicial |
 
 ## Atualizações futuras
 
-Para publicar uma nova versão distribuída, atualize os arquivos do jogo e **aumente a versão da constante `CACHE` em `sw.js`** (por exemplo, `golzdov-offline-v7`). A verificação de prontidão procura automaticamente os recursos precacheados e não precisa repetir o nome do cache no `index.html`. O jogo deverá atualizar-se quando o service worker novo for instalado e ativado; feche e reabra o PWA após a atualização, se necessário. As chaves legadas do `localStorage` continuam sendo usadas; o estado recebe `schemaVersion` e migração para preservar saves anteriores.
+Para publicar uma nova versão distribuída, atualize os arquivos do jogo e **aumente a versão da constante `CACHE` em `sw.js`** (por exemplo, `golzdov-offline-v8`). A verificação de prontidão procura automaticamente os recursos precacheados e não precisa repetir o nome do cache no `index.html`. O jogo deverá atualizar-se quando o service worker novo for instalado e ativado; feche e reabra o PWA após a atualização, se necessário. As chaves legadas do `localStorage` continuam sendo usadas; o estado recebe `schemaVersion` e migração para preservar saves anteriores.
