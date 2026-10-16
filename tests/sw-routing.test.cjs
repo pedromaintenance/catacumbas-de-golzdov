@@ -110,8 +110,8 @@ test('a atualização libera o client e apaga somente caches antigos do Golzdov 
   assert.equal(calls.claim, 1);
 });
 
-test('cache v18 inclui defesa e Juramento e nenhuma nova chave localStorage', () => {
-  assert.match(sw, /const CACHE = 'golzdov-offline-v18'/);
+test('cache v19 inclui estados terminais e nenhuma nova chave localStorage', () => {
+  assert.match(sw, /const CACHE = 'golzdov-offline-v19'/);
   assert.match(sw, /'\.\/core\/rng\.js'/);
   assert.match(sw, /'\.\/core\/dungeon\.js'/);
   assert.match(sw, /'\.\/core\/navigation\.js'/);
