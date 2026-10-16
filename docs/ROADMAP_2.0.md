@@ -19,6 +19,8 @@ Atualizado em: 15/10/2026. Planejamento detalhado: [GAME_DESIGN_2.0.md](GAME_DES
 
 ## Integrações de plataforma — Xbox / Gamepad API (15/10/2026)
 
+**Integração:** [PR #6](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/6) concluído e integrado à main (commit `ac5b0e4`). GitHub Actions: testes automáticos aprovados. Também validamos em ambiente instrumentado o fluxo RT → turno, X → mira, B → cancelar e Menu → pausa. Teste com controle físico continua pendente.
+
 - [x] Novo módulo gamepad.js: detectar controle conectado e desconectado sem afetar o jogo.
 - [x] D-pad/analógico esquerdo com zona morta, espera inicial e repetição de movimento.
 - [x] Botões Xbox A, B, X, Y, LB, RB, LT, RT, View e Menu.
