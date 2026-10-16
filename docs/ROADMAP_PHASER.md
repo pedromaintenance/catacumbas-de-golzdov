@@ -1,6 +1,6 @@
 # Roadmap de migração — Catacumbas de Golzdov → Phaser 4
 
-**Status:** P0, P1A, P1B e P1C.1 integrados à `main` com testes verdes. Próximo: [P1C.2 — habilidades e estados](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/20), depois P1C.3 (IA/dispatch). Preview Phaser só será publicada quando P2B estiver jogável.
+**Status:** P0, P1A, P1B e P1C.1 integrados; P1C.2 com seis habilidades e replays determinísticos em validação de PR. P1C.3 (IA/dispatch) e P2–P6 pendentes. Preview Phaser só será publicada quando P2B estiver jogável.
 **Data do diagnóstico:** 15/10/2026.
 **Acompanhamento GitHub:** [issue #11 — migração Phaser](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/11); [issue #12 — corrigir roteamento PWA](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/12).
 **Objetivo:** migrar a apresentação, a composição das cenas e a entrada para Phaser 4 sem alterar silenciosamente as regras do roguelike, perder os saves ou bloquear o GitHub Pages.
@@ -163,6 +163,20 @@ docs/
 - [ ] Extrair combate, IA, turnos e dispatch(action) sem dependências gráficas (P1C).
 
 **Integração:** [PR #17](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/17) integrado à main, commit `b8c8fa4`, GitHub Actions `success`. Goldens de 50 cenários e 1.000 masmorras verdes. O jogo original continua jogável; preview Phaser ainda não publicada.
+### P1C.2 — Habilidades de classe compartilhadas (16/10/2026)
+
+- [x] Congelar `skill(which)` e `castOn(x,y)` do legado *antes* da refatoração em `tests/fixtures/legacy-skills.js`, sem alterar seu comportamento.
+- [x] Criar `core/skills.js` independente de DOM, Canvas, Phaser, áudio e `localStorage`; selecionar as habilidades pelo catálogo existente (custo, alcance e alvo).
+- [x] Extrair **seis habilidades**: Martelo Rúnico, Bastião, Glifo de Luz, Sonho Afundado, Tiro Fantasma e Círculo de Espinhos.
+- [x] Preservar regras de três classes e talentos: Runa Estilhaçante, Glifo Ricochete, Glifo Faminto, Sonho Profundo, Tiro Calculado e Espinhos Drenantes.
+- [x] Manter callbacks de domínio síncronos para `heroHit` e `relicEvent('onRoot')`, com efeitos de UI (som, mensagens, mira, HUD e save) exclusivamente no adaptador legado; migrar para eventos puros somente em P1C.3.
+- [x] Criar **252 replays comparativos** (3 classes × 6 seeds × 14 cenários) entre as funções originais congeladas e o novo módulo; comparar HP, foco, turnos, RNG, estados dos inimigos, relíquias, logs e mortes.
+- [x] Atualizar scripts e cache offline do PWA para `golzdov-offline-v12`.
+- [ ] Realizar playtest manual do Xbox e das seis habilidades no Pages após propagação do merge.
+- [ ] Implementar a fase P1C.3 de IA e ações independentes de renderer, com `dispatch(state, action)`.
+
+**Condições de integração:** 252 replays idênticos e suíte de regressão CI aprovada. **Este PR não publica preview Phaser**, nem muda o formato dos saves, nem encerra P1C.
+
 ### P1C.1 — Núcleo básico de combate e turnos (15/10/2026)
 
 - [x] Congelar **192 snapshots de combate antes de qualquer refatoração**: três classes × oito seeds × oito cenários. Cobre ataque, crítico, esquiva, mitigação, ataques à distância, palavra proibida e avanço de turno.
@@ -180,7 +194,7 @@ docs/
 
 | Etapa | Entrega | Bloqueio para publicação |
 | --- | --- | --- |
-| P1C.2 | Habilidades de três classes, custos de foco, efeitos de talentos, raiz, sono e efeitos AOE | Golden tests de magias e ausência de loops |
+| P1C.2 | Seis habilidades e custos de foco, talentos, raiz, sono e AOE (implementado na branch) | 252 replays legados idênticos e CI verde antes do merge |
 | P1C.3 | IA, `worldTurn`, recompensas, terminal/morte, `dispatch(action)` e eventos puros | Replay determinístico de ações e saves v1/v2 |
 | P2A | Cena Phaser com câmera, texturas e mapa; usar o mesmo estado do núcleo | Preview não substitui a versão legada |
 | P2B | Movimento, combate básico, HUD, controle e save isolado na preview | Primeira build realmente jogável em `/phaser/` |
@@ -306,4 +320,4 @@ Em cada PR registrar:
 - Critério objetivo para liberar merge e regressão coberta.
 - Atualização de `docs/ROADMAP_PHASER.md` e ligação ao roadmap de conteúdo `docs/ROADMAP_2.0.md`.
 
-**Progresso:** P0, P1A ([PR #15](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/15)), P1B ([PR #17](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/17)) e P1C.1 ([PR #19](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/19)) concluídos com CI verde. Núcleo compartilhado contém RNG, dungeon, visão/pathfinding e cálculos básicos de combate. P1C.2 [#20](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/20), P1C.3 e P2–P6 pendentes; verificação real do Pages/PWA e Xbox físico ainda pendentes.
+**Progresso:** P0, P1A ([PR #15](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/15)), P1B ([PR #17](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/17)) e P1C.1 ([PR #19](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/19)) concluídos com CI verde. Núcleo compartilhado contém RNG, dungeon, visão/pathfinding e cálculos básicos de combate. P1C.2 (em validação, [#20](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/20)), P1C.3 e P2–P6 pendentes; verificação real do Pages/PWA e Xbox físico ainda pendentes.
