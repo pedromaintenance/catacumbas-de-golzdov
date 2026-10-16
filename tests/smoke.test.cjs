@@ -57,8 +57,9 @@ function boot() {
   assert.equal(scripts[0].split(hook).length, 2, 'ponto de instrumentação único');
   const instrumented = scripts[0].replace(
     hook,
-    "showScreen('home');renderClasses();globalThis.__testHooks={get:()=>G,startNew,resume,migrateRun,generateFloor,save,learnTalent,levelModal,receiveDamage,hideModal,chooseClass:id=>{selectedClass=id},talents:CLASS_TALENTS};requestAnimationFrame(render);"
+    "showScreen('home');renderClasses();globalThis.__testHooks={get:()=>G,startNew,resume,migrateRun,generateFloor,save,learnTalent,levelModal,receiveDamage,hideModal,chooseClass:id=>{selectedClass=id},talents:CLASS_TALENTS,applyRelic,relicEvent,heroHit,worldTurn,inventory,relicSynergies,relics:RELICS};requestAnimationFrame(render);"
   );
+  vm.runInNewContext(fs.readFileSync(path.join(ROOT, 'relic-effects.js'), 'utf8'), sandbox, { filename: 'relic-effects.js', timeout: 10000 });
   vm.runInNewContext(instrumented, sandbox, { filename: 'index.html', timeout: 10000 });
   return { hooks: sandbox.__testHooks, storage, elements };
 }
@@ -84,9 +85,12 @@ test('os scripts embutidos são válidos e cache PWA não depende de versão dup
   assert.equal(scripts.length, 2);
   for (const script of scripts) assert.doesNotThrow(() => new vm.Script(script));
   assert.match(html, /caches\.match\(new URL\(file, location\.href\)\)/);
-  assert.match(worker, /const CACHE = 'golzdov-offline-v5'/);
+  assert.match(worker, /const CACHE = 'golzdov-offline-v6'/);
   assert.match(worker, /'\.\/gamepad\.js'/);
   assert.match(html, /<script src="\.\/gamepad\.js"><\/script>/);
+  assert.match(html, /<script src="\.\/relic-effects\.js"><\/script>/);
+  assert.match(worker, /'\.\/relic-effects\.js'/);
+  assert.match(html, /const FILES = \[.*'\.\/relic-effects\.js'/);
   assert.match(html, /const FILES = \[.*'\.\/gamepad\.js'/);
   assert.doesNotThrow(() => new vm.Script(fs.readFileSync(path.join(ROOT, 'gamepad.js'), 'utf8')));
 });
@@ -118,6 +122,8 @@ test('save v1 local migra sem perder o progresso, seed ou meta legados', () => {
   assert.equal(run.schemaVersion, 2);
   assert.deepEqual(Array.from(run.hero.talents), []);
   assert.deepEqual(Array.from(run.hero.upgrades), []);
+  assert.ok(run.hero.relicState && run.hero.relicState.echo === 0);
+  assert.ok(Array.isArray(run.visitedRooms));
   assert.ok(run.seed > 0 && run.rngState > 0);
   assert.deepEqual(Array.from(run.map), old.map);
   assert.deepEqual(JSON.parse(storage.get('carcaca_golzdov_meta_v1')), oldMeta);
@@ -160,6 +166,68 @@ test('Último Juramento salva de uma morte por estrato, mas não de duas', () =>
   assert.equal(hooks.get().hero.oathWeakened, true);
   hooks.receiveDamage(100, 'Teste');
   assert.equal(hooks.get().over, true);
+});
+
+test('integração real: Musgo e Marca produzem Jardim e persistem no inventário', () => {
+  const { hooks, elements, storage } = boot();
+  hooks.startNew();
+  hooks.hideModal(true);
+  const run = hooks.get(), p = run.hero;
+  run.enemies = [];
+  p.hp = 10; p.mana = 0; run.turn = 5;
+  hooks.applyRelic(hooks.relics.find(r => r.id === 'moss'));
+  hooks.applyRelic(hooks.relics.find(r => r.id === 'rune'));
+  assert.equal(hooks.relicSynergies()[0].id, 'jardim-da-medula');
+  hooks.worldTurn();
+  assert.equal(p.hp, 12); // bug antigo de 'regen' vs 'moss' corrigido
+  assert.equal(p.mana, 1);
+  hooks.relicEvent('onRoot', { count: 2 });
+  assert.equal(p.hp, 15);
+  assert.equal(p.mana, 2);
+  hooks.inventory();
+  assert.match(elements.get('modal').innerHTML, /SINERGIAS ATIVAS/);
+  assert.match(elements.get('modal').innerHTML, /O Jardim da Medula/);
+  hooks.save();
+  const saved = JSON.parse(storage.get('carcaca_golzdov_run_v1'));
+  assert.ok(saved.hero.relics.includes('moss'));
+  assert.ok(saved.hero.relics.includes('rune'));
+});
+
+test('integração real: crítico queima, turnos consomem efeito sem causar loops', () => {
+  const { hooks } = boot();
+  hooks.startNew();
+  hooks.hideModal(true);
+  const run = hooks.get();
+  const enemy = { id: 899, type: 'boss', x: 30, y: 30, hp: 80, maxhp: 80,
+    atk: 1, def: 1, stun: 0, root: 0, cd: 0 };
+  run.enemies = [enemy];
+  hooks.applyRelic(hooks.relics.find(r => r.id === 'fang'));
+  hooks.applyRelic(hooks.relics.find(r => r.id === 'ash'));
+  hooks.heroHit(enemy, 5, 'Teste', 'basic', true);
+  assert.equal(enemy.hp, 75);
+  assert.equal(enemy.smolder, 2);
+  hooks.worldTurn();
+  assert.equal(enemy.hp, 73);
+  hooks.heroHit(enemy, 5, 'Teste', 'basic', true);
+  assert.equal(enemy.hp, 64); // +4 da sinergia, sem queimar novamente de forma recursiva
+  hooks.worldTurn();
+  hooks.worldTurn();
+  assert.equal(enemy.hp, 60);
+  assert.equal(enemy.smolder, 0);
+});
+
+test('integração real: save v2 antigo ganha relicState sem perder relíquias ou status', () => {
+  const { hooks } = boot();
+  hooks.startNew();
+  const old = JSON.parse(JSON.stringify(hooks.get()));
+  old.hero.relics = ['moss', 'mirror', 'eye'];
+  delete old.hero.relicState;
+  delete old.visitedRooms;
+  const migrated = hooks.migrateRun(old);
+  assert.deepEqual(Array.from(migrated.hero.relics), old.hero.relics);
+  assert.equal(migrated.hero.relicState.echo, 0);
+  assert.equal(migrated.hero.relicState.ward, 0);
+  assert.deepEqual(Array.from(migrated.visitedRooms), []);
 });
 
 test('1.000 estratos gerados mantêm escada, inimigos e itens alcançáveis', () => {
