@@ -24,7 +24,7 @@ function boot({ installed = true, offline = false } = {}) {
       };
     },
     async match(url) { calls.match.push(String(url.url || url)); return files.get(String(url.url || url)); },
-    async keys() { return ['golzdov-offline-v7', 'golzdov-offline-v8', 'golzdov-offline-v9', 'golzdov-offline-v10', 'golzdov-offline-v11', 'golzdov-offline-v12', 'golzdov-offline-v13', 'golzdov-offline-v14', 'golzdov-offline-v15', 'golzdov-phaser-v1', 'another-app-cache']; },
+    async keys() { return ['golzdov-offline-v7', 'golzdov-offline-v8', 'golzdov-offline-v9', 'golzdov-offline-v10', 'golzdov-offline-v11', 'golzdov-offline-v12', 'golzdov-offline-v13', 'golzdov-offline-v14', 'golzdov-offline-v15', 'golzdov-offline-v16', 'golzdov-phaser-v1', 'another-app-cache']; },
     async delete(name) { calls.delete.push(name); return true; }
   };
   const self = {
@@ -106,12 +106,12 @@ test('a atualização libera o client e apaga somente caches antigos do Golzdov 
   assert.equal(calls.skipWaiting, 1);
   listeners.activate({ waitUntil(p) { activate = p; } });
   await activate;
-  assert.deepEqual(calls.delete, ['golzdov-offline-v7','golzdov-offline-v8','golzdov-offline-v9','golzdov-offline-v10','golzdov-offline-v11','golzdov-offline-v12','golzdov-offline-v13','golzdov-offline-v14','golzdov-offline-v15']);
+  assert.deepEqual(calls.delete, ['golzdov-offline-v7','golzdov-offline-v8','golzdov-offline-v9','golzdov-offline-v10','golzdov-offline-v11','golzdov-offline-v12','golzdov-offline-v13','golzdov-offline-v14','golzdov-offline-v15','golzdov-offline-v16']);
   assert.equal(calls.claim, 1);
 });
 
-test('cache v16 inclui loot e recompensas e nenhuma nova chave localStorage', () => {
-  assert.match(sw, /const CACHE = 'golzdov-offline-v16'/);
+test('cache v17 inclui ataques por eventos e nenhuma nova chave localStorage', () => {
+  assert.match(sw, /const CACHE = 'golzdov-offline-v17'/);
   assert.match(sw, /'\.\/core\/rng\.js'/);
   assert.match(sw, /'\.\/core\/dungeon\.js'/);
   assert.match(sw, /'\.\/core\/navigation\.js'/);
