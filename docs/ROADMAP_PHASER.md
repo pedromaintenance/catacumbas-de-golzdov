@@ -141,6 +141,18 @@ docs/
 **Registro P0 (15/10/2026):** [PR #14](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/14) integrado à main (commit `15df229`), GitHub Actions `success`. [Issue #12](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/12) fechada.  O handler de `navigate` só chama `respondWith` quando a URL requisitada é exatamente a raiz do projeto ou `index.html`; para `/phaser/` e quaisquer páginas da subpasta ele se abstém, permitindo navegação pela rede ou pelo futuro service worker independente. `golzdov-offline-v8` elimina apenas caches antigos com prefixo legado; cache da futura engine permanece intocado. O jogo principal continua sem alteração de gameplay e as chaves de save existentes não foram alteradas. Deploy real e teste em dispositivo físico ainda a confirmar.
 
 
+#### Incremento P1A — RNG e geração de masmorras (15/10/2026)
+
+- [x] Extrair o xorshift32 para `core/rng.js`, independente de DOM, áudio, render e Phaser.
+- [x] Extrair a geração de mapa, salas, escadas, altar, inimigos, boss e loot para `core/dungeon.js`.
+- [x] Fazer o jogo atual usar os módulos novos, preservando as chamadas de render/HUD/visão no adaptador legado.
+- [x] Gravar **50 golden snapshots da implementação original** (10 seeds × 5 estratos), com hash de mapa/salas/itens/inimigos/spawn e estado final do RNG.
+- [x] Acrescentar testes de paridade por golden snapshots, repetibilidade e isolamento de instâncias.
+- [x] Atualizar service worker e verificação de cache para **golzdov-offline-v9**.
+- [ ] Extrair campo de visão, pathfinding, ações, IA e efeitos para módulos sem DOM (P1B).
+- [ ] Implementar `dispatch(action)` puramente testável com snapshots de combate (P1B/P1C).
+
+**Critério de integração:** fluxo do jogo original continua funcional, inclusive Xbox e saves; todos os golden tests e suíte de regressão aprovados no GitHub Actions. O Pages continua servindo o jogo legado com o novo núcleo; **não existe preview Phaser jogável ainda**.
 ### P1 — Extrair o núcleo determinístico (2–3 PRs)
 
 - [ ] Separar RNG, entidades, estado, geração de dungeon, visibilidade e pathfinding dos acessos a Canvas/DOM.
@@ -261,4 +273,4 @@ Em cada PR registrar:
 - Critério objetivo para liberar merge e regressão coberta.
 - Atualização de `docs/ROADMAP_PHASER.md` e ligação ao roadmap de conteúdo `docs/ROADMAP_2.0.md`.
 
-**Progresso neste documento:** P0 implementado e validado por CI; ainda faltam validação manual no PWA instalado e verificação da configuração de Pages. P1–P6 permanecem pendentes.
+**Progresso neste documento:** P0 integrado e validado por CI; P1A implementado em PR com módulos RNG e dungeon e golden tests. P1B/P1C e P2–P6 pendentes. Validação manual PWA/Pages ainda pendente.
