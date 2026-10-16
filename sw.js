@@ -1,7 +1,7 @@
-/* Catacumbas de Golzdov — PWA 1.2.0 */
-const CACHE = 'golzdov-offline-v4';
+/* Catacumbas de Golzdov — PWA 1.2.1 */
+const CACHE = 'golzdov-offline-v5';
 const PRECACHE = [
-  './', './index.html', './manifest.webmanifest',
+  './', './index.html', './gamepad.js', './manifest.webmanifest',
   './icons/icon-192.png', './icons/icon-512.png'
 ];
 
@@ -42,7 +42,7 @@ self.addEventListener('fetch', event => {
     })());
     return;
   }
-  // Ícones e manifesto também ficam offline.
+  // Scripts, ícones e manifesto também ficam offline.
   event.respondWith((async () => {
     const saved = await caches.match(event.request);
     if (saved) return saved;
