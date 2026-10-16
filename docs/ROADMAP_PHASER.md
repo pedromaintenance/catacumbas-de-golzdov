@@ -1,6 +1,6 @@
 # Roadmap de migração — Catacumbas de Golzdov → Phaser 4
 
-**Status:** P0–P1C.3B.2 concluídos na `main` (última CI: 65/65). P1C.3B.3A (loot e recompensas) implementado para CI e publicação; P1C.3B.3B (ataques/eventos terminais), P2–P6 pendentes. Preview Phaser só quando jogável.
+**Status:** P0–P1C.3B.3A concluídos na `main`. [PR #26](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/26): **69/69 testes verdes**, incluindo 336 replays de coleta/abates e 408 de movimento. Build **1.3.2 / cache v16** publicada no código principal; P1C.3B.3B (ataques/eventos terminais) e P2–P6 pendentes. Preview Phaser só quando jogável.
 **Data do diagnóstico:** 15/10/2026.
 **Acompanhamento GitHub:** [issue #11 — migração Phaser](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/11); [issue #12 — corrigir roteamento PWA](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/12).
 **Objetivo:** migrar a apresentação, a composição das cenas e a entrada para Phaser 4 sem alterar silenciosamente as regras do roguelike, perder os saves ou bloquear o GitHub Pages.
@@ -172,10 +172,10 @@ docs/
 - [x] Adaptar `doMove`, `collect` e `killEnemy` para consumir eventos preservando dano, sons, logs, armadilhas fatais, relíquias, recompensas e saves; nenhuma nova chave de armazenamento.
 - [x] **336 replays** dedicados: 240 de coleta (3 classes × 8 seeds × 10 cenários) + 96 de abates (3 classes × 8 seeds × 4 cenários); 408 replays anteriores de movimento permanecem como regressão integrada.
 - [x] Bump do PWA para `golzdov-offline-v16` e menu **BUILD 1.3.2 · CACHE V16 · P1C.3B.3A**.
-- [ ] Publicar somente após CI verde e conferir manualmente atualização no Pages/PWA.
+- [x] Publicar no código principal após CI verde ([PR #26](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/26)); **verificação manual do Pages/PWA ainda pendente**.
 - [ ] **P1C.3B.3B:** extrair resolução completa de `ATTACK`, efeitos de dano, vitória, morte e fila de eventos; replay de sequências antes da preview Phaser.
 
-**Critério de aceite:** 336 replays do comportamento original e regressões anteriores verdes; `core/loot.js` e `core/rewards.js` não devem acessar renderer ou storage. A build testável continua na rota raiz, **não** em `/phaser/`.
+**Integração concluída:** [PR #26](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/26), merge `ec6e707` em `main`; [CI #38957375374](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/38957375374): **69/69 testes aprovados**, incluindo 336 replays de coleta/recompensas, 408 replays de movimento e regressões de RNG, saves e PWA. A build fica na rota raiz; **ainda não existe preview Phaser jogável**. Teste real de Pages, gamepad e cache antigo instalado continua pendente.
 
 ### P1C.3B.2 — Movimento por eventos + identificação da versão (16/10/2026)
 
@@ -192,12 +192,12 @@ docs/
 **Integrado:** [PR #25](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/25), commit `c30f052` em `main`. [CI #38955997010](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/38955997010) **65/65 testes verdes**, incluindo 408 replays idênticos. A página de produção pode receber a versão PWA v15 após publicação/atualização do cache. A engine Phaser **ainda não** é jogável em `/phaser/`.
 
 
-#### Roteiro de validação no Pages — BUILD 1.3.1
+#### Roteiro de validação no Pages — BUILD 1.3.2
 
-1. Abra [o Pages](https://pedromaintenance.github.io/catacumbas-de-golzdov/) **conectado à internet**; recarregue até ver `BUILD 1.3.1 · CACHE V15 · P1C.3B.2` abaixo do estado offline. Se a versão não aparecer, feche/reabra o PWA instalado após atualização online.
+1. Abra [o Pages](https://pedromaintenance.github.io/catacumbas-de-golzdov/) **conectado à internet**; recarregue até ver `BUILD 1.3.2 · CACHE V16 · P1C.3B.3A` abaixo do estado offline. Se a versão não aparecer, feche/reabra o PWA instalado após atualização online.
 2. Inicie uma expedição com cada uma das três classes e tente andar em parede/limite, entrar em sala, pisar sobre moedas e consumir poção; nenhum movimento inválido deve consumir um turno.
-3. Ande contra um inimigo: deve atacar em vez de mover; teste depois espera e poção verificando que inimigos agem **uma vez** por turno.
-4. Teste coleta de equipamento, armadilhas, relicário, altar e escada. A expedição deve continuar normalmente após fechar e reabrir o PWA; importe/exporte um save com cuidado, sem sobrescrever um backup.
+3. Ande contra um inimigo: deve atacar em vez de mover. Teste espera e poção: inimigos agem **uma vez** por turno. Derrote inimigos comuns e, ao final, o chefe; confira XP, âmbar e comportamento do encerramento.
+4. Teste os oito tipos de coleta, especialmente equipamento, armadilhas (inclusive fatal), relicário, altar e escada. A expedição deve continuar normalmente após fechar e reabrir o PWA; importe/exporte um save com cuidado, sem sobrescrever um backup.
 5. Confirme que o status `✓ PRONTO PARA JOGAR SEM INTERNET` aparece e teste a abertura offline. **Não validado aqui em dispositivo físico:** CI não substitui teste de Android/iOS/Xbox e serviço GitHub Pages propagado.
 
 **Não confundir build e cache:** o texto no menu informa a versão do HTML carregado, não prova por si só que todos os assets estão atualizados; o status offline e o teste sem rede completam a verificação.
@@ -265,7 +265,7 @@ docs/
 | P1C.3A | **Concluído** — IA e `worldTurn` compartilhados | 660 replays, 57/57 testes e [PR #23](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/23) |
 | P1C.3B.1 | **Concluído**: WAIT/POTION e eventos ordenados | 192 replays, PR #24 e CI 61/61 |
 | P1C.3B.2 | **Concluído**: MOVE, salas, coleta delegada e build visível | PR #25, 408 replays, CI **65/65**, build 1.3.1 |
-| P1C.3B.3A | Coleta, recompensas e chefe via eventos; build 1.3.2 em revisão | 336 replays de loot/recompensas + regressões completas |
+| P1C.3B.3A | **Concluído**: coleta, recompensas e chefe via eventos; build 1.3.2 | [PR #26](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/26), 336 replays e CI **69/69** |
 | P1C.3B.3B | ATTACK, dano, fim de run e replay de ações | Replays de sequências, saves v1/v2, três classes |
 | P2A | Cena Phaser com câmera, texturas e mapa; usar o mesmo estado do núcleo | Preview não substitui a versão legada |
 | P2B | Movimento, combate básico, HUD, controle e save isolado na preview | Primeira build realmente jogável em `/phaser/` |
