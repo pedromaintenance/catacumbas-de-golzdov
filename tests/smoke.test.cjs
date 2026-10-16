@@ -87,6 +87,7 @@ test('os scripts embutidos são válidos e cache PWA não depende de versão dup
   assert.match(worker, /const CACHE = 'golzdov-offline-v5'/);
   assert.match(worker, /'\.\/gamepad\.js'/);
   assert.match(html, /<script src="\.\/gamepad\.js"><\/script>/);
+  assert.match(html, /const FILES = \[.*'\.\/gamepad\.js'/);
   assert.doesNotThrow(() => new vm.Script(fs.readFileSync(path.join(ROOT, 'gamepad.js'), 'utf8')));
 });
 
