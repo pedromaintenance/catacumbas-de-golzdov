@@ -57,9 +57,10 @@ function boot() {
   assert.equal(scripts[0].split(hook).length, 2, 'ponto de instrumentação único');
   const instrumented = scripts[0].replace(
     hook,
-    "showScreen('home');renderClasses();globalThis.__testHooks={get:()=>G,startNew,resume,migrateRun,generateFloor,save,learnTalent,levelModal,receiveDamage,hideModal,chooseClass:id=>{selectedClass=id},talents:CLASS_TALENTS,applyRelic,relicEvent,heroHit,worldTurn,inventory,relicSynergies,relics:RELICS};requestAnimationFrame(render);"
+    "showScreen('home');renderClasses();globalThis.__testHooks={get:()=>G,startNew,resume,migrateRun,generateFloor,save,learnTalent,levelModal,receiveDamage,hideModal,chooseClass:id=>{selectedClass=id},talents:CLASS_TALENTS,applyRelic,relicEvent,heroHit,worldTurn,inventory,relicSynergies,relics:RELICS,removeRelic,showRelicOffer,acceptRelicOffer,showPendingRelicOffer,collect};requestAnimationFrame(render);"
   );
   vm.runInNewContext(fs.readFileSync(path.join(ROOT, 'relic-effects.js'), 'utf8'), sandbox, { filename: 'relic-effects.js', timeout: 10000 });
+  vm.runInNewContext(fs.readFileSync(path.join(ROOT, 'relic-offers.js'), 'utf8'), sandbox, { filename: 'relic-offers.js', timeout: 10000 });
   vm.runInNewContext(instrumented, sandbox, { filename: 'index.html', timeout: 10000 });
   return { hooks: sandbox.__testHooks, storage, elements };
 }
@@ -85,12 +86,15 @@ test('os scripts embutidos são válidos e cache PWA não depende de versão dup
   assert.equal(scripts.length, 2);
   for (const script of scripts) assert.doesNotThrow(() => new vm.Script(script));
   assert.match(html, /caches\.match\(new URL\(file, location\.href\)\)/);
-  assert.match(worker, /const CACHE = 'golzdov-offline-v6'/);
+  assert.match(worker, /const CACHE = 'golzdov-offline-v7'/);
   assert.match(worker, /'\.\/gamepad\.js'/);
   assert.match(html, /<script src="\.\/gamepad\.js"><\/script>/);
   assert.match(html, /<script src="\.\/relic-effects\.js"><\/script>/);
   assert.match(worker, /'\.\/relic-effects\.js'/);
   assert.match(html, /const FILES = \[.*'\.\/relic-effects\.js'/);
+  assert.match(html, /<script src="\.\/relic-offers\.js"><\/script>/);
+  assert.match(worker, /'\.\/relic-offers\.js'/);
+  assert.match(html, /const FILES = \[.*'\.\/relic-offers\.js'/);
   assert.match(html, /const FILES = \[.*'\.\/gamepad\.js'/);
   assert.doesNotThrow(() => new vm.Script(fs.readFileSync(path.join(ROOT, 'gamepad.js'), 'utf8')));
 });
@@ -124,6 +128,8 @@ test('save v1 local migra sem perder o progresso, seed ou meta legados', () => {
   assert.deepEqual(Array.from(run.hero.upgrades), []);
   assert.ok(run.hero.relicState && run.hero.relicState.echo === 0);
   assert.ok(Array.isArray(run.visitedRooms));
+  assert.equal(run.pendingRelicOffer,null);
+  assert.equal(run.shopOffers,null);
   assert.ok(run.seed > 0 && run.rngState > 0);
   assert.deepEqual(Array.from(run.map), old.map);
   assert.deepEqual(JSON.parse(storage.get('carcaca_golzdov_meta_v1')), oldMeta);
@@ -228,6 +234,65 @@ test('integração real: save v2 antigo ganha relicState sem perder relíquias o
   assert.equal(migrated.hero.relicState.echo, 0);
   assert.equal(migrated.hero.relicState.ward, 0);
   assert.deepEqual(Array.from(migrated.visitedRooms), []);
+});
+
+test('trocas de relíquias são transacionais: stats e âmbar só mudam depois de confirmar', () => {
+  const { hooks,elements }=boot();
+  hooks.startNew();hooks.hideModal(true);
+  const run=hooks.get(),p=run.hero,find=id=>hooks.relics.find(r=>r.id===id);
+  for(const id of ['fang','moss','heart','chalice'])hooks.applyRelic(find(id));
+  const previous={atk:p.atk,maxhp:p.maxhp,maxmana:p.maxmana,coins:p.coins};
+  p.coins=90;
+  hooks.acceptRelicOffer(find('chain'),54,null);
+  assert.match(elements.get('modal').innerHTML,/BOLSA CHEIA/);
+  assert.equal(p.atk,previous.atk);
+  assert.equal(p.maxhp,previous.maxhp);
+  assert.equal(p.relics.length,4);
+  assert.equal(p.coins,90);
+  hooks.acceptRelicOffer(find('chain'),54,null,['heart','chalice']);
+  assert.equal(p.coins,36);
+  assert.deepEqual(Array.from(p.relics),['fang','moss','chain']);
+  assert.equal(p.maxhp,previous.maxhp-10);
+  assert.equal(p.maxmana,previous.maxmana-7);
+  assert.equal(p.atk,previous.atk);
+});
+
+test('Nome Roubado reduz PV máximo enquanto equipado e devolve ao ser retirado',()=>{
+  const {hooks}=boot();hooks.startNew();hooks.hideModal(true);
+  const p=hooks.get().hero,baseHp=p.maxhp,baseAtk=p.atk;
+  hooks.applyRelic(hooks.relics.find(r=>r.id==='omen'));
+  assert.equal(p.atk,baseAtk+4);
+  assert.equal(p.maxhp,baseHp-7);
+  hooks.removeRelic('omen');
+  assert.equal(p.atk,baseAtk);
+  assert.equal(p.maxhp,baseHp);
+});
+
+test('oferta dupla gratuita fica pendente no save e pode ser retomada',()=>{
+  const {hooks,storage,elements}=boot();
+  hooks.startNew();hooks.hideModal(true);
+  hooks.get().pendingRelicOffer={source:'relicario',offers:null};
+  hooks.showPendingRelicOffer();
+  assert.match(elements.get('modal').innerHTML,/Dois nomes nos ossos/);
+  assert.match(elements.get('modal').innerHTML,/RECUSAR/);
+  const offered=hooks.get().pendingRelicOffer.offers;
+  assert.equal(offered.length,2);
+  hooks.save();
+  const resumed=hooks.migrateRun(JSON.parse(storage.get('carcaca_golzdov_run_v1')));
+  assert.deepEqual(Array.from(resumed.pendingRelicOffer.offers),offered);
+});
+
+test('mercador oferece os mesmos dois itens até compra, sem reroll gratuito',()=>{
+  const {hooks,elements}=boot();
+  hooks.startNew();hooks.hideModal(true);
+  const p=hooks.get().hero;p.coins=100;
+  hooks.showRelicOffer('mercador',54);
+  const first=[...hooks.get().shopOffers];
+  hooks.hideModal(true);
+  hooks.showRelicOffer('mercador',54);
+  assert.deepEqual(Array.from(hooks.get().shopOffers),first);
+  assert.equal(p.coins,100);
+  assert.match(elements.get('modal').innerHTML,/Preço: ◈ 54/);
 });
 
 test('1.000 estratos gerados mantêm escada, inimigos e itens alcançáveis', () => {
