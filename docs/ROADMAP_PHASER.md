@@ -1,6 +1,6 @@
 # Roadmap de migração — Catacumbas de Golzdov → Phaser 4
 
-**Status:** P0–P1C.3B.3B.2C integrados à `main`. [PR #31](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/31): **80/80 testes verdes**, 252 replays de habilidades e 480 sequências multi-ação com saves. Build 1.3.6 / cache v20 no código principal para teste no Pages. Próxima etapa: P2A (estrutura Phaser/Vite), com preview jogável só após P2B.
+**Status:** P0–P1C.3B.3B.2C integrados à `main`. [PR #31](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/31): **80/80 testes verdes**, 252 replays de habilidades e 480 sequências multi-ação com saves. Build 1.3.6 / cache v20 no código principal para teste no Pages. Próxima etapa: [P2A/P2B — primeira preview Phaser](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/32), com rota principal preservada e preview jogável só após P2B.
 **Data do diagnóstico:** 15/10/2026.
 **Acompanhamento GitHub:** [issue #11 — migração Phaser](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/11); [issue #12 — corrigir roteamento PWA](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/12).
 **Objetivo:** migrar a apresentação, a composição das cenas e a entrada para Phaser 4 sem alterar silenciosamente as regras do roguelike, perder os saves ou bloquear o GitHub Pages.
@@ -171,7 +171,7 @@ docs/
 - [x] Manter os **252 replays originais** de habilidades e acrescentar **480 sequências multi-ação**: 3 classes × 5 estratos × 8 seeds × 4 roteiros, misturando SKILL, WAIT, POTION, MOVE e ATTACK, conferindo estado completo e mira depois de cada ação.
 - [x] Atualizar PWA para `golzdov-offline-v20` e identificar **BUILD 1.3.6 · CACHE V20 · P1C.3B.3B.2C** no menu.
 - [x] Integrar à `main` após CI verde ([PR #31](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/31)); **propagação real no Pages, PWA e controle físico continuam pendentes de confirmação**.
-- [ ] Consolidar checklist de validação do núcleo e iniciar P2A (estrutura Phaser/Vite) sem afetar a rota estável. Os callbacks de domínio de `core/skills.js` ainda são síncronos, não uma fila de eventos puramente serializável.
+- [ ] Consolidar checklist de validação do núcleo e iniciar [P2A/P2B (issue #32)](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/32), com Phaser/Vite e armazenamento isolado, sem afetar a rota estável. Os callbacks de domínio de `core/skills.js` ainda são síncronos, não uma fila de eventos puramente serializável.
 
 **Concluído:** [PR #31](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/31), squash `a312365` em `main`. [CI #38966706705](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/38966706705): **80/80 testes aprovados**, incluindo 480 sequências (com estado, mira, save e meta após cada ação) e 252 replays de habilidades. Os callbacks de efeitos de domínio são síncronos e podem requerer posterior serialização para Phaser. A preview `/phaser/` ainda **não** está jogável; P2A e P2B continuam pendentes.
 
