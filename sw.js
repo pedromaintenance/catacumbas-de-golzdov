@@ -1,7 +1,7 @@
-/* Catacumbas de Golzdov — PWA 1.2.6 — navegação extraída para núcleo compartilhado */
-const CACHE = 'golzdov-offline-v10';
+/* Catacumbas de Golzdov — PWA 1.2.7 — combate básico extraído para núcleo compartilhado */
+const CACHE = 'golzdov-offline-v11';
 const PRECACHE = [
-  './', './index.html', './core/rng.js', './core/dungeon.js', './core/navigation.js', './gamepad.js', './relic-effects.js', './relic-offers.js', './manifest.webmanifest',
+  './', './index.html', './core/rng.js', './core/dungeon.js', './core/navigation.js', './core/combat.js', './gamepad.js', './relic-effects.js', './relic-offers.js', './manifest.webmanifest',
   './icons/icon-192.png', './icons/icon-512.png'
 ];
 
