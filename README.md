@@ -8,6 +8,7 @@ A evolução está documentada e acompanhada em:
 
 - [Documento de Game Design 2.0](docs/GAME_DESIGN_2.0.md) — visão, classes, relíquias, facções, inimigos, combate, modo de jogo e arquitetura.
 - [Roadmap 2.0](docs/ROADMAP_2.0.md) — etapas, checklists, critérios de aceite e registro do que foi realizado.
+- [Roadmap de migração para Phaser 4](docs/ROADMAP_PHASER.md) — plano de extração do núcleo, cenas, preview em Pages, Gamepad API, PWA offline e preservação de saves.
 
 A versão 1.1 introduziu migração de saves e geração com seed persistida sem alterar as regras essenciais. O primeiro incremento da 1.2 acrescenta **9 talentos de classe**, efeitos específicos no combate e escolhas de evolução. O armazenamento local mantém as chaves legadas para que o progresso não suma após atualizar o PWA.
 
@@ -20,6 +21,10 @@ node --test tests/*.test.cjs
 ```
 
 A suíte verifica sintaxe, coerência do cache offline, migração de saves antigos, seed, talentos, conectividade de 1.000 mapas comandos de controle Xbox com gamepad simulado e as relíquias/sinergias da atualização 1.2B. O GitHub Actions executa a suíte automaticamente em push e pull requests.
+
+## Próxima arquitetura: Phaser 4 (planejamento)
+
+A migração de engine foi [planejada separadamente](docs/ROADMAP_PHASER.md), mas **a versão Phaser ainda não está implementada nem publicada**. A versão atual continua neste endereço. Uma preview jogável será adicionada à subpasta `/phaser/` após corrigir o service worker, criar a build Vite e passar nos testes. O plano mantém o save da versão atual intacto durante os testes. Acompanhe a [issue #11](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/11).
 
 ## Relicários e raridades — versão 1.2C
 

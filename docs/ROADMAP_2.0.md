@@ -1,6 +1,6 @@
 # Roadmap executável — Catacumbas de Golzdov 2.0
 
-Atualizado em: 15/10/2026. Planejamento detalhado: [GAME_DESIGN_2.0.md](GAME_DESIGN_2.0.md).
+Atualizado em: 15/10/2026. Planejamento detalhado: [GAME_DESIGN_2.0.md](GAME_DESIGN_2.0.md). A migração técnica paralela para Phaser 4 está em [ROADMAP_PHASER.md](ROADMAP_PHASER.md).
 
 > Convenções: [x] concluído e conferido; [ ] pendente. Mudanças de código devem incluir teste e confirmação antes de marcar [x]. Cada PR/etapa deve atualizar este arquivo.
 
@@ -37,6 +37,13 @@ Atualizado em: 15/10/2026. Planejamento detalhado: [GAME_DESIGN_2.0.md](GAME_DES
 - [ ] Confirmar comportamento em Android/iOS caso haja interesse em controle conectado ao celular.
 
 Esta entrega é **independente das versões de conteúdo 1.2/1.3**, e não altera a progressão salva. A detecção depende de suporte do navegador à Gamepad API. A execução dos testes automáticos não comprova conexão física.
+
+## Trilha técnica paralela — Migração para Phaser 4 (planejada)
+
+- Documento: [Roadmap Phaser 4](ROADMAP_PHASER.md); tracker de execução: [issue #11](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/11).
+- Primeiro passo: [P0 — corrigir service worker para não redirecionar /phaser/ ao HTML legado](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/12).
+- O jogo atual permanece em `/catacumbas-de-golzdov/`. A futura preview funcional, após build e deploy, será em `/catacumbas-de-golzdov/phaser/`.
+- A engine não muda automaticamente nenhuma das metas de conteúdo de 1.2, 1.3, 2.0 ou 2.1; saves de produção permanecem isolados até migração final.
 
 ## 1.1 — Fundações (em andamento)
 
