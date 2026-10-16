@@ -1,6 +1,6 @@
 # Roadmap de migração — Catacumbas de Golzdov → Phaser 4
 
-**Status:** P0, P1A e P1B integrados à main com GitHub Actions verde. Próximo: P1C (combate/turnos); preview Phaser jogável só após P2.
+**Status:** P0, P1A e P1B concluídos; P1C.1 implementado para validação no PR; P1C.2/P1C.3 e P2–P6 pendentes. Preview Phaser só será publicada quando P2B estiver jogável.
 **Data do diagnóstico:** 15/10/2026.
 **Acompanhamento GitHub:** [issue #11 — migração Phaser](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/11); [issue #12 — corrigir roteamento PWA](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/12).
 **Objetivo:** migrar a apresentação, a composição das cenas e a entrada para Phaser 4 sem alterar silenciosamente as regras do roguelike, perder os saves ou bloquear o GitHub Pages.
@@ -163,6 +163,29 @@ docs/
 - [ ] Extrair combate, IA, turnos e dispatch(action) sem dependências gráficas (P1C).
 
 **Integração:** [PR #17](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/17) integrado à main, commit `b8c8fa4`, GitHub Actions `success`. Goldens de 50 cenários e 1.000 masmorras verdes. O jogo original continua jogável; preview Phaser ainda não publicada.
+### P1C.1 — Núcleo básico de combate e turnos (15/10/2026)
+
+- [x] Congelar **192 snapshots de combate antes de qualquer refatoração**: três classes × oito seeds × oito cenários. Cobre ataque, crítico, esquiva, mitigação, ataques à distância, palavra proibida e avanço de turno.
+- [x] Criar `core/combat.js`, sem DOM, Phaser, canvas, áudio ou localStorage, usando RNG de `core/rng.js` e estado explícito.
+- [x] Adaptar o jogo legado para consumir as rolagens de ataque básico, a esquiva/ataque corpo a corpo do inimigo, os ataques à distância, a mitigação inicial e o início do turno pelo novo módulo.
+- [x] **Manter** o `GolzdovRelicEffects` como responsável pelos eventos de relicários (`onAttack`, `onDefend`, `onHurt`, etc.); nenhum disparo duplicado no módulo.
+- [x] Preservar ordem de consumo do RNG, buff do Vigia, Grilhões Partidos, riposte, dodge, crítico, bênção da Marca/Musgo e efeitos de ward.
+- [x] Ampliar regressões automatizadas, golden hashes e precache do PWA para `golzdov-offline-v11`.
+- [ ] Extrair ataques de habilidade, efeitos de talento e composição de turnos completos: **P1C.2**.
+- [ ] Refatorar `enemyStep`/IA, morte e resultado de ações para `dispatch(action, state)`: **P1C.3**.
+
+**Critério de aceite P1C.1:** os snapshots do legado e o RNG devem ser idênticos; todos os testes da CI aprovados. Este incremento **não é a conclusão de P1C e não cria a preview Phaser**. A versão atual permanece jogável no Pages.
+
+### Próximos passos rastreáveis
+
+| Etapa | Entrega | Bloqueio para publicação |
+| --- | --- | --- |
+| P1C.2 | Habilidades de três classes, custos de foco, efeitos de talentos, raiz, sono e efeitos AOE | Golden tests de magias e ausência de loops |
+| P1C.3 | IA, `worldTurn`, recompensas, terminal/morte, `dispatch(action)` e eventos puros | Replay determinístico de ações e saves v1/v2 |
+| P2A | Cena Phaser com câmera, texturas e mapa; usar o mesmo estado do núcleo | Preview não substitui a versão legada |
+| P2B | Movimento, combate básico, HUD, controle e save isolado na preview | Primeira build realmente jogável em `/phaser/` |
+| P3–P6 | Paridade completa, UI/polimento, PWA e lançamento | Playtests reais e plano de rollback |
+
 ### P1 — Extrair o núcleo determinístico (2–3 PRs)
 
 - [ ] Separar RNG, entidades, estado, geração de dungeon, visibilidade e pathfinding dos acessos a Canvas/DOM.
@@ -283,4 +306,4 @@ Em cada PR registrar:
 - Critério objetivo para liberar merge e regressão coberta.
 - Atualização de `docs/ROADMAP_PHASER.md` e ligação ao roadmap de conteúdo `docs/ROADMAP_2.0.md`.
 
-**Progresso neste documento:** P0, P1A ([PR #15](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/15)) e P1B ([PR #17](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/17)) integrados, ambos com CI aprovado. RNG, dungeon, visão e pathfinding já são módulos usados pelo jogo atual. Combate/turnos P1C e P2–P6 pendentes; validação manual do Pages/PWA físico e do Xbox real ainda pendente.
+**Progresso:** P0, P1A ([PR #15](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/15)) e P1B ([PR #17](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/17)) integrados. P1C.1 em validação: módulos RNG, dungeon, navegação e combate básico alimentam o jogo original; P1C.2/P1C.3 e P2–P6 pendentes. Verificação de Pages/PWA físico e Xbox real permanece pendente.
