@@ -1,5 +1,5 @@
-/* Catacumbas de Golzdov — PWA 1.3.2 — coleta e recompensas em núcleo compartilhado */
-const CACHE = 'golzdov-offline-v16';
+/* Catacumbas de Golzdov — PWA 1.3.3 — ataques básicos e dano por eventos */
+const CACHE = 'golzdov-offline-v17';
 const PRECACHE = [
   './', './index.html', './core/rng.js', './core/dungeon.js', './core/navigation.js', './core/combat.js', './core/skills.js', './core/enemies.js', './core/turns.js', './core/actions.js', './core/loot.js', './core/rewards.js', './gamepad.js', './relic-effects.js', './relic-offers.js', './manifest.webmanifest',
   './icons/icon-192.png', './icons/icon-512.png'

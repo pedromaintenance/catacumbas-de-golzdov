@@ -2,7 +2,7 @@
  * Cálculos do estado não dependem do navegador, Phaser, relógio nem renderer.
  * O estado recebido é alterado explicitamente; eventos descrevem efeitos
  * posteriores (log, som e exatamente uma solicitação de turno), em ordem.
- * P1C.3B.3A adicionou COLLECT e eventos de loot; ATTACK/SKILL e terminais completos pendentes.
+ * P1C.3B.3B.1 adicionou ATTACK; SKILL, dano recebido e terminais completos pendentes.
  */
 (function(root){
 'use strict';
@@ -60,6 +60,34 @@ function dispatch(run,action){
       // Loot must be resolved after onEnterRoom: relic events may alter the run.
       // The adapter's collect handler remains responsible until P1C.3B.3.
       events.push({type:'collect-at-player'},{type:'turn'},{type:'post-move'});
+      return result(run,'applied',events);
+    }
+    case 'ATTACK':{
+      // Legado: referências já mortas ainda executam a rolagem e consomem o turno.
+      // A busca de alvos pela UI evita esse caso; manter paridade com o handler direto.
+      const enemy=run.enemies.find(e=>e.id===action.enemyId);
+      if(!enemy)return result(run,'no-target');
+      const range=action.melee?1:p.range;
+      const distance=Math.abs(p.x-enemy.x)+Math.abs(p.y-enemy.y);
+      if(distance>range||(!action.melee&&!action.lineOfSight))
+        return result(run,'out-of-range',[
+          {type:'log',text:'O inimigo está fora do alcance ou atrás de uma parede.',icon:'!'},
+          {type:'sound',frequency:140}
+        ]);
+      const roll=root.GolzdovCombat.basicAttack(run,enemy,{
+        predator:!!action.predator,muralha:!!action.muralha
+      });
+      const events=[];
+      if(roll.miss){
+        events.push({type:'log',text:'Você erra '+action.enemyName+'.',icon:'⚔'});
+        events.push({type:'sound',frequency:170,duration:.08});
+      }else{
+        if(roll.consumeRiposte)p.riposte=0;
+        events.push({type:'hero-hit',enemyId:enemy.id,damage:roll.damage,
+          label:roll.critical?'ACERTO CRÍTICO':'Golpe',source:'basic',critical:roll.critical});
+        events.push({type:'sound',frequency:roll.critical?720:370,duration:.095,wave:'triangle'});
+      }
+      events.push({type:'turn'});
       return result(run,'applied',events);
     }
     case 'COLLECT':{

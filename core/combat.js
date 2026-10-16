@@ -43,10 +43,18 @@ function incomingDamage(run,value,{muralha=false}={}){
   // O evento onDefend e os efeitos das relíquias continuam sob o despachante existente.
   return damage;
 }
+// O golpe bruto não ativa relicários; heroHit mantém onAttack antes de chamar isto.
+function damageEnemy(run,enemy,damage,label,definitions,source='effect'){
+  if(!run||!enemy||enemy.hp<=0)return [];
+  enemy.hp-=damage;
+  const events=[{type:'log',text:label+': '+definitions[enemy.type].name+' sofre '+damage+' de dano.',icon:'⚔'}];
+  if(enemy.hp<=0)events.push({type:'defeat-enemy',enemyId:enemy.id,source});
+  return events;
+}
 function startTurn(run){
   run.turn++;
   if(run.hero.buff>0)run.hero.buff--;
   return run.turn;
 }
-root.GolzdovCombat=Object.freeze({basicAttack,enemyMelee,enemyRanged,incomingDamage,startTurn});
+root.GolzdovCombat=Object.freeze({basicAttack,enemyMelee,enemyRanged,incomingDamage,damageEnemy,startTurn});
 })(typeof window!=='undefined'?window:globalThis);
