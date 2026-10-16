@@ -1,0 +1,1754 @@
+{
+  "origin": "Legacy index.html pre-P1C main, generated with real combat/turn handlers",
+  "hashScheme": "FNV1a32 of JSON.stringify({rngState,turn,hp,mana,atk,def,buff,riposte,chainUsed,relicState,kills,coins,enemy:{hp,x,y,stun,root,cd},logs: first four})",
+  "seedList": [
+    1,
+    305419896,
+    2882400001,
+    4294967295,
+    1831565813,
+    3735928559,
+    167,
+    1450744508
+  ],
+  "scenarios": [
+    "basic",
+    "critical",
+    "enemy-melee",
+    "enemy-dodge",
+    "mitigate",
+    "ranged",
+    "boss-ranged",
+    "turn"
+  ],
+  "samples": [
+    {
+      "classId": "vigia",
+      "seed": 1,
+      "scenario": "basic",
+      "hash": "a53edf9e",
+      "rngState": 67634689,
+      "hp": 97,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 1,
+      "scenario": "critical",
+      "hash": "a53edf9e",
+      "rngState": 67634689,
+      "hp": 97,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 1,
+      "scenario": "enemy-melee",
+      "hash": "753659db",
+      "rngState": 270369,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 1,
+      "scenario": "enemy-dodge",
+      "hash": "753659db",
+      "rngState": 270369,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 1,
+      "scenario": "mitigate",
+      "hash": "7e4dac4c",
+      "rngState": 1,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 1,
+      "scenario": "ranged",
+      "hash": "3174c66c",
+      "rngState": 270369,
+      "hp": 89,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 1,
+      "scenario": "boss-ranged",
+      "hash": "f3bb5be6",
+      "rngState": 67634689,
+      "hp": 87,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 1,
+      "scenario": "turn",
+      "hash": "f5c41d4c",
+      "rngState": 270369,
+      "hp": 97,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 305419896,
+      "scenario": "basic",
+      "hash": "d55e27a3",
+      "rngState": 1882851208,
+      "hp": 90,
+      "enemyHp": 468
+    },
+    {
+      "classId": "vigia",
+      "seed": 305419896,
+      "scenario": "critical",
+      "hash": "d55e27a3",
+      "rngState": 1882851208,
+      "hp": 90,
+      "enemyHp": 468
+    },
+    {
+      "classId": "vigia",
+      "seed": 305419896,
+      "scenario": "enemy-melee",
+      "hash": "d41d310f",
+      "rngState": 358294691,
+      "hp": 90,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 305419896,
+      "scenario": "enemy-dodge",
+      "hash": "4856612a",
+      "rngState": 2274908837,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 305419896,
+      "scenario": "mitigate",
+      "hash": "c9c5f830",
+      "rngState": 305419896,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 305419896,
+      "scenario": "ranged",
+      "hash": "56d867d9",
+      "rngState": 2274908837,
+      "hp": 87,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 305419896,
+      "scenario": "boss-ranged",
+      "hash": "91e7df1b",
+      "rngState": 358294691,
+      "hp": 89,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 305419896,
+      "scenario": "turn",
+      "hash": "67804670",
+      "rngState": 358294691,
+      "hp": 92,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 2882400001,
+      "scenario": "basic",
+      "hash": "0e8f3801",
+      "rngState": 919090537,
+      "hp": 91,
+      "enemyHp": 466
+    },
+    {
+      "classId": "vigia",
+      "seed": 2882400001,
+      "scenario": "critical",
+      "hash": "0e8f3801",
+      "rngState": 919090537,
+      "hp": 91,
+      "enemyHp": 466
+    },
+    {
+      "classId": "vigia",
+      "seed": 2882400001,
+      "scenario": "enemy-melee",
+      "hash": "5365febb",
+      "rngState": 305721618,
+      "hp": 90,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 2882400001,
+      "scenario": "enemy-dodge",
+      "hash": "8d91b99b",
+      "rngState": 3549775607,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 2882400001,
+      "scenario": "mitigate",
+      "hash": "58852190",
+      "rngState": 2882400001,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 2882400001,
+      "scenario": "ranged",
+      "hash": "2821f25d",
+      "rngState": 3549775607,
+      "hp": 85,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 2882400001,
+      "scenario": "boss-ranged",
+      "hash": "15a032e7",
+      "rngState": 305721618,
+      "hp": 89,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 2882400001,
+      "scenario": "turn",
+      "hash": "d13ba7ac",
+      "rngState": 305721618,
+      "hp": 92,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 4294967295,
+      "scenario": "basic",
+      "hash": "7442274f",
+      "rngState": 1958451267,
+      "hp": 90,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 4294967295,
+      "scenario": "critical",
+      "hash": "7442274f",
+      "rngState": 1958451267,
+      "hp": 90,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 4294967295,
+      "scenario": "enemy-melee",
+      "hash": "094c06a6",
+      "rngState": 253983,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 4294967295,
+      "scenario": "enemy-dodge",
+      "hash": "094c06a6",
+      "rngState": 253983,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 4294967295,
+      "scenario": "mitigate",
+      "hash": "5e20528c",
+      "rngState": 4294967295,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 4294967295,
+      "scenario": "ranged",
+      "hash": "5685a241",
+      "rngState": 253983,
+      "hp": 89,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 4294967295,
+      "scenario": "boss-ranged",
+      "hash": "ab0325f2",
+      "rngState": 4228382207,
+      "hp": 83,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 4294967295,
+      "scenario": "turn",
+      "hash": "83a30b49",
+      "rngState": 253983,
+      "hp": 97,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 1831565813,
+      "scenario": "basic",
+      "hash": "81e46626",
+      "rngState": 265159372,
+      "hp": 92,
+      "enemyHp": 482
+    },
+    {
+      "classId": "vigia",
+      "seed": 1831565813,
+      "scenario": "critical",
+      "hash": "39f14508",
+      "rngState": 265159372,
+      "hp": 92,
+      "enemyHp": 464
+    },
+    {
+      "classId": "vigia",
+      "seed": 1831565813,
+      "scenario": "enemy-melee",
+      "hash": "d5660514",
+      "rngState": 2447379481,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 1831565813,
+      "scenario": "enemy-dodge",
+      "hash": "51ea4b91",
+      "rngState": 1085196063,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 1831565813,
+      "scenario": "mitigate",
+      "hash": "e1fa80d4",
+      "rngState": 1831565813,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 1831565813,
+      "scenario": "ranged",
+      "hash": "49f6ad2a",
+      "rngState": 1085196063,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 1831565813,
+      "scenario": "boss-ranged",
+      "hash": "24ca27ad",
+      "rngState": 2447379481,
+      "hp": 85,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 1831565813,
+      "scenario": "turn",
+      "hash": "2ba84442",
+      "rngState": 2447379481,
+      "hp": 90,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 3735928559,
+      "scenario": "basic",
+      "hash": "3f4ac3f6",
+      "rngState": 1745748808,
+      "hp": 90,
+      "enemyHp": 482
+    },
+    {
+      "classId": "vigia",
+      "seed": 3735928559,
+      "scenario": "critical",
+      "hash": "39194bb8",
+      "rngState": 1745748808,
+      "hp": 90,
+      "enemyHp": 464
+    },
+    {
+      "classId": "vigia",
+      "seed": 3735928559,
+      "scenario": "enemy-melee",
+      "hash": "d2d1007b",
+      "rngState": 2384302402,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 3735928559,
+      "scenario": "enemy-dodge",
+      "hash": "4e2487f4",
+      "rngState": 1199382711,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 3735928559,
+      "scenario": "mitigate",
+      "hash": "d65fdabd",
+      "rngState": 3735928559,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 3735928559,
+      "scenario": "ranged",
+      "hash": "35ca4f5f",
+      "rngState": 1199382711,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 3735928559,
+      "scenario": "boss-ranged",
+      "hash": "07df7b54",
+      "rngState": 2384302402,
+      "hp": 85,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 3735928559,
+      "scenario": "turn",
+      "hash": "9e58a2b5",
+      "rngState": 2384302402,
+      "hp": 90,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 167,
+      "scenario": "basic",
+      "hash": "8b16ce06",
+      "rngState": 514560091,
+      "hp": 92,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 167,
+      "scenario": "critical",
+      "hash": "8b16ce06",
+      "rngState": 514560091,
+      "hp": 92,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 167,
+      "scenario": "enemy-melee",
+      "hash": "a3931f93",
+      "rngState": 42530061,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 167,
+      "scenario": "enemy-dodge",
+      "hash": "a3931f93",
+      "rngState": 42530061,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 167,
+      "scenario": "mitigate",
+      "hash": "0900aac5",
+      "rngState": 167,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 167,
+      "scenario": "ranged",
+      "hash": "e3b7aee4",
+      "rngState": 42530061,
+      "hp": 89,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 167,
+      "scenario": "boss-ranged",
+      "hash": "8d453889",
+      "rngState": 2567059513,
+      "hp": 85,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 167,
+      "scenario": "turn",
+      "hash": "c26bc424",
+      "rngState": 42530061,
+      "hp": 97,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 1450744508,
+      "scenario": "basic",
+      "hash": "4f0e4e6e",
+      "rngState": 561367956,
+      "hp": 97,
+      "enemyHp": 468
+    },
+    {
+      "classId": "vigia",
+      "seed": 1450744508,
+      "scenario": "critical",
+      "hash": "4f0e4e6e",
+      "rngState": 561367956,
+      "hp": 97,
+      "enemyHp": 468
+    },
+    {
+      "classId": "vigia",
+      "seed": 1450744508,
+      "scenario": "enemy-melee",
+      "hash": "b01cf1c5",
+      "rngState": 189067675,
+      "hp": 90,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 1450744508,
+      "scenario": "enemy-dodge",
+      "hash": "eb9fb3ea",
+      "rngState": 3771219275,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 1450744508,
+      "scenario": "mitigate",
+      "hash": "8e58450d",
+      "rngState": 1450744508,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 1450744508,
+      "scenario": "ranged",
+      "hash": "58a4b13e",
+      "rngState": 3771219275,
+      "hp": 85,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 1450744508,
+      "scenario": "boss-ranged",
+      "hash": "3cc6c251",
+      "rngState": 189067675,
+      "hp": 89,
+      "enemyHp": 500
+    },
+    {
+      "classId": "vigia",
+      "seed": 1450744508,
+      "scenario": "turn",
+      "hash": "6aebec1a",
+      "rngState": 189067675,
+      "hp": 92,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 1,
+      "scenario": "basic",
+      "hash": "a53edf9e",
+      "rngState": 67634689,
+      "hp": 97,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 1,
+      "scenario": "critical",
+      "hash": "a53edf9e",
+      "rngState": 67634689,
+      "hp": 97,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 1,
+      "scenario": "enemy-melee",
+      "hash": "753659db",
+      "rngState": 270369,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 1,
+      "scenario": "enemy-dodge",
+      "hash": "753659db",
+      "rngState": 270369,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 1,
+      "scenario": "mitigate",
+      "hash": "54e62363",
+      "rngState": 1,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 1,
+      "scenario": "ranged",
+      "hash": "3174c66c",
+      "rngState": 270369,
+      "hp": 89,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 1,
+      "scenario": "boss-ranged",
+      "hash": "f3bb5be6",
+      "rngState": 67634689,
+      "hp": 87,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 1,
+      "scenario": "turn",
+      "hash": "f5c41d4c",
+      "rngState": 270369,
+      "hp": 97,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 305419896,
+      "scenario": "basic",
+      "hash": "a6c0e55a",
+      "rngState": 1882851208,
+      "hp": 90,
+      "enemyHp": 480
+    },
+    {
+      "classId": "arcanista",
+      "seed": 305419896,
+      "scenario": "critical",
+      "hash": "a6c0e55a",
+      "rngState": 1882851208,
+      "hp": 90,
+      "enemyHp": 480
+    },
+    {
+      "classId": "arcanista",
+      "seed": 305419896,
+      "scenario": "enemy-melee",
+      "hash": "d41d310f",
+      "rngState": 358294691,
+      "hp": 90,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 305419896,
+      "scenario": "enemy-dodge",
+      "hash": "4856612a",
+      "rngState": 2274908837,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 305419896,
+      "scenario": "mitigate",
+      "hash": "49a8d227",
+      "rngState": 305419896,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 305419896,
+      "scenario": "ranged",
+      "hash": "56d867d9",
+      "rngState": 2274908837,
+      "hp": 87,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 305419896,
+      "scenario": "boss-ranged",
+      "hash": "91e7df1b",
+      "rngState": 358294691,
+      "hp": 89,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 305419896,
+      "scenario": "turn",
+      "hash": "67804670",
+      "rngState": 358294691,
+      "hp": 92,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 2882400001,
+      "scenario": "basic",
+      "hash": "e8dacdf1",
+      "rngState": 919090537,
+      "hp": 91,
+      "enemyHp": 478
+    },
+    {
+      "classId": "arcanista",
+      "seed": 2882400001,
+      "scenario": "critical",
+      "hash": "e8dacdf1",
+      "rngState": 919090537,
+      "hp": 91,
+      "enemyHp": 478
+    },
+    {
+      "classId": "arcanista",
+      "seed": 2882400001,
+      "scenario": "enemy-melee",
+      "hash": "5365febb",
+      "rngState": 305721618,
+      "hp": 90,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 2882400001,
+      "scenario": "enemy-dodge",
+      "hash": "8d91b99b",
+      "rngState": 3549775607,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 2882400001,
+      "scenario": "mitigate",
+      "hash": "ab188987",
+      "rngState": 2882400001,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 2882400001,
+      "scenario": "ranged",
+      "hash": "2821f25d",
+      "rngState": 3549775607,
+      "hp": 85,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 2882400001,
+      "scenario": "boss-ranged",
+      "hash": "15a032e7",
+      "rngState": 305721618,
+      "hp": 89,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 2882400001,
+      "scenario": "turn",
+      "hash": "d13ba7ac",
+      "rngState": 305721618,
+      "hp": 92,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 4294967295,
+      "scenario": "basic",
+      "hash": "7442274f",
+      "rngState": 1958451267,
+      "hp": 90,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 4294967295,
+      "scenario": "critical",
+      "hash": "7442274f",
+      "rngState": 1958451267,
+      "hp": 90,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 4294967295,
+      "scenario": "enemy-melee",
+      "hash": "094c06a6",
+      "rngState": 253983,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 4294967295,
+      "scenario": "enemy-dodge",
+      "hash": "094c06a6",
+      "rngState": 253983,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 4294967295,
+      "scenario": "mitigate",
+      "hash": "a3b660a3",
+      "rngState": 4294967295,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 4294967295,
+      "scenario": "ranged",
+      "hash": "5685a241",
+      "rngState": 253983,
+      "hp": 89,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 4294967295,
+      "scenario": "boss-ranged",
+      "hash": "ab0325f2",
+      "rngState": 4228382207,
+      "hp": 83,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 4294967295,
+      "scenario": "turn",
+      "hash": "83a30b49",
+      "rngState": 253983,
+      "hp": 97,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 1831565813,
+      "scenario": "basic",
+      "hash": "e39e4208",
+      "rngState": 265159372,
+      "hp": 92,
+      "enemyHp": 488
+    },
+    {
+      "classId": "arcanista",
+      "seed": 1831565813,
+      "scenario": "critical",
+      "hash": "662bbde4",
+      "rngState": 265159372,
+      "hp": 92,
+      "enemyHp": 476
+    },
+    {
+      "classId": "arcanista",
+      "seed": 1831565813,
+      "scenario": "enemy-melee",
+      "hash": "d5660514",
+      "rngState": 2447379481,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 1831565813,
+      "scenario": "enemy-dodge",
+      "hash": "51ea4b91",
+      "rngState": 1085196063,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 1831565813,
+      "scenario": "mitigate",
+      "hash": "0686b60b",
+      "rngState": 1831565813,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 1831565813,
+      "scenario": "ranged",
+      "hash": "49f6ad2a",
+      "rngState": 1085196063,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 1831565813,
+      "scenario": "boss-ranged",
+      "hash": "24ca27ad",
+      "rngState": 2447379481,
+      "hp": 85,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 1831565813,
+      "scenario": "turn",
+      "hash": "2ba84442",
+      "rngState": 2447379481,
+      "hp": 90,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 3735928559,
+      "scenario": "basic",
+      "hash": "3facc020",
+      "rngState": 1745748808,
+      "hp": 90,
+      "enemyHp": 488
+    },
+    {
+      "classId": "arcanista",
+      "seed": 3735928559,
+      "scenario": "critical",
+      "hash": "2fc46c10",
+      "rngState": 1745748808,
+      "hp": 90,
+      "enemyHp": 476
+    },
+    {
+      "classId": "arcanista",
+      "seed": 3735928559,
+      "scenario": "enemy-melee",
+      "hash": "d2d1007b",
+      "rngState": 2384302402,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 3735928559,
+      "scenario": "enemy-dodge",
+      "hash": "4e2487f4",
+      "rngState": 1199382711,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 3735928559,
+      "scenario": "mitigate",
+      "hash": "acec80d6",
+      "rngState": 3735928559,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 3735928559,
+      "scenario": "ranged",
+      "hash": "35ca4f5f",
+      "rngState": 1199382711,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 3735928559,
+      "scenario": "boss-ranged",
+      "hash": "07df7b54",
+      "rngState": 2384302402,
+      "hp": 85,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 3735928559,
+      "scenario": "turn",
+      "hash": "9e58a2b5",
+      "rngState": 2384302402,
+      "hp": 90,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 167,
+      "scenario": "basic",
+      "hash": "8b16ce06",
+      "rngState": 514560091,
+      "hp": 92,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 167,
+      "scenario": "critical",
+      "hash": "8b16ce06",
+      "rngState": 514560091,
+      "hp": 92,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 167,
+      "scenario": "enemy-melee",
+      "hash": "a3931f93",
+      "rngState": 42530061,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 167,
+      "scenario": "enemy-dodge",
+      "hash": "a3931f93",
+      "rngState": 42530061,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 167,
+      "scenario": "mitigate",
+      "hash": "bd21ca1e",
+      "rngState": 167,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 167,
+      "scenario": "ranged",
+      "hash": "e3b7aee4",
+      "rngState": 42530061,
+      "hp": 89,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 167,
+      "scenario": "boss-ranged",
+      "hash": "8d453889",
+      "rngState": 2567059513,
+      "hp": 85,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 167,
+      "scenario": "turn",
+      "hash": "c26bc424",
+      "rngState": 42530061,
+      "hp": 97,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 1450744508,
+      "scenario": "basic",
+      "hash": "3a156e03",
+      "rngState": 561367956,
+      "hp": 97,
+      "enemyHp": 480
+    },
+    {
+      "classId": "arcanista",
+      "seed": 1450744508,
+      "scenario": "critical",
+      "hash": "3a156e03",
+      "rngState": 561367956,
+      "hp": 97,
+      "enemyHp": 480
+    },
+    {
+      "classId": "arcanista",
+      "seed": 1450744508,
+      "scenario": "enemy-melee",
+      "hash": "b01cf1c5",
+      "rngState": 189067675,
+      "hp": 90,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 1450744508,
+      "scenario": "enemy-dodge",
+      "hash": "eb9fb3ea",
+      "rngState": 3771219275,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 1450744508,
+      "scenario": "mitigate",
+      "hash": "1ab20d66",
+      "rngState": 1450744508,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 1450744508,
+      "scenario": "ranged",
+      "hash": "58a4b13e",
+      "rngState": 3771219275,
+      "hp": 85,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 1450744508,
+      "scenario": "boss-ranged",
+      "hash": "3cc6c251",
+      "rngState": 189067675,
+      "hp": 89,
+      "enemyHp": 500
+    },
+    {
+      "classId": "arcanista",
+      "seed": 1450744508,
+      "scenario": "turn",
+      "hash": "6aebec1a",
+      "rngState": 189067675,
+      "hp": 92,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 1,
+      "scenario": "basic",
+      "hash": "9eb8989d",
+      "rngState": 67634689,
+      "hp": 97,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 1,
+      "scenario": "critical",
+      "hash": "9eb8989d",
+      "rngState": 67634689,
+      "hp": 97,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 1,
+      "scenario": "enemy-melee",
+      "hash": "14c055e5",
+      "rngState": 270369,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 1,
+      "scenario": "enemy-dodge",
+      "hash": "14c055e5",
+      "rngState": 270369,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 1,
+      "scenario": "mitigate",
+      "hash": "8e1be6f5",
+      "rngState": 1,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 1,
+      "scenario": "ranged",
+      "hash": "b3812193",
+      "rngState": 1,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 1,
+      "scenario": "boss-ranged",
+      "hash": "b3812193",
+      "rngState": 1,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 1,
+      "scenario": "turn",
+      "hash": "3665af95",
+      "rngState": 270369,
+      "hp": 97,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 305419896,
+      "scenario": "basic",
+      "hash": "63fe2985",
+      "rngState": 1882851208,
+      "hp": 90,
+      "enemyHp": 480
+    },
+    {
+      "classId": "errante",
+      "seed": 305419896,
+      "scenario": "critical",
+      "hash": "63fe2985",
+      "rngState": 1882851208,
+      "hp": 90,
+      "enemyHp": 480
+    },
+    {
+      "classId": "errante",
+      "seed": 305419896,
+      "scenario": "enemy-melee",
+      "hash": "196418f1",
+      "rngState": 358294691,
+      "hp": 90,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 305419896,
+      "scenario": "enemy-dodge",
+      "hash": "8d88c75c",
+      "rngState": 2274908837,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 305419896,
+      "scenario": "mitigate",
+      "hash": "8748c429",
+      "rngState": 305419896,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 305419896,
+      "scenario": "ranged",
+      "hash": "8ea8d487",
+      "rngState": 305419896,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 305419896,
+      "scenario": "boss-ranged",
+      "hash": "8ea8d487",
+      "rngState": 305419896,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 305419896,
+      "scenario": "turn",
+      "hash": "eedb5183",
+      "rngState": 358294691,
+      "hp": 92,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 2882400001,
+      "scenario": "basic",
+      "hash": "888e9b6a",
+      "rngState": 919090537,
+      "hp": 91,
+      "enemyHp": 478
+    },
+    {
+      "classId": "errante",
+      "seed": 2882400001,
+      "scenario": "critical",
+      "hash": "888e9b6a",
+      "rngState": 919090537,
+      "hp": 91,
+      "enemyHp": 478
+    },
+    {
+      "classId": "errante",
+      "seed": 2882400001,
+      "scenario": "enemy-melee",
+      "hash": "dce1594d",
+      "rngState": 305721618,
+      "hp": 90,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 2882400001,
+      "scenario": "enemy-dodge",
+      "hash": "44174da5",
+      "rngState": 3549775607,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 2882400001,
+      "scenario": "mitigate",
+      "hash": "c50a3989",
+      "rngState": 2882400001,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 2882400001,
+      "scenario": "ranged",
+      "hash": "b33a07e7",
+      "rngState": 2882400001,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 2882400001,
+      "scenario": "boss-ranged",
+      "hash": "b33a07e7",
+      "rngState": 2882400001,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 2882400001,
+      "scenario": "turn",
+      "hash": "0df0a4df",
+      "rngState": 305721618,
+      "hp": 92,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 4294967295,
+      "scenario": "basic",
+      "hash": "68ac181a",
+      "rngState": 1958451267,
+      "hp": 90,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 4294967295,
+      "scenario": "critical",
+      "hash": "68ac181a",
+      "rngState": 1958451267,
+      "hp": 90,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 4294967295,
+      "scenario": "enemy-melee",
+      "hash": "6e80d928",
+      "rngState": 253983,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 4294967295,
+      "scenario": "enemy-dodge",
+      "hash": "6e80d928",
+      "rngState": 253983,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 4294967295,
+      "scenario": "mitigate",
+      "hash": "8cf83e35",
+      "rngState": 4294967295,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 4294967295,
+      "scenario": "ranged",
+      "hash": "3e092ad3",
+      "rngState": 4294967295,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 4294967295,
+      "scenario": "boss-ranged",
+      "hash": "3e092ad3",
+      "rngState": 4294967295,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 4294967295,
+      "scenario": "turn",
+      "hash": "5dbb34b0",
+      "rngState": 253983,
+      "hp": 97,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 1831565813,
+      "scenario": "basic",
+      "hash": "f54ac561",
+      "rngState": 265159372,
+      "hp": 92,
+      "enemyHp": 488
+    },
+    {
+      "classId": "errante",
+      "seed": 1831565813,
+      "scenario": "critical",
+      "hash": "ac04e6d7",
+      "rngState": 265159372,
+      "hp": 92,
+      "enemyHp": 476
+    },
+    {
+      "classId": "errante",
+      "seed": 1831565813,
+      "scenario": "enemy-melee",
+      "hash": "a29555c6",
+      "rngState": 2447379481,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 1831565813,
+      "scenario": "enemy-dodge",
+      "hash": "d4f35967",
+      "rngState": 1085196063,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 1831565813,
+      "scenario": "mitigate",
+      "hash": "8bdcda9d",
+      "rngState": 1831565813,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 1831565813,
+      "scenario": "ranged",
+      "hash": "f90f7a5b",
+      "rngState": 1831565813,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 1831565813,
+      "scenario": "boss-ranged",
+      "hash": "f90f7a5b",
+      "rngState": 1831565813,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 1831565813,
+      "scenario": "turn",
+      "hash": "7170eb55",
+      "rngState": 2447379481,
+      "hp": 90,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 3735928559,
+      "scenario": "basic",
+      "hash": "17b2d029",
+      "rngState": 1745748808,
+      "hp": 90,
+      "enemyHp": 488
+    },
+    {
+      "classId": "errante",
+      "seed": 3735928559,
+      "scenario": "critical",
+      "hash": "56fa70b3",
+      "rngState": 1745748808,
+      "hp": 90,
+      "enemyHp": 476
+    },
+    {
+      "classId": "errante",
+      "seed": 3735928559,
+      "scenario": "enemy-melee",
+      "hash": "02ebe7c5",
+      "rngState": 2384302402,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 3735928559,
+      "scenario": "enemy-dodge",
+      "hash": "a7b9c4a2",
+      "rngState": 1199382711,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 3735928559,
+      "scenario": "mitigate",
+      "hash": "3bbd09e4",
+      "rngState": 3735928559,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 3735928559,
+      "scenario": "ranged",
+      "hash": "ca369e26",
+      "rngState": 3735928559,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 3735928559,
+      "scenario": "boss-ranged",
+      "hash": "ca369e26",
+      "rngState": 3735928559,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 3735928559,
+      "scenario": "turn",
+      "hash": "682a5722",
+      "rngState": 2384302402,
+      "hp": 90,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 167,
+      "scenario": "basic",
+      "hash": "55e9dedb",
+      "rngState": 514560091,
+      "hp": 92,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 167,
+      "scenario": "critical",
+      "hash": "55e9dedb",
+      "rngState": 514560091,
+      "hp": 92,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 167,
+      "scenario": "enemy-melee",
+      "hash": "e9dede3d",
+      "rngState": 42530061,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 167,
+      "scenario": "enemy-dodge",
+      "hash": "e9dede3d",
+      "rngState": 42530061,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 167,
+      "scenario": "mitigate",
+      "hash": "37b1386c",
+      "rngState": 167,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 167,
+      "scenario": "ranged",
+      "hash": "db5dd0ae",
+      "rngState": 167,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 167,
+      "scenario": "boss-ranged",
+      "hash": "db5dd0ae",
+      "rngState": 167,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 167,
+      "scenario": "turn",
+      "hash": "e2364ead",
+      "rngState": 42530061,
+      "hp": 97,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 1450744508,
+      "scenario": "basic",
+      "hash": "ba219d3a",
+      "rngState": 561367956,
+      "hp": 97,
+      "enemyHp": 480
+    },
+    {
+      "classId": "errante",
+      "seed": 1450744508,
+      "scenario": "critical",
+      "hash": "ba219d3a",
+      "rngState": 561367956,
+      "hp": 97,
+      "enemyHp": 480
+    },
+    {
+      "classId": "errante",
+      "seed": 1450744508,
+      "scenario": "enemy-melee",
+      "hash": "be281b33",
+      "rngState": 189067675,
+      "hp": 90,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 1450744508,
+      "scenario": "enemy-dodge",
+      "hash": "573e2d1c",
+      "rngState": 3771219275,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 1450744508,
+      "scenario": "mitigate",
+      "hash": "e2b71434",
+      "rngState": 1450744508,
+      "hp": 88,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 1450744508,
+      "scenario": "ranged",
+      "hash": "bdd8ed96",
+      "rngState": 1450744508,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 1450744508,
+      "scenario": "boss-ranged",
+      "hash": "bdd8ed96",
+      "rngState": 1450744508,
+      "hp": 95,
+      "enemyHp": 500
+    },
+    {
+      "classId": "errante",
+      "seed": 1450744508,
+      "scenario": "turn",
+      "hash": "a51f89fd",
+      "rngState": 189067675,
+      "hp": 92,
+      "enemyHp": 500
+    }
+  ]
+}
