@@ -2,7 +2,7 @@
  * Cálculos do estado não dependem do navegador, Phaser, relógio nem renderer.
  * O estado recebido é alterado explicitamente; eventos descrevem efeitos
  * posteriores (log, som e exatamente uma solicitação de turno), em ordem.
- * P1C.3B.2 acrescentou MOVE; ATTACK / SKILL e eventos de loot seguem pendentes.
+ * P1C.3B.3A adicionou COLLECT e eventos de loot; ATTACK/SKILL e terminais completos pendentes.
  */
 (function(root){
 'use strict';
@@ -61,6 +61,13 @@ function dispatch(run,action){
       // The adapter's collect handler remains responsible until P1C.3B.3.
       events.push({type:'collect-at-player'},{type:'turn'},{type:'post-move'});
       return result(run,'applied',events);
+    }
+    case 'COLLECT':{
+      const item=run.items.find(i=>i.x===p.x&&i.y===p.y);
+      if(!item)return result(run,'no-item');
+      // Item removal precedes trap/relic effects, as in the original doMove.
+      run.items=run.items.filter(i=>i!==item);
+      return result(run,'applied',root.GolzdovLoot.resolve(run,item,{hasRelicOffers:!!action.hasRelicOffers}));
     }
     default:
       return result(run,'unsupported');
