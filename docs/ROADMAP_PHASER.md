@@ -1,6 +1,6 @@
 # Roadmap de migração — Catacumbas de Golzdov → Phaser 4
 
-**Status:** P0–P1C.3B.3A concluídos na `main`. [PR #26](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/26): **69/69 testes verdes**, incluindo 336 replays de coleta/abates e 408 de movimento. Build **1.3.2 / cache v16** publicada no código principal; [P1C.3B.3B — ataques/eventos terminais](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/27) e P2–P6 pendentes. Preview Phaser só quando jogável.
+**Status:** P0–P1C.3B.3A integrados à `main` (CI 69/69). P1C.3B.3B.1 — ataque básico e dano direto via eventos — implementado e em validação; P1C.3B.3B.2, P2–P6 pendentes. A build Phaser só será anunciada quando jogável.
 **Data do diagnóstico:** 15/10/2026.
 **Acompanhamento GitHub:** [issue #11 — migração Phaser](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/11); [issue #12 — corrigir roteamento PWA](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/12).
 **Objetivo:** migrar a apresentação, a composição das cenas e a entrada para Phaser 4 sem alterar silenciosamente as regras do roguelike, perder os saves ou bloquear o GitHub Pages.
@@ -163,6 +163,20 @@ docs/
 - [ ] Extrair combate, IA, turnos e dispatch(action) sem dependências gráficas (P1C).
 
 **Integração:** [PR #17](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/17) integrado à main, commit `b8c8fa4`, GitHub Actions `success`. Goldens de 50 cenários e 1.000 masmorras verdes. O jogo original continua jogável; preview Phaser ainda não publicada.
+### P1C.3B.3B.1 — Ataque básico e dano direto via eventos (16/10/2026)
+
+- [x] Congelar **antes** da refatoração os handlers `attack`, `heroHit`, `hitEnemy` e `receiveDamage` em `tests/fixtures/legacy-attack-damage.js`.
+- [x] Adicionar `ATTACK` a `core/actions.js`, com alvo e alcance válidos, linha de visão, acerto, crítico, talentos Olho Predador e Muralha Viva e consumo de riposte. O dispatcher devolve eventos ordenados `log`, `hero-hit`, `sound`, `turn`.
+- [x] Extrair a redução direta de PV do inimigo para `core/combat.js::damageEnemy`, devolvendo eventos `log` e `defeat-enemy` para que `relicEvent(onAttack)` e `onKill` permaneçam na ordem legada.
+- [x] Adaptar `attack` e `hitEnemy` no `index.html` sem modificar esquema do save, mira, hit effects, resultados terminais ou áudio.
+- [x] Criar **504 replays comparativos** (360 ataques: três classes × oito seeds × 15 cenários; 144 impactos diretos: três classes × oito seeds × seis cenários), comparando run, RNG, save, meta, log, morte e relíquias.
+- [x] Testar ação sem alvo / fora de alcance sem turno nem consumo de RNG; manter 408 replays de movimento, 336 de coleta/abates e 192 de combate básico como regressão.
+- [x] Bump da aplicação para **BUILD 1.3.3 · CACHE V17 · P1C.3B.3B.1** e atualização do PWA `golzdov-offline-v17`.
+- [ ] Integrar somente após CI verde e verificação de que a versão aparece no Pages.
+- [ ] **P1C.3B.3B.2** — dano recebido (defesa/Último Juramento), escolha de finais, morte permanente, `SKILL` como ação unificada e replay de múltiplas ações.
+
+**Aceite:** diferenças zero nos 504 replays e suíte geral aprovada. Ataque básico é desacoplado do renderer, mas `heroHit` e os efeitos de relíquias ainda são callbacks síncronos do legado. **Não publicar `/phaser/` como jogável antes de P2B.**
+
 ### P1C.3B.3A — Coleta e recompensas por eventos (16/10/2026)
 
 - [x] Congelar `collect(item)` e `killEnemy(enemy,source)` originais **antes** da refatoração em `tests/fixtures/legacy-loot-rewards.js`.
@@ -266,7 +280,8 @@ docs/
 | P1C.3B.1 | **Concluído**: WAIT/POTION e eventos ordenados | 192 replays, PR #24 e CI 61/61 |
 | P1C.3B.2 | **Concluído**: MOVE, salas, coleta delegada e build visível | PR #25, 408 replays, CI **65/65**, build 1.3.1 |
 | P1C.3B.3A | **Concluído**: coleta, recompensas e chefe via eventos; build 1.3.2 | [PR #26](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/26), 336 replays e CI **69/69** |
-| P1C.3B.3B | ATTACK, dano, fim de run e replay de ações | Replays de sequências, saves v1/v2, três classes |
+| P1C.3B.3B.1 | ATTACK e dano direto por eventos (em revisão) | 504 replays de ataque/dano; CI verde |
+| P1C.3B.3B.2 | Dano recebido, morte permanente, finais, SKILL e replays de sequência | Saves v1/v2, três classes e cinco estratos |
 | P2A | Cena Phaser com câmera, texturas e mapa; usar o mesmo estado do núcleo | Preview não substitui a versão legada |
 | P2B | Movimento, combate básico, HUD, controle e save isolado na preview | Primeira build realmente jogável em `/phaser/` |
 | P3–P6 | Paridade completa, UI/polimento, PWA e lançamento | Playtests reais e plano de rollback |
