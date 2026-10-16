@@ -1,0 +1,41 @@
+/* Adaptador de cena P2A — reutiliza os módulos originais de simulação.
+ * Este módulo não grava no armazenamento e não executa turnos sozinho.
+ * Catálogo de inimigos espelhado e verificado por tests/phaser-p2a.test.cjs.
+ */
+import '../../core/rng.js';
+import '../../core/dungeon.js';
+import '../../core/navigation.js';
+
+export const WIDTH=35;
+export const HEIGHT=35;
+export const ENEMIES=Object.freeze({
+  rat:{hp:8,atk:4,def:0},
+  guard:{hp:15,atk:6,def:2},
+  slime:{hp:18,atk:5,def:1},
+  archer:{hp:13,atk:6,def:1},
+  kappa:{hp:17,atk:7,def:1},
+  specter:{hp:20,atk:8,def:1},
+  knight:{hp:26,atk:9,def:3},
+  boss:{hp:106,atk:13,def:3}
+});
+const host=typeof window!=='undefined'?window:globalThis;
+const FIXED_SEED=0x52c4a190;
+
+export function createPreviewWorld(seed=FIXED_SEED,floor=1){
+  if(!Number.isInteger(floor)||floor<1||floor>5)throw Error('Estrato fora de 1–5');
+  const fixedSeed=(seed>>>0)||host.GolzdovCoreRng.NONZERO;
+  const hero={classId:'vigia',talents:[],upgrades:[],riposte:0,
+    lastOathUsed:false,oathWeakened:false,x:0,y:0,hp:43,maxhp:43,
+    mana:8,maxmana:8,atk:7,def:3,range:1,dodge:5,crit:10,
+    level:1,xp:0,nextXP:22,coins:0,potions:2,
+    weapon:'Martelo das Montanhas',armor:'Cota de Ferro',
+    relics:[],relicState:{echo:0,ward:0,fangTurn:-1},buff:0};
+  const run={schemaVersion:2,seed:fixedSeed,rngState:fixedSeed,floor,turn:0,over:false,
+    map:[],seen:[],rooms:[],enemies:[],items:[],stairs:null,shrine:null,
+    altarUsed:false,enemyId:0,logs:[],kills:0,steps:0,treasure:0,
+    chainUsed:false,visitedRooms:[],pendingRelicOffer:null,shopOffers:null,hero};
+  host.GolzdovDungeon.generateFloor(run,ENEMIES,WIDTH,HEIGHT);
+  const visible=host.GolzdovNavigation.visibleCells(run.map,WIDTH,HEIGHT,run.hero);
+  for(const i of visible)run.seen[i]=true;
+  return {run,visible};
+}
