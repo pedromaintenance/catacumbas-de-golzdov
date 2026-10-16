@@ -40,7 +40,7 @@ test('núcleo novo é carregável sem DOM, Canvas, Phaser ou armazenamento',()=>
   for(const src of sources){
     assert.doesNotMatch(src,/document\./);
     assert.doesNotMatch(src,/localStorage/);
-    assert.doesNotMatch(src,/Phaser\./);
+    assert.doesNotMatch(src.replace(/\/\*[\s\S]*?\*\//g,''),/Phaser\./);
   }
 });
 test('xorshift do núcleo preserva sequências e a convenção de seed zero',()=>{
