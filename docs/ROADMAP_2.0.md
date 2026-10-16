@@ -44,7 +44,8 @@ Esta entrega é **independente das versões de conteúdo 1.2/1.3**, e não alter
 - Primeiro passo: [P0 — corrigir service worker para não redirecionar /phaser/ ao HTML legado](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/12).
 - 15/10/2026: correção do roteamento do PWA implementada (cache v8), com testes simulados de navegação raiz/subrotas e ativação. Validação do CI, do Pages e do dispositivo físico é registrada no [Roadmap Phaser](ROADMAP_PHASER.md).
 - 15/10/2026: P1A extraiu RNG e geração procedural para `core/rng.js` e `core/dungeon.js`, com 50 snapshots de referência do gerador anterior para testar a paridade em 5 estratos. CI e integração rastreados em [Roadmap Phaser](ROADMAP_PHASER.md).
-- 15/10/2026: P1B extrai LOS, visibilidade e pathfinding em `core/navigation.js`, com 50 fixtures do algoritmo anterior e 16 alvos por mapa. Cache do PWA v10; CI e merge a conferir.
+- 15/10/2026: P1B integrado pelo [PR #17](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/17): LOS, visibilidade e pathfinding em `core/navigation.js`, 50 cenários de referência, cache v10 e CI aprovada.
+- 15/10/2026: **P1C.1 implementado em branch** — `core/combat.js`, 192 snapshots de 3 classes × 8 seeds × 8 situações com rolagens, mitigação e turnos. Cache v11. P1C.2/P1C.3 estão detalhados em [ROADMAP_PHASER.md](ROADMAP_PHASER.md).
 - O jogo atual permanece em `/catacumbas-de-golzdov/`. A futura preview funcional, após build e deploy, será em `/catacumbas-de-golzdov/phaser/`.
 - A engine não muda automaticamente nenhuma das metas de conteúdo de 1.2, 1.3, 2.0 ou 2.1; saves de produção permanecem isolados até migração final.
 
