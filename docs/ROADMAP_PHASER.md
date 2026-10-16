@@ -1,6 +1,6 @@
 # Roadmap de migração — Catacumbas de Golzdov → Phaser 4
 
-**Status:** P0–P1C.3B.3B.2B integrados à `main` (78 testes verdes). P1C.3B.3B.2C — SKILL e sequências de ações — em validação; P2–P6 aguardam núcleo aprovado. Build candidata 1.3.6 / cache v20; sem preview Phaser jogável.
+**Status:** P0–P1C.3B.3B.2C integrados à `main`. [PR #31](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/31): **80/80 testes verdes**, 252 replays de habilidades e 480 sequências multi-ação com saves. Build 1.3.6 / cache v20 no código principal para teste no Pages. Próxima etapa: P2A (estrutura Phaser/Vite), com preview jogável só após P2B.
 **Data do diagnóstico:** 15/10/2026.
 **Acompanhamento GitHub:** [issue #11 — migração Phaser](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/11); [issue #12 — corrigir roteamento PWA](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/12).
 **Objetivo:** migrar a apresentação, a composição das cenas e a entrada para Phaser 4 sem alterar silenciosamente as regras do roguelike, perder os saves ou bloquear o GitHub Pages.
@@ -170,10 +170,10 @@ docs/
 - [x] Eventos de log, áudio e avanço de turno produzidos pelo dispatcher; o adaptador `index.html` continua gerenciando mira, exibição e saves nas mesmas posições do ciclo.
 - [x] Manter os **252 replays originais** de habilidades e acrescentar **480 sequências multi-ação**: 3 classes × 5 estratos × 8 seeds × 4 roteiros, misturando SKILL, WAIT, POTION, MOVE e ATTACK, conferindo estado completo e mira depois de cada ação.
 - [x] Atualizar PWA para `golzdov-offline-v20` e identificar **BUILD 1.3.6 · CACHE V20 · P1C.3B.3B.2C** no menu.
-- [ ] Integrar à `main` somente depois de CI verde; verificar propagação real no Pages/PWA e controle físico.
+- [x] Integrar à `main` após CI verde ([PR #31](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/31)); **propagação real no Pages, PWA e controle físico continuam pendentes de confirmação**.
 - [ ] Consolidar checklist de validação do núcleo e iniciar P2A (estrutura Phaser/Vite) sem afetar a rota estável. Os callbacks de domínio de `core/skills.js` ainda são síncronos, não uma fila de eventos puramente serializável.
 
-**Critério de aceite:** 480 sequências e 252 replays individuais de habilidades idênticos ao jogo anterior, além de todos os testes de regressão/PWA verdes. Nenhuma chave de save deve mudar e `/phaser/` permanece não jogável.
+**Concluído:** [PR #31](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/31), squash `a312365` em `main`. [CI #38966706705](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/38966706705): **80/80 testes aprovados**, incluindo 480 sequências (com estado, mira, save e meta após cada ação) e 252 replays de habilidades. Os callbacks de efeitos de domínio são síncronos e podem requerer posterior serialização para Phaser. A preview `/phaser/` ainda **não** está jogável; P2A e P2B continuam pendentes.
 
 ### P1C.3B.3B.2B — Morte, escolha final e vitória por eventos (16/10/2026)
 
@@ -325,7 +325,7 @@ docs/
 | P1C.3B.3B.1 | **Concluído**: ATTACK e dano direto por eventos | [PR #28](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/28), 504 replays, **73/73 testes** |
 | P1C.3B.3B.2A | **Concluído**: dano recebido, defesa e Último Juramento | [PR #29](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/29), 576 replays, **76/76 testes**, build 1.3.4 |
 | P1C.3B.3B.2B | **Concluído**: morte, escolha e vitória por eventos | [PR #30](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/30), 288 replays, **78/78 testes**, cache v19 |
-| P1C.3B.3B.2C | SKILL instant/targeted + sequências multi-ação (em CI) | 252 replays de habilidades + 480 sequências, 3 classes e 5 estratos |
+| P1C.3B.3B.2C | **Concluído**: SKILL instant/targeted e 480 sequências | [PR #31](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/31), CI **80/80**, build 1.3.6 |
 | P2A | Cena Phaser com câmera, texturas e mapa; usar o mesmo estado do núcleo | Preview não substitui a versão legada |
 | P2B | Movimento, combate básico, HUD, controle e save isolado na preview | Primeira build realmente jogável em `/phaser/` |
 | P3–P6 | Paridade completa, UI/polimento, PWA e lançamento | Playtests reais e plano de rollback |
