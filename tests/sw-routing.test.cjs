@@ -106,12 +106,14 @@ test('a atualização libera o client e apaga somente caches antigos do Golzdov 
   assert.equal(calls.skipWaiting, 1);
   listeners.activate({ waitUntil(p) { activate = p; } });
   await activate;
-  assert.deepEqual(calls.delete, ['golzdov-offline-v7']);
+  assert.deepEqual(calls.delete, ['golzdov-offline-v7','golzdov-offline-v8']);
   assert.equal(calls.claim, 1);
 });
 
-test('cache v8 publicado com o script PWA e nenhum novo localStorage introduzido', () => {
-  assert.match(sw, /const CACHE = 'golzdov-offline-v8'/);
+test('cache v9 inclui core e nenhuma nova chave localStorage', () => {
+  assert.match(sw, /const CACHE = 'golzdov-offline-v9'/);
+  assert.match(sw, /'\.\/core\/rng\.js'/);
+  assert.match(sw, /'\.\/core\/dungeon\.js'/);
   assert.match(sw, /url\.pathname !== homePath && url\.pathname !== indexPath/);
   assert.doesNotMatch(sw, /localStorage/);
 });
