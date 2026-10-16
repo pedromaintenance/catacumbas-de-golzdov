@@ -391,7 +391,7 @@ showScreen('home');renderClasses();requestAnimationFrame(render);
     say('MODO APP INDISPONÍVEL NESTE NAVEGADOR', 'offline-error');
     return;
   }
-  const FILES = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
+  const FILES = ['./', './index.html', './gamepad.js', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
   async function checkReady() {
     // Look up active precached assets without duplicating the SW cache version here.
     const all = await Promise.all(FILES.map(file => caches.match(new URL(file, location.href))));
