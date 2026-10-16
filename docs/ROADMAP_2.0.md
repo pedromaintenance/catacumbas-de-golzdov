@@ -15,7 +15,7 @@ Atualizado em: 15/10/2026. Planejamento detalhado: [GAME_DESIGN_2.0.md](GAME_DES
 - 14/10/2026: início da 1.2: nove talentos de classe (três por classe), escolha progressiva, efeitos sobre combate, histórico de talentos no inventário e proteção dos saves existentes. O sistema genérico de eventos de efeitos e as sinergias de relíquias seguem pendentes.
 - 14/10/2026: [PR #3](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/3) integrado à main e verificado pelo GitHub Actions com resultado **success**; entrega inicial da 1.2 disponível no jogo.
 - Próximas tarefas rastreadas: [#4 — efeitos e relíquias sinérgicas](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/4) e [#5 — validar PWA offline no celular](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/5).
-- 15/10/2026: motor de relíquias 1.2B implementado em branch, com seis relíquias e três sinergias, testes automatizados e cache offline v6. A validação do CI e a integração à main serão registradas após sua execução.
+- 15/10/2026: **1.2B integrada na main pelo [PR #7](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/7)**; GitHub Actions aprovou testes de seis relíquias, três sinergias, migração de saves e regressões. [Issue #4](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/4) concluída. Próximo incremento: [#8 — raridade, escolha de relíquias e balanceamento](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/8).
 - 14/10/2026: implementação das fundações técnicas iniciada na branch de trabalho.
 
 ## Integrações de plataforma — Xbox / Gamepad API (15/10/2026)
@@ -67,7 +67,7 @@ Esta entrega é **independente das versões de conteúdo 1.2/1.3**, e não alter
 - Um ID de relíquia repetido não acumula bônus; recargas, escudos e combos possuem limites de ativação.
 - Chaves de saves existentes preservadas (`schemaVersion: 2`), com estado das relíquias e salas visitadas migrado de forma aditiva.
 - `relic-effects.js` pré-carregado no service worker com cache v6; CI cobre efeitos isolados, integração, saves e 1.000 gerações.
-- **Ainda pendente:** medição de equilíbrio com jogadores, regras gerais de raridade/espaços, validação do PWA instalado com hardware real e 3 builds equilibradas de cada classe.
+- **Ainda pendente:** medição de equilíbrio com jogadores, regras gerais de raridade/espaços (**issue #8**), validação do PWA instalado com hardware real (**issue #5**) e 3 builds equilibradas de cada classe.
 
 ## 1.2 — Novas Builds (em andamento)
 
