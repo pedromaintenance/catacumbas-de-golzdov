@@ -1,6 +1,6 @@
 # Roadmap executável — Catacumbas de Golzdov 2.0
 
-Atualizado em: 14/10/2026. Planejamento detalhado: [GAME_DESIGN_2.0.md](GAME_DESIGN_2.0.md).
+Atualizado em: 15/10/2026. Planejamento detalhado: [GAME_DESIGN_2.0.md](GAME_DESIGN_2.0.md).
 
 > Convenções: [x] concluído e conferido; [ ] pendente. Mudanças de código devem incluir teste e confirmação antes de marcar [x]. Cada PR/etapa deve atualizar este arquivo.
 
@@ -16,6 +16,21 @@ Atualizado em: 14/10/2026. Planejamento detalhado: [GAME_DESIGN_2.0.md](GAME_DES
 - 14/10/2026: [PR #3](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/3) integrado à main e verificado pelo GitHub Actions com resultado **success**; entrega inicial da 1.2 disponível no jogo.
 - Próximas tarefas rastreadas: [#4 — efeitos e relíquias sinérgicas](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/4) e [#5 — validar PWA offline no celular](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/5).
 - 14/10/2026: implementação das fundações técnicas iniciada na branch de trabalho.
+
+## Integrações de plataforma — Xbox / Gamepad API (15/10/2026)
+
+- [x] Novo módulo gamepad.js: detectar controle conectado e desconectado sem afetar o jogo.
+- [x] D-pad/analógico esquerdo com zona morta, espera inicial e repetição de movimento.
+- [x] Botões Xbox A, B, X, Y, LB, RB, LT, RT, View e Menu.
+- [x] Navegação por controle em tela inicial, seleção de classe, modais, mercador e evolução.
+- [x] Mira com analógico direito/D-pad, retículo no Canvas e seleção de inimigos via LB/RB.
+- [x] Indicador de controle e instruções no manual e README.
+- [x] gamepad.js adicionado ao precache com incremento de cache v5.
+- [x] Testes automáticos usando controle simulado para comandos, reconexão, repetição e navegação.
+- [ ] Teste manual com **controle Xbox real** via USB e Bluetooth, e no PWA instalado.
+- [ ] Confirmar comportamento em Android/iOS caso haja interesse em controle conectado ao celular.
+
+Esta entrega é **independente das versões de conteúdo 1.2/1.3**, e não altera a progressão salva. A detecção depende de suporte do navegador à Gamepad API. A execução dos testes automáticos não comprova conexão física.
 
 ## 1.1 — Fundações (em andamento)
 
