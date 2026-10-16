@@ -1,6 +1,6 @@
 # Roadmap de migração — Catacumbas de Golzdov → Phaser 4
 
-**Status:** P0 em implementação; migração para Phaser ainda não iniciada.
+**Status:** P0 concluído em código e integrado à main (PR #14, testes CI aprovados). P1 e preview Phaser ainda não iniciados.
 **Data do diagnóstico:** 15/10/2026.
 **Acompanhamento GitHub:** [issue #11 — migração Phaser](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/11); [issue #12 — corrigir roteamento PWA](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/12).
 **Objetivo:** migrar a apresentação, a composição das cenas e a entrada para Phaser 4 sem alterar silenciosamente as regras do roguelike, perder os saves ou bloquear o GitHub Pages.
@@ -23,7 +23,7 @@ Inspecionado diretamente na branch principal do repositório:
 
 Phaser oferece estrutura de cenas, câmeras, sprite/textura, efeitos, áudio e entrada unificada. Não é necessário usar física de tempo real: Golzdov continuará em grade e por turnos; Phaser será o **renderer e adaptador de entradas**, não o dono das regras.
 
-**Stack-base recomendada:** Phaser **4.1.0** (ou release estável atual fixada e verificada no início da implementação), JavaScript moderno com **Vite** e módulos ES. Evitar adicionar React ou grandes frameworks de UI nesta migração. O código de gameplay deve ser puro, importável sem DOM, Phaser ou Canvas. Evolução para TypeScript pode ocorrer mais tarde, de forma independente.
+**Stack-base recomendada:** Phaser **4.2.1** (versão estável verificada em 15/10/2026; fixar dependências no início da implementação), JavaScript moderno com **Vite** e módulos ES. Evitar adicionar React ou grandes frameworks de UI nesta migração. O código de gameplay deve ser puro, importável sem DOM, Phaser ou Canvas. Evolução para TypeScript pode ocorrer mais tarde, de forma independente.
 
 Referências técnicas oficiais:
 - https://github.com/phaserjs/phaser/releases
@@ -138,7 +138,7 @@ docs/
 - [ ] Criar link de preview **apenas quando existir uma página funcional**.
 
 **Aceite:** jogo atual continua utilizável; subpasta acessível sem ser sequestrada pelo SW; saves não mudam. Publicar na `main` porque este PR é uma correção funcional.
-**Registro P0 (15/10/2026):** O handler de `navigate` só chama `respondWith` quando a URL requisitada é exatamente a raiz do projeto ou `index.html`; para `/phaser/` e quaisquer páginas da subpasta ele se abstém, permitindo navegação pela rede ou pelo futuro service worker independente. `golzdov-offline-v8` elimina apenas caches antigos com prefixo legado; cache da futura engine permanece intocado. O jogo principal continua sem alteração de gameplay e as chaves de save existentes não foram alteradas. Deploy real e teste em dispositivo físico ainda a confirmar.
+**Registro P0 (15/10/2026):** [PR #14](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/14) integrado à main (commit `15df229`), GitHub Actions `success`. [Issue #12](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/12) fechada.  O handler de `navigate` só chama `respondWith` quando a URL requisitada é exatamente a raiz do projeto ou `index.html`; para `/phaser/` e quaisquer páginas da subpasta ele se abstém, permitindo navegação pela rede ou pelo futuro service worker independente. `golzdov-offline-v8` elimina apenas caches antigos com prefixo legado; cache da futura engine permanece intocado. O jogo principal continua sem alteração de gameplay e as chaves de save existentes não foram alteradas. Deploy real e teste em dispositivo físico ainda a confirmar.
 
 
 ### P1 — Extrair o núcleo determinístico (2–3 PRs)
@@ -261,4 +261,4 @@ Em cada PR registrar:
 - Critério objetivo para liberar merge e regressão coberta.
 - Atualização de `docs/ROADMAP_PHASER.md` e ligação ao roadmap de conteúdo `docs/ROADMAP_2.0.md`.
 
-**Progresso neste documento:** planejamento aprovado tecnicamente quanto à viabilidade; todos os itens de implementação ainda estão pendentes.
+**Progresso neste documento:** P0 implementado e validado por CI; ainda faltam validação manual no PWA instalado e verificação da configuração de Pages. P1–P6 permanecem pendentes.
