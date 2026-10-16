@@ -56,7 +56,7 @@
       <div class="meta-line"><span id="meta-record">MELHOR EXPEDIÇÃO · —</span><span id="meta-wins">0 VITÓRIAS</span></div>
       <button id="start-btn" class="primary-button">INICIAR EXPEDIÇÃO <span>◆</span></button>
       <button id="continue-btn" class="secondary-button hidden">CONTINUAR EXPEDIÇÃO <span>↗</span></button>
-      <div class="home-help">5 ESTRATOS · 3 CLASSES · MORTE PERMANENTE<br><span id="offline-status" role="status" aria-live="polite">◌ PREPARANDO JOGO OFFLINE…</span><small id="build-version" class="build-version" aria-label="Versão do jogo">BUILD 1.3.2 · CACHE V16 · P1C.3B.3A</small></div>
+      <div class="home-help">5 ESTRATOS · 3 CLASSES · MORTE PERMANENTE<br><span id="offline-status" role="status" aria-live="polite">◌ PREPARANDO JOGO OFFLINE…</span><small id="build-version" class="build-version" aria-label="Versão do jogo">BUILD 1.3.3 · CACHE V17 · P1C.3B.3B.1</small></div>
       <div class="home-aux"><button id="help-home" class="plain-button">COMO JOGAR <span>⌄</span></button><button id="import-btn" class="plain-button">IMPORTAR SAVE <span>↥</span></button></div>
     </div>
   </section>
@@ -259,6 +259,14 @@ function applyGameEvents(events){
     else if(event.type==='sound')beep(event.frequency,event.duration);
     else if(event.type==='damage')receiveDamage(event.value,event.message);
     else if(event.type==='relic-event')relicEvent(event.event,{enemy:event.enemy,kind:event.kind});
+    else if(event.type==='hero-hit'){
+      const enemy=G.enemies.find(e=>e.id===event.enemyId&&e.hp>0);
+      if(enemy)heroHit(enemy,event.damage,event.label,event.source,event.critical);
+    }
+    else if(event.type==='defeat-enemy'){
+      const enemy=G.enemies.find(e=>e.id===event.enemyId);
+      if(enemy)killEnemy(enemy,event.source);
+    }
     else if(event.type==='boss-down')G.bossDown=true;
   }
 }
@@ -340,7 +348,20 @@ function showPendingRelicOffer(){
   };
   showRelicOffer(G.pendingRelicOffer.source,0,after);
 }
-function attack(e,melee=false){if(!canPlay())return;const p=G.hero;let range=melee?1:p.range;if(dist(p,e)>range||(!melee&&!lineClear(p.x,p.y,e.x,e.y))){log('O inimigo está fora do alcance ou atrás de uma parede.','!');beep(140);return;}stopAuto();aim=null;updateAim();const roll=window.GolzdovCombat.basicAttack(G,e,{predator:hasTalent('e_predador'),muralha:hasTalent('v_muralha')});if(roll.miss){log(`Você erra ${ENEMIES[e.type].name}.`,'⚔');beep(170,.08);}else{if(roll.consumeRiposte)p.riposte=0;heroHit(e,roll.damage,roll.critical?'ACERTO CRÍTICO':'Golpe','basic',roll.critical);beep(roll.critical?720:370,.095,'triangle');}worldTurn();updateHUD();save();}
+function attack(e,melee=false){
+  if(!canPlay())return;
+  const out=window.GolzdovActions.dispatch(G,{
+    type:'ATTACK',enemyId:e?.id,enemyName:e?ENEMIES[e.type].name:'',
+    melee,lineOfSight:!!e&&(melee||lineClear(G.hero.x,G.hero.y,e.x,e.y)),
+    predator:hasTalent('e_predador'),muralha:hasTalent('v_muralha')
+  });
+  if(out.status==='applied'){stopAuto();aim=null;updateAim();}
+  for(const event of out.events){
+    if(event.type==='turn'){worldTurn();}
+    else applyGameEvents([event]);
+  }
+  if(out.status==='applied'){updateHUD();save();}
+}
 function relicSynergies(){return window.GolzdovRelicEffects?.synergiesFor(G?.hero)||[];}
 function relicEvent(event,details={}){if(!G)return details;const p=G.hero;const ctx={run:G,hero:p,
   heal:n=>{const before=p.hp;p.hp=clamp(p.hp+n,0,p.maxhp);return p.hp-before;},
@@ -350,7 +371,7 @@ function relicEvent(event,details={}){if(!G)return details;const p=G.hero;const 
   ...details};
   window.GolzdovRelicEffects?.dispatch(event,ctx);return ctx;}
 function heroHit(e,damage,label,source='skill',critical=false){if(!e||e.hp<=0)return;const ctx=relicEvent('onAttack',{enemy:e,damage,kind:source,critical,wasSmoldering:(e.smolder||0)>0});hitEnemy(e,Math.max(1,Math.floor(ctx.damage)),label,source);}
-function hitEnemy(e,dmg,kind,source='effect'){if(!e||e.hp<=0)return;e.hp-=dmg;log(`${kind}: ${ENEMIES[e.type].name} sofre ${dmg} de dano.`,'⚔');if(e.hp<=0)killEnemy(e,source);}
+function hitEnemy(e,dmg,kind,source='effect'){applyGameEvents(window.GolzdovCombat.damageEnemy(G,e,dmg,kind,ENEMIES,source));}
 function killEnemy(e,source='effect'){applyGameEvents(window.GolzdovRewards.defeat(G,e,ENEMIES,source));}
 function skill(which){if(!canPlay())return;stopAuto();const p=G.hero,c=CLASSES[p.classId],s=c.skills[which];if(p.mana<s.cost){log(`Foco insuficiente. Precisa de ${s.cost} pontos.`,'✧');beep(125);return;}if(s.target){aim=aim===which?null:which;updateAim();if(aim!==null){toast(`Selecione um alvo para ${s.name}`);beep(505);}}else{aim=null;updateAim();const outcome=window.GolzdovSkills.instant(G,which,{skills:c.skills,hit:heroHit,onRoot:relicEvent});if(outcome.message)log(outcome.message,outcome.icon);beep(480,.14);worldTurn();updateHUD();save();}}
 function castOn(x,y){if(!canPlay()||aim===null)return;const c=CLASSES[G.hero.classId];const outcome=window.GolzdovSkills.targeted(G,aim,x,y,{skills:c.skills,isVisible,lineClear,enemyAt,hit:heroHit});if(outcome.status==='unreachable'){log('A magia não consegue alcançar esse ponto.','✧');beep(125);return;}if(outcome.status==='empty'){log('Toque em um inimigo para usar essa habilidade.','✧');return;}if(outcome.status==='no-focus'){aim=null;updateAim();return;}if(outcome.message)log(outcome.message,outcome.icon);aim=null;updateAim();beep(730,.17,'triangle');worldTurn();updateHUD();save();}
