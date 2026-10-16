@@ -19,7 +19,28 @@ Execute, com Node.js 22 ou superior:
 node --test tests/*.test.cjs
 ```
 
-A suíte verifica sintaxe, coerência do cache offline, migração de saves antigos, seed, talentos, conectividade de 1.000 mapas e comandos de controle Xbox com um gamepad simulado. O GitHub Actions executa a suíte automaticamente em push e pull requests.
+A suíte verifica sintaxe, coerência do cache offline, migração de saves antigos, seed, talentos, conectividade de 1.000 mapas comandos de controle Xbox com gamepad simulado e as relíquias/sinergias da atualização 1.2B. O GitHub Actions executa a suíte automaticamente em push e pull requests.
+
+## Relíquias e sinergias — atualização 1.2B
+
+Seis relíquias mantêm seus benefícios antigos e agora mudam as decisões de combate:
+
+| Relíquia | Novo efeito |
+| --- | --- |
+| Presa de Golzdov | +3 dano contra inimigos enraizados; abate básico devolve 1 foco (no máximo uma vez por turno) |
+| Musgo de Ironwood | Regeneração corrigida: +2 vida a cada 6 turnos e +2 ao entrar pela primeira vez em uma sala |
+| Espelho Afogado | Ao esquivar, prepara +3 de dano para o próximo golpe (sem empilhar) |
+| Selo Rachado | Depois de receber dano, protege o próximo golpe recebido em 2 pontos |
+| Marca de Raiz 根 | +1 foco a cada 3 turnos e +1 em magias que enraízam inimigos |
+| Cinza do Crepúsculo | Críticos deixam queimadura: 2 de dano no início de cada um dos próximos dois turnos |
+
+As três **sinergias de relíquias** aparecem automaticamente no inventário quando você junta os itens necessários:
+
+- **O Olhar que Não Existe** (Espelho Afogado + Olho de Vandar): desviar de um ataque marca o agressor como Exposto; o próximo golpe contra ele tem +4 dano.
+- **O Jardim da Medula** (Musgo de Ironwood + Marca de Raiz): magias que enraízam adversários restauram até 3 PV, uma vez por conjuração.
+- **A Presa das Cinzas** (Presa de Golzdov + Cinza do Crepúsculo): crítico contra alvo que já estava queimando causa +4 de dano.
+
+**Nota de compatibilidade:** saves da versão anterior conservam suas relíquias sem recolhê-las de novo. Os campos novos são preenchidos automaticamente quando a partida é retomada; não alteramos as chaves de armazenamento. O módulo relic-effects.js não depende de bibliotecas externas e faz parte do cache offline. As sinergias desta release não criam ataques extra nem efeitos recursivos.
 
 ## Controle Xbox (USB ou Bluetooth)
 
@@ -46,9 +67,10 @@ O jogo reconhece automaticamente um controle Xbox compatível com a **Gamepad AP
 ## Publicação no GitHub Pages
 
 1. Crie um repositório público (ex.: `catacumbas-de-golzdov`).
-2. Extraia o ZIP e envie os **5 itens** diretamente para a raiz do repositório:
+2. Extraia o ZIP e envie os **6 itens** diretamente para a raiz do repositório:
    - `index.html`
    - `gamepad.js`
+   - `relic-effects.js`
    - `manifest.webmanifest`
    - `sw.js`
    - pasta `icons` (com `icon-192.png` e `icon-512.png`)
@@ -77,10 +99,11 @@ O jogo reconhece automaticamente um controle Xbox compatível com a **Gamepad AP
 |---|---|
 | `index.html` | HTML, estilos e motor principal do jogo |
 | `gamepad.js` | Mapeamento Xbox, navegação por foco e repetição de direções |
+| `relic-effects.js` | Despachante declarativo de efeitos de relíquias, bônus e sinergias |
 | `manifest.webmanifest` | Nome, ícone e aparência do aplicativo instalado |
 | `sw.js` | Armazena os arquivos no dispositivo e atende offline |
 | `icons/icon-192.png`, `icons/icon-512.png` | Ícones na tela inicial |
 
 ## Atualizações futuras
 
-Para publicar uma nova versão distribuída, atualize os arquivos do jogo e **aumente a versão da constante `CACHE` em `sw.js`** (por exemplo, `golzdov-offline-v6`). A verificação de prontidão procura automaticamente os recursos precacheados e não precisa repetir o nome do cache no `index.html`. O jogo deverá atualizar-se quando o service worker novo for instalado e ativado; feche e reabra o PWA após a atualização, se necessário. As chaves legadas do `localStorage` continuam sendo usadas; o estado recebe `schemaVersion` e migração para preservar saves anteriores.
+Para publicar uma nova versão distribuída, atualize os arquivos do jogo e **aumente a versão da constante `CACHE` em `sw.js`** (por exemplo, `golzdov-offline-v7`). A verificação de prontidão procura automaticamente os recursos precacheados e não precisa repetir o nome do cache no `index.html`. O jogo deverá atualizar-se quando o service worker novo for instalado e ativado; feche e reabra o PWA após a atualização, se necessário. As chaves legadas do `localStorage` continuam sendo usadas; o estado recebe `schemaVersion` e migração para preservar saves anteriores.
