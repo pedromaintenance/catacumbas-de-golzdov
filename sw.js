@@ -1,5 +1,5 @@
-/* Catacumbas de Golzdov — PWA 1.3.0 — primeiro despachante de ações sem DOM */
-const CACHE = 'golzdov-offline-v14';
+/* Catacumbas de Golzdov — PWA 1.3.1 — MOVE por eventos e build visível */
+const CACHE = 'golzdov-offline-v15';
 const PRECACHE = [
   './', './index.html', './core/rng.js', './core/dungeon.js', './core/navigation.js', './core/combat.js', './core/skills.js', './core/enemies.js', './core/turns.js', './core/actions.js', './gamepad.js', './relic-effects.js', './relic-offers.js', './manifest.webmanifest',
   './icons/icon-192.png', './icons/icon-512.png'
