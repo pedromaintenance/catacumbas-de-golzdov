@@ -6,6 +6,8 @@ Atualizado em: 15/10/2026. Planejamento detalhado: [GAME_DESIGN_2.0.md](GAME_DES
 
 ## Histórico de execução
 
+- 15/10/2026: **1.2C integrada à `main`** via PR #9, com 31 testes verdes. Inclui cinco raridades, duas ofertas por relicário, quatro espaços, troca transacional, maldição Nome Roubado e migração aditiva de saves. Publicação via Pages depende do mecanismo de deploy configurado; conferir visualmente no site público.
+
 - 14/10/2026: diagnóstico técnico no repositório (5 estratos, 3 classes, 10 relíquias, 7 inimigos comuns + chefe, 2 finais); priorização de builds e diferenças qualitativas entre partidas.
 - 14/10/2026: documento mestre de design criado.
 - 14/10/2026: fundações implementadas na branch de trabalho: versão 2 do formato de save, migração dos saves v1, seed persistida, RNG de simulação, cache offline v3, correção da checagem de prontidão e documentação no README.
@@ -101,7 +103,7 @@ Esta entrega é **independente das versões de conteúdo 1.2/1.3**, e não alter
 - [ ] Testes de balanceamento com as três classes em partidas completas e revisão das chances/pesos após feedback.
 - [ ] Validar visualmente a experiência no Pages e o controle Xbox real, sem presumir que o teste automático equivale ao playtest.
 
-**Publicação:** integrar à `main` só depois da aprovação do GitHub Actions. O usuário testa a versão distribuída pelo Pages. Rastreabilidade: [issue #8](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/8).
+**Integração realizada:** [PR #9](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/9) integrado à `main` (commit `e7b3712`) após **31/31 testes aprovados** no GitHub Actions. Release funcional pronta para publicação pelo GitHub Pages configurado para a branch principal; a confirmação externa do deploy e o playtest permanecem pendentes. Balanceamento acompanha a [issue #8](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/8).
 
 ## 1.3 — Catacumbas Vivas (pendente)
 
