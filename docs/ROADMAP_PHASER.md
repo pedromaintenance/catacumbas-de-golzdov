@@ -1,6 +1,6 @@
 # Roadmap de migração — Catacumbas de Golzdov → Phaser 4
 
-**Status:** P0–P1C.3B.3B.2C integrados à `main`. [PR #31](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/31): **80/80 testes verdes**, 252 replays de habilidades e 480 sequências multi-ação com saves. Build 1.3.6 / cache v20 no código principal para teste no Pages. P2A.1 — estrutura Phaser 4/Vite e primeira cena — em revisão; P2B será a primeira preview jogável, na [issue #32](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/32). Rota principal preservada.
+**Status:** P0–P1C.3B.3B.2C integrados à `main`. [PR #31](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/31): **80/80 testes verdes**, 252 replays de habilidades e 480 sequências multi-ação com saves. Build 1.3.6 / cache v20 no código principal para teste no Pages. P2A.1 **concluída** no [PR #33](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/33), CI **84/84** + bundle Vite/Phaser validado. P2B será a primeira preview jogável, na [issue #32](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/32). Rota principal preservada.
 **Data do diagnóstico:** 15/10/2026.
 **Acompanhamento GitHub:** [issue #11 — migração Phaser](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/11); [issue #12 — corrigir roteamento PWA](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/12).
 **Objetivo:** migrar a apresentação, a composição das cenas e a entrada para Phaser 4 sem alterar silenciosamente as regras do roguelike, perder os saves ou bloquear o GitHub Pages.
@@ -326,7 +326,7 @@ docs/
 | P1C.3B.3B.2A | **Concluído**: dano recebido, defesa e Último Juramento | [PR #29](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/29), 576 replays, **76/76 testes**, build 1.3.4 |
 | P1C.3B.3B.2B | **Concluído**: morte, escolha e vitória por eventos | [PR #30](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/30), 288 replays, **78/78 testes**, cache v19 |
 | P1C.3B.3B.2C | **Concluído**: SKILL instant/targeted e 480 sequências | [PR #31](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/31), CI **80/80**, build 1.3.6 |
-| P2A.1 | Fonte Phaser 4/Vite, câmera/mapa com núcleo, build CI isolado (em revisão) | Não publicado no Pages; ainda não jogável |
+| P2A.1 | **Concluído**: Phaser 4/Vite, câmera/mapa compartilhado e build CI isolado | [PR #33](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/33), **84/84 testes**; não jogável/não publicado |
 | P2B | Primeira preview com entrada, turnos, HUD e save separado | [Issue #32](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/32); somente publicar quando jogável |
 | P2B | Movimento, combate básico, HUD, controle e save isolado na preview | Primeira build realmente jogável em `/phaser/` |
 | P3–P6 | Paridade completa, UI/polimento, PWA e lançamento | Playtests reais e plano de rollback |
@@ -350,9 +350,11 @@ docs/
 - [x] Gerar o mapa a partir de **`core/rng.js`, `core/dungeon.js` e `core/navigation.js` originais**; seeds e estratos determinísticos por URL. O catálogo mínimo de inimigos no adaptador é conferido contra o legado.
 - [x] Criar testes específicos de paridade de catálogo, conectividade de 20 mapas de cinco estratos, ausência de escrita nos saves, rotas e ausência de CDN/SW da preview.
 - [x] CI: instalar dependências, compilar Phaser/Vite, validar caminhos relativos e bundle autocontido e armazenar artefato privado de CI sem publicá-lo no Pages.
-- [ ] Verificar CI verde e integrar o PR à `main`; após integração, conferir a documentação.
+- [x] [PR #33](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/33) integrado à `main` após [CI #38969595128](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/38969595128): **84/84 testes verdes**, build Vite/Phaser com 11 módulos transformados, paths relativos verificados e artefato `golzdov-phaser-p2a` enviado para a CI.
 - [ ] Registrar `package-lock.json` com árvore transitiva fixada antes de P2B. P2A fixa somente versões diretas (não reivindicar reprodutibilidade total).
 - [ ] **P2B:** input, comandos/turnos, HUD, isolamento de save e **primeira preview realmente jogável** em `/phaser/`.
+
+**Integração concluída:** squash `7386064` em `main`. O build técnico ainda não foi publicado em `/phaser/` e não existe cena jogável na rota experimental. Renderização em navegador real ainda não foi inspecionada; o build/CI, por si só, não comprova FPS, câmera ou compatibilidade mobile.
 
 **Segurança da publicação:** não alterar `sw.js`, as chaves `carcaca_golzdov_run_v1`/`carcaca_golzdov_meta_v1` nem a rota principal. Uma cena renderizada sem movimento **não** é jogo jogável. [Tracker #32](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/32).
 
