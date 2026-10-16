@@ -24,9 +24,9 @@ A suíte verifica sintaxe, coerência do cache offline, migração de saves anti
 
 ## Próxima arquitetura: Phaser 4 (P1 — núcleo em extração)
 
-A migração de engine está [planejada e em execução](docs/ROADMAP_PHASER.md). Os incrementos P1A/P1B/P1C.1/P1C.2/P1C.3A **não incluem uma interface Phaser jogável**: extrai o RNG para `core/rng.js` e o gerador procedural para `core/dungeon.js`, módulos independentes do navegador reutilizáveis no futuro Phaser. Foram congelados 50 snapshots da geração original para evitar alterações acidentais de seed, spawn e loot. A versão atual continua neste endereço. O service worker do jogo atual não captura as navegações de `/phaser/` e foi atualizado para v13, incluindo os módulos core em cache. Uma preview jogável só será adicionada à subpasta `/phaser/` depois de criar o projeto Phaser/Vite e passar nos testes. A rota experimental **ainda não contém o jogo Phaser**. O plano mantém o save da versão atual intacto durante os testes. Atualize o jogo principal conectado à internet para permitir que o PWA instalado receba o service worker novo. Acompanhe a [issue #11](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/11).
+A migração de engine está [planejada e em execução](docs/ROADMAP_PHASER.md). Os incrementos P1A/P1B/P1C.1/P1C.2/P1C.3A/P1C.3B.1 **não incluem uma interface Phaser jogável**: extrai o RNG para `core/rng.js` e o gerador procedural para `core/dungeon.js`, módulos independentes do navegador reutilizáveis no futuro Phaser. Foram congelados 50 snapshots da geração original para evitar alterações acidentais de seed, spawn e loot. A versão atual continua neste endereço. O service worker do jogo atual não captura as navegações de `/phaser/` e foi atualizado para v14, incluindo os módulos core em cache. Uma preview jogável só será adicionada à subpasta `/phaser/` depois de criar o projeto Phaser/Vite e passar nos testes. A rota experimental **ainda não contém o jogo Phaser**. O plano mantém o save da versão atual intacto durante os testes. Atualize o jogo principal conectado à internet para permitir que o PWA instalado receba o service worker novo. Acompanhe a [issue #11](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/11).
 
-### Núcleo compartilhado (P1A–P1C.3A)
+### Núcleo compartilhado (P1A–P1C.3B.1)
 
 - `core/rng.js`: xorshift32, escolha de inteiros e sorteio sem relógio, render ou dependência Phaser. Atualiza apenas `rngState` do estado explícito da expedição.
 - `core/dungeon.js`: geração dos cinco estratos, posicionamento de inimigos, itens, altar, chefe e escada; os resultados continuam idênticos aos snapshots originais.
@@ -35,13 +35,15 @@ A migração de engine está [planejada e em execução](docs/ROADMAP_PHASER.md)
 - `core/skills.js`: habilidades das três classes, validação de alvo e mana, estados e talentos; callbacks de domínio para dano e relíquias, sem som, menus ou saves.
 - `core/enemies.js`: IA determinística de movimentação, stun/root, ataques e recarga, sem render e com callbacks de dano do jogo atual.
 - `core/turns.js`: orquestração do ciclo de rodada, vitória, morte e subida de nível. Uma rodada só ocorre por ação explícita, nunca pelo loop de desenho.
+- `core/actions.js`: primeira implementação do despachante `dispatch(run,action)` para WAIT e POTION. Produz eventos ordenados sem tocar na UI; ação inválida não avança turno nem sorteia RNG.
 - `tests/fixtures/legacy-dungeon-golden.json`: 50 casos produzidos **antes** da extração, a partir do jogo original. A suíte compara hash do mundo completo e RNG final, sem precisar renderizar canvas.
 - `tests/fixtures/legacy-navigation-golden.json`: 50 casos de visão, neblina, LOS e rotas BFS calculados antes do P1B e conferidos depois.
 - `tests/fixtures/legacy-combat-golden.json`: 192 execuções reais antes do P1C.1, para comparar HP, RNG, inimigos, turnos e logs em oito situações nas três classes.
 - `tests/fixtures/legacy-skills.js`: cópia imutável das duas funções originais de habilidade; `tests/core-skills.test.cjs` compara 252 execuções originais e novas, com três classes e seis seeds.
 - `tests/fixtures/legacy-ai-turns.js`: cópia das duas funções originais de IA e rodada; `tests/core-ai-turns.test.cjs` compara 660 cenários idênticos entre legado e novo.
+- `tests/fixtures/legacy-utility-actions.js`: cópia das ações `drink` e `waitTurn` anteriores. `tests/core-actions.test.cjs` compara 192 replays das três classes com o novo dispatch.
 
-Recompensas, progressão, entrada/controles e despachante de ações completo ainda dependem do `index.html`; serão extraídos em P1C.3B e etapas seguintes. A mira e o feedback audiovisual continuam no adaptador legado. O PWA continua jogável na rota principal, sem gravação em novas chaves de save.
+Movimento, combate/ataque dirigido, coleta, recompensas, progressão e entrada/controles ainda dependem do `index.html`; serão extraídos em P1C.3B.2/B.3 e etapas seguintes. A mira e o feedback audiovisual continuam no adaptador legado. O PWA continua jogável na rota principal, sem gravação em novas chaves de save.
 
 ## Relicários e raridades — versão 1.2C
 

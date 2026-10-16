@@ -1,7 +1,7 @@
-/* Catacumbas de Golzdov — PWA 1.2.9 — IA e turnos extraídos para núcleo compartilhado */
-const CACHE = 'golzdov-offline-v13';
+/* Catacumbas de Golzdov — PWA 1.3.0 — primeiro despachante de ações sem DOM */
+const CACHE = 'golzdov-offline-v14';
 const PRECACHE = [
-  './', './index.html', './core/rng.js', './core/dungeon.js', './core/navigation.js', './core/combat.js', './core/skills.js', './core/enemies.js', './core/turns.js', './gamepad.js', './relic-effects.js', './relic-offers.js', './manifest.webmanifest',
+  './', './index.html', './core/rng.js', './core/dungeon.js', './core/navigation.js', './core/combat.js', './core/skills.js', './core/enemies.js', './core/turns.js', './core/actions.js', './gamepad.js', './relic-effects.js', './relic-offers.js', './manifest.webmanifest',
   './icons/icon-192.png', './icons/icon-512.png'
 ];
 
