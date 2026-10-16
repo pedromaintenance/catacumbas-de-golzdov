@@ -16,16 +16,39 @@ A versão 1.1 introduziu migração de saves e geração com seed persistida sem
 Execute, com Node.js 22 ou superior:
 
 ```sh
-node --test tests/smoke.test.cjs
+node --test tests/*.test.cjs
 ```
 
-A suíte verifica sintaxe, coerência do cache offline, migração do formato v1, reprodução por seed, talentos iniciais e conectividade de 1.000 estratos procedurais. O GitHub Actions executa a suíte automaticamente em push e pull requests.
+A suíte verifica sintaxe, coerência do cache offline, migração de saves antigos, seed, talentos, conectividade de 1.000 mapas e comandos de controle Xbox com um gamepad simulado. O GitHub Actions executa a suíte automaticamente em push e pull requests.
+
+## Controle Xbox (USB ou Bluetooth)
+
+O jogo reconhece automaticamente um controle Xbox compatível com a **Gamepad API**. Não é necessário instalar extensões nem remapear teclas. O suporte depende do sistema operacional e do navegador; em alguns navegadores, pressione um botão depois de abrir a página para ativar a conexão. Ainda é necessário testar com um controle físico real e no PWA instalado.
+
+| Xbox | Ação |
+| --- | --- |
+| Analógico esquerdo / D-pad | Andar; navegar entre opções nos menus |
+| A | Ataque básico / confirmar / lançar habilidade mirando |
+| B | Cancelar mira, voltar de menus fecháveis; no jogo abre pausa |
+| X / Y | Habilidade 1 / habilidade 2 |
+| LB / RB | Bolsa / mapa; ao mirar, alternar inimigos |
+| LT / RT | Beber poção / esperar um turno e recuperar foco |
+| View (dois quadrados) | Registros e histórico |
+| Menu (☰) | Pausa e opções de salvar/sair/exportar |
+| Analógico direito durante a mira | Mover a mira das magias; A lança, B cancela |
+
+- O direcional possui zona morta e repetição controlada; botões de ação não repetem quando ficam pressionados.
+- Evolução, mercadores, altares e finais podem ser navegados com direcional e A.
+- Um retículo aparece na mira de habilidades; o Arcanista pode selecionar terreno válido para magias de área.
+- O teclado e os comandos de toque continuam disponíveis, mesmo com o controle desconectado.
+- A versão offline inclui gamepad.js no cache do service worker.
 
 ## Publicação no GitHub Pages
 
 1. Crie um repositório público (ex.: `catacumbas-de-golzdov`).
-2. Extraia o ZIP e envie os **4 itens** diretamente para a raiz do repositório:
+2. Extraia o ZIP e envie os **5 itens** diretamente para a raiz do repositório:
    - `index.html`
+   - `gamepad.js`
    - `manifest.webmanifest`
    - `sw.js`
    - pasta `icons` (com `icon-192.png` e `icon-512.png`)
@@ -52,11 +75,12 @@ A suíte verifica sintaxe, coerência do cache offline, migração do formato v1
 
 | Arquivo | Uso |
 |---|---|
-| `index.html` | Jogo completo: HTML, CSS e JavaScript embutidos |
+| `index.html` | HTML, estilos e motor principal do jogo |
+| `gamepad.js` | Mapeamento Xbox, navegação por foco e repetição de direções |
 | `manifest.webmanifest` | Nome, ícone e aparência do aplicativo instalado |
 | `sw.js` | Armazena os arquivos no dispositivo e atende offline |
 | `icons/icon-192.png`, `icons/icon-512.png` | Ícones na tela inicial |
 
 ## Atualizações futuras
 
-Para publicar uma nova versão distribuída, atualize os arquivos do jogo e **aumente a versão da constante `CACHE` em `sw.js`** (por exemplo, `golzdov-offline-v5`). A verificação de prontidão procura automaticamente os recursos precacheados e não precisa repetir o nome do cache no `index.html`. O jogo deverá atualizar-se quando o service worker novo for instalado e ativado; feche e reabra o PWA após a atualização, se necessário. As chaves legadas do `localStorage` continuam sendo usadas; o estado recebe `schemaVersion` e migração para preservar saves anteriores.
+Para publicar uma nova versão distribuída, atualize os arquivos do jogo e **aumente a versão da constante `CACHE` em `sw.js`** (por exemplo, `golzdov-offline-v6`). A verificação de prontidão procura automaticamente os recursos precacheados e não precisa repetir o nome do cache no `index.html`. O jogo deverá atualizar-se quando o service worker novo for instalado e ativado; feche e reabra o PWA após a atualização, se necessário. As chaves legadas do `localStorage` continuam sendo usadas; o estado recebe `schemaVersion` e migração para preservar saves anteriores.
