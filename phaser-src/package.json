@@ -1,0 +1,17 @@
+{
+  "name": "@carcaca/golzdov-phaser-preview",
+  "version": "0.1.0-p2a",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1"
+  },
+  "dependencies": {
+    "phaser": "4.2.1"
+  },
+  "devDependencies": {
+    "vite": "6.3.1"
+  }
+}
