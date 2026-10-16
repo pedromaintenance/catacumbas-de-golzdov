@@ -94,6 +94,7 @@
 </main>
 <script src="./core/rng.js"></script>
 <script src="./core/dungeon.js"></script>
+<script src="./core/navigation.js"></script>
 <script src="./gamepad.js"></script>
 <script src="./relic-effects.js"></script>
 <script src="./relic-offers.js"></script>
@@ -203,8 +204,8 @@ function idx(x,y){return y*W+x;}
 function inMap(x,y){return x>0&&y>0&&x<W-1&&y<H-1;}
 function walk(x,y){return inMap(x,y)&&G.map[idx(x,y)]===1;}
 function generateFloor(){window.GolzdovDungeon.generateFloor(G,ENEMIES,W,H);reveal();updateHUD();}
-function lineClear(x0,y0,x1,y1){let dx=Math.abs(x1-x0),dy=Math.abs(y1-y0),sx=x0<x1?1:-1,sy=y0<y1?1:-1,err=dx-dy;while(!(x0===x1&&y0===y1)){let e2=2*err;if(e2>-dy){err-=dy;x0+=sx;}if(e2<dx){err+=dx;y0+=sy;}if(x0===x1&&y0===y1)return true;if(!inMap(x0,y0)||G.map[idx(x0,y0)]===0)return false;}return true;}
-function reveal(){if(!G)return;visible=new Set();const h=G.hero,r=6+(h.relics.includes('eye')?2:0);for(let y=h.y-r;y<=h.y+r;y++)for(let x=h.x-r;x<=h.x+r;x++){if(!inMap(x,y)||Math.hypot(x-h.x,y-h.y)>r+.25)continue;if(lineClear(h.x,h.y,x,y)){const k=idx(x,y);visible.add(k);G.seen[k]=true;}}}
+function lineClear(x0,y0,x1,y1){return window.GolzdovNavigation.lineClear(G.map,W,H,x0,y0,x1,y1);}
+function reveal(){if(!G)return;visible=window.GolzdovNavigation.visibleCells(G.map,W,H,G.hero,G.hero.relics.includes('eye')?2:0);for(const k of visible)G.seen[k]=true;}
 function isVisible(x,y){return visible.has(idx(x,y));}
 function enemiesInSight(){return G.enemies.filter(e=>e.hp>0&&isVisible(e.x,e.y));}
 function enemyAt(x,y){return G.enemies.find(e=>e.hp>0&&e.x===x&&e.y===y);}
@@ -349,7 +350,7 @@ function menu(){if(!G)return;showModal(`<span class="modal-kicker">EXPEDIÇÃO E
 function confirmAbandon(){showModal(`<span class="modal-kicker">SEM VOLTA</span><h2>Abandonar <em>expedição?</em></h2><p>Todo o equipamento, experiência e exploração desta tentativa serão perdidos. Seu recorde permanece.</p><div class="footer-actions"><button id="ab-no">NÃO, CONTINUAR</button><button id="ab-yes" class="danger">ABANDONAR</button></div>`,false);$('ab-no').onclick=hideModalForced;$('ab-yes').onclick=()=>{G.over=true;endMeta(false);deleteStore(SAVE);hideModal(true);showScreen('home');};}
 function hideModalForced(){hideModal(true);}
 function guide(fromGame=false){showModal(`<span class="modal-kicker">MANUAL DO EXPLORADOR</span><h2>Como <em>sobreviver.</em></h2><p>Explore cinco estratos gerados a cada partida. Encontre a <b>escada dourada</b> para descer. No último estrato, derrote o Escrivão Sem Nome.</p><div class="legend-row"><span class="legend-swatch">▲</span> Toque nas setas ou deslize o dedo para andar.</div><div class="legend-row"><span class="legend-swatch">⚔</span> Toque num inimigo ou use ATACAR. Arcos atingem de longe.</div><div class="legend-row"><span class="legend-swatch">✧</span> Ative uma magia e toque no alvo. O foco é limitado.</div><div class="legend-row"><span class="legend-swatch">◆</span> Centro do direcional: esperar e recuperar 1 de foco.</div><div class="legend-row"><span class="legend-swatch">✚</span> Poções curam. Itens no chão são coletados automaticamente.</div><div class="legend-row"><span class="legend-swatch">▦</span> Toque no chão distante para andar automaticamente até lá.</div><p class="micro">No computador, use WASD ou setas. Teclas 1, 2, Espaço, H, M e I também funcionam. Os inimigos agem a cada turno seu. A morte é permanente.</p><span class="modal-kicker">CONTROLE XBOX (BLUETOOTH OU USB)</span><div class="legend-row">🎮 <b>Analógico esquerdo / direcional:</b> andar ou navegar em menus.</div><div class="legend-row">🅰️ <b>A:</b> atacar / confirmar; <b>B:</b> cancelar / voltar.</div><div class="legend-row">🆇 <b>X:</b> habilidade 1; <b>Y:</b> habilidade 2.</div><div class="legend-row"><b>LB / RB:</b> bolsa / mapa; ao mirar, alternar alvos.</div><div class="legend-row"><b>LT / RT:</b> poção / esperar turno.</div><div class="legend-row"><b>View / Menu:</b> registros / pausar.</div><p class="micro">Ao mirar uma habilidade: use o analógico direito ou direcional para mover a mira; A lança e B cancela. O suporte depende da Gamepad API do seu navegador.</p><div class="footer-actions"><button id="guide-close">${fromGame?'CONTINUAR EXPLORAÇÃO':'ENTENDI'}</button></div>`,true);$('guide-close').onclick=hideModal;}
-function findPath(tx,ty){if(!G.seen[idx(tx,ty)]||!walk(tx,ty)||enemyAt(tx,ty))return null;const p=G.hero,queue=[{x:p.x,y:p.y}],seen=new Set([key(p.x,p.y)]),prev=new Map(),dirs=[[0,-1],[1,0],[0,1],[-1,0]];let i=0;while(i<queue.length){const u=queue[i++];if(u.x===tx&&u.y===ty){const arr=[];let k=key(tx,ty);while(k!==key(p.x,p.y)){const a=prev.get(k);if(!a)return null;arr.push(a.dir);k=a.from;}return arr.reverse();}for(const [dx,dy] of dirs){const x=u.x+dx,y=u.y+dy,k=key(x,y);if(!walk(x,y)||!G.seen[k]||seen.has(k)||enemyAt(x,y))continue;seen.add(k);prev.set(k,{from:key(u.x,u.y),dir:[dx,dy]});queue.push({x,y});}}return null;}
+function findPath(tx,ty){return window.GolzdovNavigation.findPath(G,W,H,tx,ty);}
 function autoTo(x,y){if(!canPlay())return;const route=findPath(x,y);if(!route?.length){log('Não há caminho conhecido até esse ponto.','⌁');return;}stopAuto();const startHp=G.hero.hp;function step(){if(!canPlay()||G.hero.hp<startHp){stopAuto();return;}if(enemiesInSight().some(e=>dist(e,G.hero)<=3)){stopAuto();log('Movimento interrompido: há um inimigo por perto.','!');return;}const direction=route.shift();if(!direction){stopAuto();return;}doMove(...direction);if(route.length&&canPlay())autoTimer=setTimeout(step,135);else stopAuto();}step();}
 function attackNearest(){if(!canPlay())return;const p=G.hero;const choices=enemiesInSight().filter(e=>dist(e,p)<=p.range&&lineClear(p.x,p.y,e.x,e.y)).sort((a,b)=>dist(a,p)-dist(b,p));if(!choices.length){log('Nenhum inimigo ao alcance de seu ataque básico.','⚔');return;}attack(choices[0]);}
 function tapWorld(x,y){if(!canPlay())return;if(!inMap(x,y))return;if(aim!==null){castOn(x,y);return;}const e=enemyAt(x,y);if(e&&isVisible(x,y)){attack(e);return;}if(x===G.hero.x&&y===G.hero.y){waitTurn();return;}if(walk(x,y)&&G.seen[idx(x,y)]){if(dist(G.hero,{x,y})===1)move(x-G.hero.x,y-G.hero.y);else autoTo(x,y);}else if(!G.seen[idx(x,y)])log('A escuridão ainda encobre essa passagem.','◈');}
@@ -463,7 +464,7 @@ showScreen('home');renderClasses();requestAnimationFrame(render);
     say('MODO APP INDISPONÍVEL NESTE NAVEGADOR', 'offline-error');
     return;
   }
-  const FILES = ['./', './index.html', './core/rng.js', './core/dungeon.js', './gamepad.js', './relic-effects.js', './relic-offers.js', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
+  const FILES = ['./', './index.html', './core/rng.js', './core/dungeon.js', './core/navigation.js', './gamepad.js', './relic-effects.js', './relic-offers.js', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
   async function checkReady() {
     // Look up active precached assets without duplicating the SW cache version here.
     const all = await Promise.all(FILES.map(file => caches.match(new URL(file, location.href))));
