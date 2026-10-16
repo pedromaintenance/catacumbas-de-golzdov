@@ -56,7 +56,7 @@
       <div class="meta-line"><span id="meta-record">MELHOR EXPEDIÇÃO · —</span><span id="meta-wins">0 VITÓRIAS</span></div>
       <button id="start-btn" class="primary-button">INICIAR EXPEDIÇÃO <span>◆</span></button>
       <button id="continue-btn" class="secondary-button hidden">CONTINUAR EXPEDIÇÃO <span>↗</span></button>
-      <div class="home-help">5 ESTRATOS · 3 CLASSES · MORTE PERMANENTE<br><span id="offline-status" role="status" aria-live="polite">◌ PREPARANDO JOGO OFFLINE…</span><small id="build-version" class="build-version" aria-label="Versão do jogo">BUILD 1.3.5 · CACHE V19 · P1C.3B.3B.2B</small></div>
+      <div class="home-help">5 ESTRATOS · 3 CLASSES · MORTE PERMANENTE<br><span id="offline-status" role="status" aria-live="polite">◌ PREPARANDO JOGO OFFLINE…</span><small id="build-version" class="build-version" aria-label="Versão do jogo">BUILD 1.3.6 · CACHE V20 · P1C.3B.3B.2C</small></div>
       <div class="home-aux"><button id="help-home" class="plain-button">COMO JOGAR <span>⌄</span></button><button id="import-btn" class="plain-button">IMPORTAR SAVE <span>↥</span></button></div>
     </div>
   </section>
@@ -376,8 +376,45 @@ function relicEvent(event,details={}){if(!G)return details;const p=G.hero;const 
 function heroHit(e,damage,label,source='skill',critical=false){if(!e||e.hp<=0)return;const ctx=relicEvent('onAttack',{enemy:e,damage,kind:source,critical,wasSmoldering:(e.smolder||0)>0});hitEnemy(e,Math.max(1,Math.floor(ctx.damage)),label,source);}
 function hitEnemy(e,dmg,kind,source='effect'){applyGameEvents(window.GolzdovCombat.damageEnemy(G,e,dmg,kind,ENEMIES,source));}
 function killEnemy(e,source='effect'){applyGameEvents(window.GolzdovRewards.defeat(G,e,ENEMIES,source));}
-function skill(which){if(!canPlay())return;stopAuto();const p=G.hero,c=CLASSES[p.classId],s=c.skills[which];if(p.mana<s.cost){log(`Foco insuficiente. Precisa de ${s.cost} pontos.`,'✧');beep(125);return;}if(s.target){aim=aim===which?null:which;updateAim();if(aim!==null){toast(`Selecione um alvo para ${s.name}`);beep(505);}}else{aim=null;updateAim();const outcome=window.GolzdovSkills.instant(G,which,{skills:c.skills,hit:heroHit,onRoot:relicEvent});if(outcome.message)log(outcome.message,outcome.icon);beep(480,.14);worldTurn();updateHUD();save();}}
-function castOn(x,y){if(!canPlay()||aim===null)return;const c=CLASSES[G.hero.classId];const outcome=window.GolzdovSkills.targeted(G,aim,x,y,{skills:c.skills,isVisible,lineClear,enemyAt,hit:heroHit});if(outcome.status==='unreachable'){log('A magia não consegue alcançar esse ponto.','✧');beep(125);return;}if(outcome.status==='empty'){log('Toque em um inimigo para usar essa habilidade.','✧');return;}if(outcome.status==='no-focus'){aim=null;updateAim();return;}if(outcome.message)log(outcome.message,outcome.icon);aim=null;updateAim();beep(730,.17,'triangle');worldTurn();updateHUD();save();}
+function runSkillEvents(events){
+  for(const event of events){
+    if(event.type==='log')log(event.text,event.icon);
+    else if(event.type==='sound')beep(event.frequency,event.duration,event.wave);
+    else if(event.type==='turn')worldTurn();
+  }
+}
+function skill(which){
+  if(!canPlay())return;
+  stopAuto();
+  const p=G.hero,c=CLASSES[p.classId],s=c.skills[which];
+  if(p.mana<s.cost){log(`Foco insuficiente. Precisa de ${s.cost} pontos.`,'✧');beep(125);return;}
+  if(s.target){
+    aim=aim===which?null:which;updateAim();
+    if(aim!==null){toast(`Selecione um alvo para ${s.name}`);beep(505);}
+    return;
+  }
+  aim=null;updateAim();
+  const out=window.GolzdovActions.dispatch(G,{
+    type:'SKILL',phase:'instant',which,skills:c.skills,hit:heroHit,onRoot:relicEvent
+  });
+  runSkillEvents(out.events);
+  if(out.consumesTurn){updateHUD();save();}
+}
+function castOn(x,y){
+  if(!canPlay()||aim===null)return;
+  const c=CLASSES[G.hero.classId];
+  const out=window.GolzdovActions.dispatch(G,{
+    type:'SKILL',phase:'targeted',which:aim,x,y,skills:c.skills,
+    isVisible,lineClear,enemyAt,hit:heroHit
+  });
+  // Mensagens da habilidade são geradas antes de encerrar a mira.
+  for(const event of out.events)if(event.type==='log')log(event.text,event.icon);
+  if(out.status==='no-focus'){aim=null;updateAim();return;}
+  if(out.status!=='applied'){for(const event of out.events)if(event.type==='sound')beep(event.frequency,event.duration,event.wave);return;}
+  aim=null;updateAim();
+  runSkillEvents(out.events.filter(event=>event.type!=='log'));
+  updateHUD();save();
+}
 function executeUtilityAction(type){if(!canPlay())return;stopAuto();aim=null;updateAim();const result=window.GolzdovActions.dispatch(G,{type});for(const event of result.events){if(event.type==='log')log(event.text,event.icon);else if(event.type==='sound')beep(event.frequency,event.duration,event.wave);else if(event.type==='turn')worldTurn();}if(result.consumesTurn){updateHUD();save();}}
 function drink(){executeUtilityAction('POTION');}
 function waitTurn(){executeUtilityAction('WAIT');}

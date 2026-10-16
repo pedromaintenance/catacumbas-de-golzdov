@@ -1,5 +1,5 @@
-/* Catacumbas de Golzdov — PWA 1.3.5 — estados terminais e meta por eventos */
-const CACHE = 'golzdov-offline-v19';
+/* Catacumbas de Golzdov — PWA 1.3.6 — habilidades SKILL por dispatcher */
+const CACHE = 'golzdov-offline-v20';
 const PRECACHE = [
   './', './index.html', './core/rng.js', './core/dungeon.js', './core/navigation.js', './core/combat.js', './core/skills.js', './core/enemies.js', './core/turns.js', './core/actions.js', './core/loot.js', './core/rewards.js', './core/defense.js', './core/endings.js', './gamepad.js', './relic-effects.js', './relic-offers.js', './manifest.webmanifest',
   './icons/icon-192.png', './icons/icon-512.png'

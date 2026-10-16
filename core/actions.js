@@ -2,7 +2,7 @@
  * Cálculos do estado não dependem do navegador, Phaser, relógio nem renderer.
  * O estado recebido é alterado explicitamente; eventos descrevem efeitos
  * posteriores (log, som e exatamente uma solicitação de turno), em ordem.
- * P1C.3B.3B.1 adicionou ATTACK; SKILL, dano recebido e terminais completos pendentes.
+ * P1C.3B.3B.2C adicionou SKILL instant/targeted; replays sequenciais e Phaser ainda pendentes.
  */
 (function(root){
 'use strict';
@@ -89,6 +89,42 @@ function dispatch(run,action){
       }
       events.push({type:'turn'});
       return result(run,'applied',events);
+    }
+    case 'SKILL':{
+      // Efeitos de ataque/raiz ainda são callbacks síncronos de domínio.
+      // Essa ordem é essencial para dreno, crítico, recompensa e relíquias.
+      const rules=root.GolzdovSkills,which=action.which,skills=action.skills;
+      if(!rules||!Array.isArray(skills)||!Number.isInteger(which)||!skills[which])
+        return result(run,'invalid-skill');
+      if(action.phase==='instant'){
+        if(skills[which].target)return result(run,'requires-target');
+        if(p.mana<skills[which].cost)return result(run,'no-focus');
+        const out=rules.instant(run,which,{skills,hit:action.hit,onRoot:action.onRoot});
+        const events=[];
+        if(out.message)events.push({type:'log',text:out.message,icon:out.icon});
+        events.push({type:'sound',frequency:480,duration:.14},{type:'turn'});
+        return result(run,'applied',events);
+      }
+      if(action.phase==='targeted'){
+        if(!skills[which].target)return result(run,'not-targeted');
+        const out=rules.targeted(run,which,action.x,action.y,{
+          skills,isVisible:action.isVisible,lineClear:action.lineClear,
+          enemyAt:action.enemyAt,hit:action.hit
+        });
+        if(out.status==='unreachable')return result(run,'unreachable',[
+          {type:'log',text:'A magia não consegue alcançar esse ponto.',icon:'✧'},
+          {type:'sound',frequency:125}
+        ]);
+        if(out.status==='empty')return result(run,'empty',[
+          {type:'log',text:'Toque em um inimigo para usar essa habilidade.',icon:'✧'}
+        ]);
+        if(out.status!=='used')return result(run,out.status);
+        const events=[];
+        if(out.message)events.push({type:'log',text:out.message,icon:out.icon});
+        events.push({type:'sound',frequency:730,duration:.17,wave:'triangle'},{type:'turn'});
+        return result(run,'applied',events);
+      }
+      return result(run,'invalid-skill-phase');
     }
     case 'COLLECT':{
       const item=run.items.find(i=>i.x===p.x&&i.y===p.y);

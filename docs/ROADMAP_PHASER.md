@@ -1,6 +1,6 @@
 # Roadmap de migração — Catacumbas de Golzdov → Phaser 4
 
-**Status:** P0–P1C.3B.3B.2B integrados à `main`. [PR #30](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/30) concluiu com **78/78 testes verdes** (288 replays de finais). BUILD 1.3.5 / PWA cache v19 disponível no código principal para teste do Pages. Próximos: P1C.3B.3B.2C (SKILL e sequências de ações) e P2–P6; sem preview Phaser jogável.
+**Status:** P0–P1C.3B.3B.2B integrados à `main` (78 testes verdes). P1C.3B.3B.2C — SKILL e sequências de ações — em validação; P2–P6 aguardam núcleo aprovado. Build candidata 1.3.6 / cache v20; sem preview Phaser jogável.
 **Data do diagnóstico:** 15/10/2026.
 **Acompanhamento GitHub:** [issue #11 — migração Phaser](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/11); [issue #12 — corrigir roteamento PWA](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/12).
 **Objetivo:** migrar a apresentação, a composição das cenas e a entrada para Phaser 4 sem alterar silenciosamente as regras do roguelike, perder os saves ou bloquear o GitHub Pages.
@@ -163,6 +163,18 @@ docs/
 - [ ] Extrair combate, IA, turnos e dispatch(action) sem dependências gráficas (P1C).
 
 **Integração:** [PR #17](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/17) integrado à main, commit `b8c8fa4`, GitHub Actions `success`. Goldens de 50 cenários e 1.000 masmorras verdes. O jogo original continua jogável; preview Phaser ainda não publicada.
+### P1C.3B.3B.2C — Seis habilidades via SKILL e replays sequenciais (16/10/2026)
+
+- [x] Acrescentar `SKILL` ao despachante `core/actions.js` com duas fases: `instant` (Bastião e Círculo de Espinhos) e `targeted` (Martelo Rúnico, Glifo de Luz, Sonho Afundado e Tiro Fantasma).
+- [x] Preservar validações de foco, alcance, linha de visão, mira, talentos, ricochetes, enraizamento e efeitos síncronos de relíquias. O núcleo de habilidades `core/skills.js` continua responsável pela resolução determinística, sem DOM/Phaser.
+- [x] Eventos de log, áudio e avanço de turno produzidos pelo dispatcher; o adaptador `index.html` continua gerenciando mira, exibição e saves nas mesmas posições do ciclo.
+- [x] Manter os **252 replays originais** de habilidades e acrescentar **480 sequências multi-ação**: 3 classes × 5 estratos × 8 seeds × 4 roteiros, misturando SKILL, WAIT, POTION, MOVE e ATTACK, conferindo estado completo e mira depois de cada ação.
+- [x] Atualizar PWA para `golzdov-offline-v20` e identificar **BUILD 1.3.6 · CACHE V20 · P1C.3B.3B.2C** no menu.
+- [ ] Integrar à `main` somente depois de CI verde; verificar propagação real no Pages/PWA e controle físico.
+- [ ] Consolidar checklist de validação do núcleo e iniciar P2A (estrutura Phaser/Vite) sem afetar a rota estável. Os callbacks de domínio de `core/skills.js` ainda são síncronos, não uma fila de eventos puramente serializável.
+
+**Critério de aceite:** 480 sequências e 252 replays individuais de habilidades idênticos ao jogo anterior, além de todos os testes de regressão/PWA verdes. Nenhuma chave de save deve mudar e `/phaser/` permanece não jogável.
+
 ### P1C.3B.3B.2B — Morte, escolha final e vitória por eventos (16/10/2026)
 
 - [x] Congelar literalmente `die`, `finalDecision`, `victory` e `endMeta` da build 1.3.4 em `tests/fixtures/legacy-endings.js` **antes** de extrair o código.
@@ -232,16 +244,17 @@ docs/
 **Integrado:** [PR #25](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/25), commit `c30f052` em `main`. [CI #38955997010](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/38955997010) **65/65 testes verdes**, incluindo 408 replays idênticos. A página de produção pode receber a versão PWA v15 após publicação/atualização do cache. A engine Phaser **ainda não** é jogável em `/phaser/`.
 
 
-#### Roteiro de validação no Pages — BUILD 1.3.5
+#### Roteiro de validação no Pages — BUILD 1.3.6
 
-1. Abra [o Pages](https://pedromaintenance.github.io/catacumbas-de-golzdov/) **conectado à internet**; recarregue até ver `BUILD 1.3.5 · CACHE V19 · P1C.3B.3B.2B` abaixo do estado offline. Se a versão não aparecer, feche/reabra o PWA instalado após atualização online.
+1. Abra [o Pages](https://pedromaintenance.github.io/catacumbas-de-golzdov/) **conectado à internet**; recarregue até ver `BUILD 1.3.6 · CACHE V20 · P1C.3B.3B.2C` abaixo do estado offline. Se a versão não aparecer, feche/reabra o PWA instalado após atualização online.
 2. Inicie uma expedição com cada uma das três classes e tente andar em parede/limite, entrar em sala, pisar sobre moedas e consumir poção; nenhum movimento inválido deve consumir um turno.
 3. Ande contra um inimigo: deve atacar em vez de mover. Teste espera e poção: inimigos agem **uma vez** por turno. Derrote inimigos comuns e, ao final, o chefe; confira XP, âmbar e comportamento do encerramento.
 4. Teste os oito tipos de coleta, especialmente equipamento, armadilhas (inclusive fatal), relicário, altar e escada. A expedição deve continuar normalmente após fechar e reabrir o PWA; importe/exporte um save com cuidado, sem sobrescrever um backup.
 5. Ataque de perto e à distância com as três classes; provoque críticos, teste alvos fora de alcance e efeitos de relíquias de ataque/abate. Ataques inválidos não devem avançar o turno, e cada ataque válido deve avançar uma vez.
 6. Teste a defesa ativa do Vigia, danos fatais e o talento Último Juramento: ele deve impedir a primeira morte e deixar a guarda enfraquecida, mas não salvar o segundo golpe fatal. Se possível, confira correntes e efeitos de relíquias que respondem ao dano recebido.
 7. Termine uma expedição: deixe o personagem morrer, confira a tela de morte, meta e remoção do save da campanha. Em uma vitória, compare as escolhas **REVELAR O NOME** e **GUARDAR O NOME**, o retorno ao menu e o contador de vitórias. Use um backup antes de um teste de morte permanente.
-8. Confirme que o status `✓ PRONTO PARA JOGAR SEM INTERNET` aparece e teste a abertura offline. **Não validado aqui em dispositivo físico:** CI não substitui teste de Android/iOS/Xbox e serviço GitHub Pages propagado.
+8. Use **as duas habilidades das três classes**. Confira falta de foco, mira em parede/inimigo fora do alcance, ricochete do Arcanista, espinhos do Errante e Bastião do Vigia. Alternar habilidade, andar, beber poção e atacar não pode causar turno duplo.
+9. Confirme que o status `✓ PRONTO PARA JOGAR SEM INTERNET` aparece e teste a abertura offline. **Não validado aqui em dispositivo físico:** CI não substitui teste de Android/iOS/Xbox e serviço GitHub Pages propagado.
 
 **Não confundir build e cache:** o texto no menu informa a versão do HTML carregado, não prova por si só que todos os assets estão atualizados; o status offline e o teste sem rede completam a verificação.
 
@@ -312,7 +325,7 @@ docs/
 | P1C.3B.3B.1 | **Concluído**: ATTACK e dano direto por eventos | [PR #28](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/28), 504 replays, **73/73 testes** |
 | P1C.3B.3B.2A | **Concluído**: dano recebido, defesa e Último Juramento | [PR #29](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/29), 576 replays, **76/76 testes**, build 1.3.4 |
 | P1C.3B.3B.2B | **Concluído**: morte, escolha e vitória por eventos | [PR #30](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/30), 288 replays, **78/78 testes**, cache v19 |
-| P1C.3B.3B.2C | SKILL e replays longos de ações | Saves v1/v2, 3 classes, 5 estratos |
+| P1C.3B.3B.2C | SKILL instant/targeted + sequências multi-ação (em CI) | 252 replays de habilidades + 480 sequências, 3 classes e 5 estratos |
 | P2A | Cena Phaser com câmera, texturas e mapa; usar o mesmo estado do núcleo | Preview não substitui a versão legada |
 | P2B | Movimento, combate básico, HUD, controle e save isolado na preview | Primeira build realmente jogável em `/phaser/` |
 | P3–P6 | Paridade completa, UI/polimento, PWA e lançamento | Playtests reais e plano de rollback |
