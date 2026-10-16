@@ -1,6 +1,6 @@
 # Roadmap de migração — Catacumbas de Golzdov → Phaser 4
 
-**Status:** P0–P1C.3B.3B.1 integrados (73/73 testes). P1C.3B.3B.2A — defesa e Último Juramento — em revisão para CI; próximas P1C.3B.3B.2B (finais), .2C (habilidades/sequências) e P2–P6 pendentes. A build Phaser só será publicada quando jogável.
+**Status:** P0–P1C.3B.3B.2A integrados à `main`. [PR #29](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/29): **76/76 testes verdes**, incluindo 576 replays de dano recebido. BUILD 1.3.4 / cache v18 liberada no código principal. Pendentes P1C.3B.3B.2B (finais), .2C (SKILL e sequências) e P2–P6. Sem preview Phaser jogável.
 **Data do diagnóstico:** 15/10/2026.
 **Acompanhamento GitHub:** [issue #11 — migração Phaser](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/11); [issue #12 — corrigir roteamento PWA](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/12).
 **Objetivo:** migrar a apresentação, a composição das cenas e a entrada para Phaser 4 sem alterar silenciosamente as regras do roguelike, perder os saves ou bloquear o GitHub Pages.
@@ -171,11 +171,11 @@ docs/
 - [x] Adaptar o `receiveDamage` existente aos eventos, mantendo o modal de morte e a lógica de meta/save legados intactos.
 - [x] Acrescentar **576 replays de regressão** (3 classes × 8 seeds × 24 cenários), incluindo golpe fatal, correntes, buffs defensivos, Riposte, Juramento esgotado, dois golpes consecutivos, zero/negativo e relíquias.
 - [x] Atualizar PWA `golzdov-offline-v18` e identificação do menu **BUILD 1.3.4 · CACHE V18 · P1C.3B.3B.2A**.
-- [ ] Concluir e integrar após CI verde; validar o Pages e o PWA instalado.
+- [x] Integrar à `main` após CI verde ([PR #29](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/29)); **validar propagação no Pages e PWA instalado ainda pendente**.
 - [ ] **P1C.3B.3B.2B:** resultados terminais (`die`, `finalDecision`, `victory`) como transições de estado e eventos de UI/meta.
 - [ ] **P1C.3B.3B.2C:** unificar `SKILL` no dispatcher, replay de sequências longas de ações/saves e ciclo dos cinco estratos.
 
-**Aceite P1C.3B.3B.2A:** todas as comparações de estado, logs, RNG, morte, meta e saves idênticas ao legado, além da CI geral verde. A interface atual permanece jogável na rota principal, sem preview Phaser em `/phaser/`.
+**Concluído:** [PR #29](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/29), squash `34e1866`, integrado à `main`. [CI #38963042502](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/38963042502): **76 testes aprovados, zero falhas**, incluindo 576 replays pareados (HP, logs, RNG, meta, morte e saves) e 408 replays de movimento. Não há alteração de chaves de save; o jogo legado continua jogável na rota principal. **A propagação no Pages/PWA e teste em dispositivo real continuam pendentes.**
 
 ### P1C.3B.3B.1 — Ataque básico e dano direto via eventos (16/10/2026)
 
@@ -297,7 +297,7 @@ docs/
 | P1C.3B.2 | **Concluído**: MOVE, salas, coleta delegada e build visível | PR #25, 408 replays, CI **65/65**, build 1.3.1 |
 | P1C.3B.3A | **Concluído**: coleta, recompensas e chefe via eventos; build 1.3.2 | [PR #26](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/26), 336 replays e CI **69/69** |
 | P1C.3B.3B.1 | **Concluído**: ATTACK e dano direto por eventos | [PR #28](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/28), 504 replays, **73/73 testes** |
-| P1C.3B.3B.2A | Defesa, dano recebido e Último Juramento (em validação) | 576 replays, CI verde, build 1.3.4 |
+| P1C.3B.3B.2A | **Concluído**: dano recebido, defesa e Último Juramento | [PR #29](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/29), 576 replays, **76/76 testes**, build 1.3.4 |
 | P1C.3B.3B.2B/.2C | Morte/finais, SKILL e sequências de ações | Saves v1/v2, três classes, cinco estratos |
 | P2A | Cena Phaser com câmera, texturas e mapa; usar o mesmo estado do núcleo | Preview não substitui a versão legada |
 | P2B | Movimento, combate básico, HUD, controle e save isolado na preview | Primeira build realmente jogável em `/phaser/` |
