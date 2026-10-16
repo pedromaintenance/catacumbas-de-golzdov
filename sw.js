@@ -1,7 +1,7 @@
-/* Catacumbas de Golzdov — PWA 1.2.1 */
-const CACHE = 'golzdov-offline-v5';
+/* Catacumbas de Golzdov — PWA 1.2.2 */
+const CACHE = 'golzdov-offline-v6';
 const PRECACHE = [
-  './', './index.html', './gamepad.js', './manifest.webmanifest',
+  './', './index.html', './gamepad.js', './relic-effects.js', './manifest.webmanifest',
   './icons/icon-192.png', './icons/icon-512.png'
 ];
 
