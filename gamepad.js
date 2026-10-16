@@ -55,7 +55,14 @@
         !b.closest?.('.hidden') &&
         (typeof b.getClientRects !== 'function' || b.getClientRects().length > 0)
       );
-      if (context !== 'modal') return buttons;
+      if (context === 'home') {
+        const order = ['start-btn', 'continue-btn', 'help-home', 'import-btn', 'sound-home'];
+        return buttons.sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
+      }
+      if (context === 'select') {
+        return buttons.sort((a, b) => (a.id === 'back-home' ? 2 : a.id === 'begin-run' ? 1 : 0) -
+          (b.id === 'back-home' ? 2 : b.id === 'begin-run' ? 1 : 0));
+      }
       // Prefer an actual decision over the little X of a closable dialog.
       return [...buttons.filter(b => !b.classList.contains('close-modal')),
         ...buttons.filter(b => b.classList.contains('close-modal'))];
