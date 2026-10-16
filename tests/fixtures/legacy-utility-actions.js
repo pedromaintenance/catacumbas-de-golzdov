@@ -1,0 +1,3 @@
+/* Funções originais de ações do jogador, congeladas antes do P1C.3B.1. */
+function drink(){if(!canPlay())return;stopAuto();aim=null;updateAim();const p=G.hero;if(!p.potions){log('Sua bolsa está vazia.','✚');return;}if(p.hp===p.maxhp){log('Você já está com a vida completa.','✚');return;}p.potions--;let value=17+p.level*2;p.hp=clamp(p.hp+value,0,p.maxhp);log(`Você bebe uma poção: +${value} de vida.`,'♥');beep(620,.14);worldTurn();updateHUD();save();}
+function waitTurn(){if(!canPlay())return;stopAuto();aim=null;updateAim();const p=G.hero;p.mana=clamp(p.mana+1,0,p.maxmana);log('Você respira fundo e restaura 1 ponto de foco.','◈');worldTurn();updateHUD();save();}
