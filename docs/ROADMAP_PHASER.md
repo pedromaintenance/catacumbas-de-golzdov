@@ -1,6 +1,6 @@
 # Roadmap de migração — Catacumbas de Golzdov → Phaser 4
 
-**Status:** P0–P1C.3A concluídos. P1C.3B.1 (WAIT/POTION) integrado à main pelo PR #24, com 61 testes verdes. P1C.3B.2 (MOVE + versão visível no menu) implementado para validação; P1C.3B.3 e P2–P6 pendentes. Preview Phaser jogável apenas após P2B.
+**Status:** P0–P1C.3B.2 integrados à `main`. PR #24: 61 testes verdes; PR #25: **65 testes verdes**, incluindo 408 replays de movimento. A versão **BUILD 1.3.1 · CACHE V15** está no código principal para teste no Pages. P1C.3B.3 e P2–P6 pendentes; a preview Phaser jogável será publicada apenas após P2B.
 **Data do diagnóstico:** 15/10/2026.
 **Acompanhamento GitHub:** [issue #11 — migração Phaser](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/11); [issue #12 — corrigir roteamento PWA](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/12).
 **Objetivo:** migrar a apresentação, a composição das cenas e a entrada para Phaser 4 sem alterar silenciosamente as regras do roguelike, perder os saves ou bloquear o GitHub Pages.
@@ -175,7 +175,18 @@ docs/
 - [ ] Integrar somente após CI verde e validar visualmente no Pages e no PWA instalado (recarregar online antes).
 - [ ] **P1C.3B.3**: migrar ataques direcionados, coleta, recompensas e estados finais para eventos de domínio; replay multi-turno antes da primeira preview Phaser.
 
-**Critério de aceite:** 408 replays idênticos de movimento e loot + suíte de regressão geral verde. Publicar na rota raiz do Pages após aprovação; isso ainda **não** publica a engine Phaser em `/phaser/`.
+**Integrado:** [PR #25](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/25), commit `c30f052` em `main`. [CI #38955997010](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/38955997010) **65/65 testes verdes**, incluindo 408 replays idênticos. A página de produção pode receber a versão PWA v15 após publicação/atualização do cache. A engine Phaser **ainda não** é jogável em `/phaser/`.
+
+
+#### Roteiro de validação no Pages — BUILD 1.3.1
+
+1. Abra [o Pages](https://pedromaintenance.github.io/catacumbas-de-golzdov/) **conectado à internet**; recarregue até ver `BUILD 1.3.1 · CACHE V15 · P1C.3B.2` abaixo do estado offline. Se a versão não aparecer, feche/reabra o PWA instalado após atualização online.
+2. Inicie uma expedição com cada uma das três classes e tente andar em parede/limite, entrar em sala, pisar sobre moedas e consumir poção; nenhum movimento inválido deve consumir um turno.
+3. Ande contra um inimigo: deve atacar em vez de mover; teste depois espera e poção verificando que inimigos agem **uma vez** por turno.
+4. Teste coleta de equipamento, armadilhas, relicário, altar e escada. A expedição deve continuar normalmente após fechar e reabrir o PWA; importe/exporte um save com cuidado, sem sobrescrever um backup.
+5. Confirme que o status `✓ PRONTO PARA JOGAR SEM INTERNET` aparece e teste a abertura offline. **Não validado aqui em dispositivo físico:** CI não substitui teste de Android/iOS/Xbox e serviço GitHub Pages propagado.
+
+**Não confundir build e cache:** o texto no menu informa a versão do HTML carregado, não prova por si só que todos os assets estão atualizados; o status offline e o teste sem rede completam a verificação.
 
 ### P1C.3B.1 — Despachante de ações e eventos (16/10/2026)
 
@@ -239,7 +250,7 @@ docs/
 | P1C.2 | **Concluído**: seis habilidades, custos de foco, talentos, raiz, sono e AOE | [PR #21](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/21) e 53/53 testes verdes |
 | P1C.3A | **Concluído** — IA e `worldTurn` compartilhados | 660 replays, 57/57 testes e [PR #23](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/23) |
 | P1C.3B.1 | **Concluído**: WAIT/POTION e eventos ordenados | 192 replays, PR #24 e CI 61/61 |
-| P1C.3B.2 | MOVE, entrada de salas, coleta delegada e build visível (em revisão) | 408 replays, versão 1.3.1 e CI verde |
+| P1C.3B.2 | **Concluído**: MOVE, salas, coleta delegada e build visível | PR #25, 408 replays, CI **65/65**, build 1.3.1 |
 | P1C.3B.3 | Ataque, coleta, recompensas e finais via eventos puros | Replays de sequências, saves v1/v2 e 3 classes |
 | P2A | Cena Phaser com câmera, texturas e mapa; usar o mesmo estado do núcleo | Preview não substitui a versão legada |
 | P2B | Movimento, combate básico, HUD, controle e save isolado na preview | Primeira build realmente jogável em `/phaser/` |
@@ -365,4 +376,4 @@ Em cada PR registrar:
 - Critério objetivo para liberar merge e regressão coberta.
 - Atualização de `docs/ROADMAP_PHASER.md` e ligação ao roadmap de conteúdo `docs/ROADMAP_2.0.md`.
 
-**Progresso:** P0, P1A ([PR #15](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/15)), P1B ([PR #17](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/17)), P1C.1 ([PR #19](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/19)) e P1C.2 ([PR #21](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/21)) concluídos com CI verde. IA e turnos P1C.3A concluídos ([PR #23](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/23)); despacho WAIT/POTION P1C.3B.1 concluído ([PR #24](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/24)); MOVE P1C.3B.2 em revisão, P1C.3B.3 e P2–P6 pendentes. Verificação real do Pages/PWA e Xbox físico ainda pendentes.
+**Progresso:** P0, P1A ([PR #15](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/15)), P1B ([PR #17](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/17)), P1C.1 ([PR #19](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/19)) e P1C.2 ([PR #21](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/21)) concluídos com CI verde. IA e turnos P1C.3A concluídos ([PR #23](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/23)); despacho WAIT/POTION P1C.3B.1 concluído ([PR #24](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/24)); MOVE P1C.3B.2 concluído ([PR #25](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/25), 65 testes verdes), P1C.3B.3 e P2–P6 pendentes. Verificação real do Pages/PWA e Xbox físico ainda pendentes.
