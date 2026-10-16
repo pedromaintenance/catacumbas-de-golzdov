@@ -1,6 +1,6 @@
 # Roadmap de migração — Catacumbas de Golzdov → Phaser 4
 
-**Status:** proposta técnica, nenhuma migração implementada ainda.
+**Status:** P0 em implementação; migração para Phaser ainda não iniciada.
 **Data do diagnóstico:** 15/10/2026.
 **Acompanhamento GitHub:** [issue #11 — migração Phaser](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/11); [issue #12 — corrigir roteamento PWA](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/12).
 **Objetivo:** migrar a apresentação, a composição das cenas e a entrada para Phaser 4 sem alterar silenciosamente as regras do roguelike, perder os saves ou bloquear o GitHub Pages.
@@ -131,13 +131,15 @@ docs/
 
 ### P0 — Proteger o Pages atual (pré-requisito; PR isolado)
 
-- [ ] Corrigir o fallback de `navigate` no SW legado para não devolver index antigo sob `/phaser/`.
-- [ ] Testar root online/offline e navegação para subpasta, com SW antigo já ativo.
-- [ ] Diagnosticar se Pages serve `main/(root)` ou Actions; documentar decisão de deploy da preview.
-- [ ] Criar smoke test de rotas e de cache para regressões.
+- [x] Corrigir o fallback de `navigate` no SW legado para não devolver index antigo sob `/phaser/`. (cache v8)
+- [x] Simular root online/offline, subrotas, instalação, ativação e cache antigo em testes de Node. **Teste manual com PWA previamente instalado ainda pendente.**
+- [ ] Confirmar pelo painel de Settings → Pages se o site serve `main/(root)` ou Actions. A conexão disponível com GitHub não expõe as configurações do Pages; URL pública não foi acessível pelo verificador automático. **Não inferir modo de deploy.**
+- [x] Criar smoke test de rotas e de cache para regressões (`tests/sw-routing.test.cjs`).
 - [ ] Criar link de preview **apenas quando existir uma página funcional**.
 
 **Aceite:** jogo atual continua utilizável; subpasta acessível sem ser sequestrada pelo SW; saves não mudam. Publicar na `main` porque este PR é uma correção funcional.
+**Registro P0 (15/10/2026):** O handler de `navigate` só chama `respondWith` quando a URL requisitada é exatamente a raiz do projeto ou `index.html`; para `/phaser/` e quaisquer páginas da subpasta ele se abstém, permitindo navegação pela rede ou pelo futuro service worker independente. `golzdov-offline-v8` elimina apenas caches antigos com prefixo legado; cache da futura engine permanece intocado. O jogo principal continua sem alteração de gameplay e as chaves de save existentes não foram alteradas. Deploy real e teste em dispositivo físico ainda a confirmar.
+
 
 ### P1 — Extrair o núcleo determinístico (2–3 PRs)
 
