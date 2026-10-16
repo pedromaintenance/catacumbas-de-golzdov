@@ -1,5 +1,5 @@
-/* Catacumbas de Golzdov — PWA 1.2.3 */
-const CACHE = 'golzdov-offline-v7';
+/* Catacumbas de Golzdov — PWA 1.2.4 — subrotas protegidas para Phaser */
+const CACHE = 'golzdov-offline-v8';
 const PRECACHE = [
   './', './index.html', './gamepad.js', './relic-effects.js', './relic-offers.js', './manifest.webmanifest',
   './icons/icon-192.png', './icons/icon-512.png'
@@ -32,7 +32,12 @@ self.addEventListener('fetch', event => {
   if (!url.pathname.startsWith(root.pathname)) return;
 
   if (event.request.mode === 'navigate') {
-    // O HTML completo do jogo é servido diretamente do cache, mesmo sem rede.
+    // O jogo legado controla apenas a própria tela inicial.
+    // Nunca entregar o index.html legado em /phaser/ ou outras subrotas do Pages.
+    // Essas rotas devem carregar seu HTML real ou ser controladas pelo seu próprio SW.
+    const homePath = root.pathname;
+    const indexPath = new URL('./index.html', root).pathname;
+    if (url.pathname !== homePath && url.pathname !== indexPath) return;
     event.respondWith((async () => {
       const cache = await caches.open(CACHE);
       const saved = await cache.match(new URL('./index.html', root));
