@@ -1,6 +1,6 @@
 # Roadmap de migração — Catacumbas de Golzdov → Phaser 4
 
-**Status:** P0 e P1A integrados à main ([PR #14](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/14), [PR #15](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/15)), com CI aprovado. P1B/P1C e preview Phaser ainda pendentes.
+**Status:** P0 e P1A integrados à main com CI aprovado. P1B implementado em branch para testes; P1C e preview Phaser pendentes.
 **Data do diagnóstico:** 15/10/2026.
 **Acompanhamento GitHub:** [issue #11 — migração Phaser](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/11); [issue #12 — corrigir roteamento PWA](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/12).
 **Objetivo:** migrar a apresentação, a composição das cenas e a entrada para Phaser 4 sem alterar silenciosamente as regras do roguelike, perder os saves ou bloquear o GitHub Pages.
@@ -153,6 +153,16 @@ docs/
 - [ ] Implementar `dispatch(action)` puramente testável com snapshots de combate (P1B/P1C).
 
 **Integração:** concluída pelo [PR #15](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/15), commit `10abed3`. **GitHub Actions: 42/42 testes aprovados.** O jogo legado continua na raiz e inclui o novo núcleo; **não existe preview Phaser jogável ainda**.
+#### Incremento P1B — Visibilidade e navegação (15/10/2026)
+
+- [x] Extrair linha de visão (LOS), neblina/tiles visíveis e pathfinding BFS para `core/navigation.js`, independente de DOM, Canvas, Phaser, RNG e armazenamento.
+- [x] Fazer jogo legado delegar cálculos de visão e percurso ao módulo; manter `reveal()` marcando o mapa como explorado e HUD/controle como adaptadores.
+- [x] Gravar 50 referências anteriores à extração (10 seeds × 5 estratos), comparando neblina, áreas visíveis, LOS e BFS para 16 destinos por mapa.
+- [x] Cobrir caminhos bloqueados por inimigos, destinos não revelados e paredes em testes próprios.
+- [x] Atualizar cache offline para `golzdov-offline-v10` e testes da versão instalada.
+- [ ] Extrair combate, IA, turnos e dispatch(action) sem dependências gráficas (P1C).
+
+**Aceite:** resultados da navegação iguais ao comportamento original; regressão completa aprovada em CI; sem perda de saves nem mudança de gameplay. A versão Phaser ainda não está jogável.
 ### P1 — Extrair o núcleo determinístico (2–3 PRs)
 
 - [ ] Separar RNG, entidades, estado, geração de dungeon, visibilidade e pathfinding dos acessos a Canvas/DOM.
