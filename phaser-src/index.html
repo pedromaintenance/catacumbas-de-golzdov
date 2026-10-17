@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
 <meta name="theme-color" content="#0b0c11"/>
 <meta name="description" content="Catacumbas de Golzdov — prévia jogável isolada em Phaser 4"/>
-<title>Golzdov · Phaser P3A.2 — Talentos</title>
+<title>Golzdov · Phaser P3B.1 — Itens e relíquias</title>
 </head><body>
 <main class="app">
 <header class="masthead"><p class="eyebrow">CARCAÇA / CATACUMBAS DE GOLZDOV</p>
@@ -13,7 +13,7 @@
 <section class="panel" aria-labelledby="scene-heading">
 <div class="panel-heading"><div><span class="marker">EXPEDIÇÃO EXPERIMENTAL</span>
 <h2 id="scene-heading">Costelas do Silêncio</h2><p class="class-status">⚔ <strong id="hero-class">Vigia de Thargrid</strong> · <span id="hero-weapon">Martelo das Montanhas</span></p></div>
-<span class="prototype">P3A.2 · ASCENSÃO E TALENTOS</span></div>
+<span class="prototype">P3B.1 · ITENS E RELICÁRIOS</span></div>
 <div class="hud" aria-label="Estado da expedição">
 <div class="resource hp" aria-label="Pontos de vida"><span>♥ VIDA <b id="hero-hp">43 / 43</b></span><div class="resource-track"><div id="hp-fill" class="resource-fill"></div></div></div>
 <div class="resource focus" aria-label="Foco"><span>✧ FOCO <b id="hero-focus">8 / 8</b></span><div class="resource-track"><div id="focus-fill" class="resource-fill"></div></div></div>
@@ -26,6 +26,15 @@
   <h2 id="ending-title">O osso vence.</h2><p id="ending-summary"></p>
   <p class="ending-hint">Sua história ainda ecoa na Carcaça.</p>
   <button data-preview-action="restart">↺ NOVA EXPEDIÇÃO</button></div>
+</div>
+<div id="item-selection" class="item-selection hidden" role="dialog" aria-modal="true" aria-labelledby="item-title">
+ <div class="item-selection-content">
+  <span id="item-kicker" class="marker">A CARCAÇA OFERECE UMA ESCOLHA</span>
+  <h2 id="item-title">As inscrições despertam.</h2>
+  <p id="item-desc" class="class-copy">Selecione uma opção para prosseguir.</p>
+  <div id="item-options" class="item-options" aria-label="Opções de interação"></div>
+  <p class="class-warning">Teclado: 1–9, setas e Enter · Controle: direcional e A · Toque: escolha uma carta.</p>
+ </div>
 </div>
 <div id="talent-selection" class="talent-selection hidden" role="dialog" aria-modal="true" aria-labelledby="talent-title">
  <div class="talent-selection-content">
@@ -61,6 +70,7 @@
 <button id="skill1-button" data-preview-action="skill1" aria-label="Habilidade dois">✧ HABILIDADE 2</button>
 <button data-preview-action="wait" aria-label="Esperar um turno">◈ ESPERAR</button>
 <button data-preview-action="potion" aria-label="Beber poção">♥ POÇÃO</button>
+<button data-preview-action="interact" aria-label="Interagir com objeto do local">✥ INTERAGIR</button>
 <button data-preview-action="restart" class="danger" aria-label="Iniciar nova expedição">↺ REINICIAR</button>
 </div></div>
 <div class="panel-footer"><span id="scene-status" aria-live="polite">Entrando na Carcaça…</span>
@@ -68,10 +78,10 @@
 <div id="recent-log" class="log" aria-live="polite"></div>
 </section>
 <footer class="note"><p><b>Teclado:</b> setas/WASD para mover; 1/2 para habilidades, clique no alvo ou F para confirmar, Esc cancela mira; F/Enter para atacar;
-H/P para poção; Espaço para esperar; 1/2/3 para escolher talentos na ascensão. <b>Xbox:</b> D-pad/analógico, A atacar,
-X poção, Y/B habilidades, RB esperar. Toque nos botões ou clique em uma casa adjacente.</p>
+H/P para poção; E para interagir na casa atual; Espaço para esperar; 1/2/3 para escolher talentos na ascensão. <b>Xbox:</b> D-pad/analógico, A atacar,
+X poção, Y/B habilidades, RB esperar. Clique em um item ou destino explorado para caminhar até ele, ou toque na casa vizinha.</p>
 <p>Os turnos só avançam após uma ação válida. Save automático independente da versão clássica.
-A preview inclui três classes, seis habilidades e escolhas de ascensão com nove talentos exclusivos de classe e três melhorias universais. Relíquias, mercador, escolhas narrativas e finais completos ainda virão nas próximas etapas.</p>
+A preview inclui talentos, coleta integral de itens, armadilhas, escolha e substituição de relíquias, altar e escadaria com confirmação. Mercador e finais narrativos completos permanecem em desenvolvimento.</p>
 <a href="../">Voltar ao jogo clássico</a></footer>
 </main>
 <script type="module" src="./src/main.js"></script>
