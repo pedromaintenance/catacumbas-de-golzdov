@@ -9,11 +9,11 @@
 <main class="app">
 <header class="masthead"><p class="eyebrow">CARCAÇA / CATACUMBAS DE GOLZDOV</p>
 <h1>O osso ainda <em>respira.</em></h1>
-<p class="subtitle">PRÉVIA JOGÁVEL · PHASER 4 · ARTE DO JOGO CLÁSSICO</p></header>
+<p class="subtitle">PRÉVIA JOGÁVEL · PHASER 4 · TRÊS CLASSES</p></header>
 <section class="panel" aria-labelledby="scene-heading">
 <div class="panel-heading"><div><span class="marker">EXPEDIÇÃO EXPERIMENTAL</span>
-<h2 id="scene-heading">Costelas do Silêncio</h2></div>
-<span class="prototype">P2B.2 · ARTE RESTAURADA</span></div>
+<h2 id="scene-heading">Costelas do Silêncio</h2><p class="class-status">⚔ <strong id="hero-class">Vigia de Thargrid</strong> · <span id="hero-weapon">Martelo das Montanhas</span></p></div>
+<span class="prototype">P3A.1 · CLASSES E MAGIA</span></div>
 <div class="hud" aria-label="Estado da expedição">
 <div class="resource hp" aria-label="Pontos de vida"><span>♥ VIDA <b id="hero-hp">43 / 43</b></span><div class="resource-track"><div id="hp-fill" class="resource-fill"></div></div></div>
 <div class="resource focus" aria-label="Foco"><span>✧ FOCO <b id="hero-focus">8 / 8</b></span><div class="resource-track"><div id="focus-fill" class="resource-fill"></div></div></div>
@@ -26,7 +26,21 @@
   <h2 id="ending-title">O osso vence.</h2><p id="ending-summary"></p>
   <p class="ending-hint">Sua história ainda ecoa na Carcaça.</p>
   <button data-preview-action="restart">↺ NOVA EXPEDIÇÃO</button></div>
+</div>
+<div id="class-selection" class="class-selection hidden" role="dialog" aria-modal="true" aria-labelledby="class-title">
+ <div class="class-selection-content">
+  <span class="marker">UMA HISTÓRIA COMEÇA AQUI</span>
+  <h2 id="class-title">Escolha seu destino.</h2>
+  <p class="class-copy">Três origens, três formas de enfrentar a Carcaça. O novo herói terá um save próprio, separado do jogo clássico.</p>
+  <div class="class-cards">
+   <button data-preview-class="vigia" class="class-card"><strong>⚒ VIGIA DE THARGRID</strong><small>GUARDIÃO DAS MONTANHAS</small><span>43 PV · 8 FOCO · DEF 3</span><em>Martelo Rúnico · Bastião</em><span>Resistência e combate corpo a corpo</span><b>1 · ESCOLHER VIGIA</b></button>
+   <button data-preview-class="arcanista" class="class-card"><strong>夢 ARCANISTA YOKAI</strong><small>LEITOR DOS NOMES ANTIGOS</small><span>27 PV · 19 FOCO · DEF 1</span><em>Glifo de Luz · Sonho Afundado</em><span>Magia e controle de área</span><b>2 · ESCOLHER ARCANISTA</b></button>
+   <button data-preview-class="errante" class="class-card"><strong>➶ ERRANTE DE IRONWOOD</strong><small>CAÇADOR DA RESISTÊNCIA</small><span>32 PV · 11 FOCO · DEF 1</span><em>Tiro Fantasma · Círculo de Espinhos</em><span>Arco de longo alcance e raízes</span><b>3 · ESCOLHER ERRANTE</b></button>
+  </div>
+  <p class="class-warning">Ao escolher uma classe, uma expedição anterior desta preview será substituída. A campanha HTML permanece intocada.</p>
+ </div>
 </div></div>
+<div id="aim-hint" class="aim-hint hidden" aria-live="polite"></div>
 <div class="controls" aria-label="Controles de jogo">
 <div class="dpad"><button data-preview-action="up" aria-label="Mover para cima">▲</button>
 <div><button data-preview-action="left" aria-label="Mover para a esquerda">◀</button>
@@ -34,6 +48,8 @@
 <button data-preview-action="right" aria-label="Mover para a direita">▶</button></div></div>
 <div class="actions">
 <button data-preview-action="attack" aria-label="Atacar inimigo próximo">⚔ ATACAR</button>
+<button id="skill0-button" data-preview-action="skill0" aria-label="Habilidade um">✧ HABILIDADE 1</button>
+<button id="skill1-button" data-preview-action="skill1" aria-label="Habilidade dois">✧ HABILIDADE 2</button>
 <button data-preview-action="wait" aria-label="Esperar um turno">◈ ESPERAR</button>
 <button data-preview-action="potion" aria-label="Beber poção">♥ POÇÃO</button>
 <button data-preview-action="restart" class="danger" aria-label="Iniciar nova expedição">↺ REINICIAR</button>
@@ -42,11 +58,11 @@
 <span>SEED <b id="scene-seed">—</b></span></div>
 <div id="recent-log" class="log" aria-live="polite"></div>
 </section>
-<footer class="note"><p><b>Teclado:</b> setas/WASD para mover; F/Enter para atacar;
+<footer class="note"><p><b>Teclado:</b> setas/WASD para mover; 1/2 para habilidades, clique no alvo ou F para confirmar, Esc cancela mira; F/Enter para atacar;
 H/P para poção; Espaço para esperar. <b>Xbox:</b> D-pad/analógico, A atacar,
-X poção, RB esperar. Toque nos botões ou clique em uma casa adjacente.</p>
+X poção, Y/B habilidades, RB esperar. Toque nos botões ou clique em uma casa adjacente.</p>
 <p>Os turnos só avançam após uma ação válida. Save automático independente da versão clássica.
-Esta é uma prévia de combate e exploração; talentos, mercador, relíquias,
+Esta é uma prévia de combate e exploração para três classes e seis habilidades; talentos, mercador, relíquias,
 escolhas narrativas e balanceamento completo virão nas próximas etapas.</p>
 <a href="../">Voltar ao jogo clássico</a></footer>
 </main>
