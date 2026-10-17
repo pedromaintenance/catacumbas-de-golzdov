@@ -15,7 +15,7 @@ no branch `main`, a workflow constrói o bundle e atualiza **somente**
 - Gamepad: D-pad ou analógico esquerdo, A atacar, X poção e RB esperar.
 - `?seed=305419896&floor=4` inicia nova expedição nesse estrato **quando não houver save de preview**. REINICIAR apaga apenas o save de preview.
 
-## Novidades P3B.2 — mercador entre estratos (em validação)
+## Novidades P3B.2 — mercador entre estratos (integrada, 127/127 testes)
 
 - Na escada dos estratos 1–4, escolha **MERCADOR** para abrir seis serviços pelos preços oficiais do HTML: 20/16/16/38/38/54 âmbar.
 - O estoque de duas inscrições é único por estrato. Recusar, reabrir e recarregar o save não muda a oferta. Troca de relíquias só debita 54 após confirmar a equipagem e as substituições.

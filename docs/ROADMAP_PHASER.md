@@ -13,7 +13,7 @@
 - [ ] Verificar via HTTP/visual a atualização no Pages e em Xbox/celular reais; sem presumir confirmação.
 - [ ] Próximos blocos P3: relíquias e gatilhos (`onAttack`, `onRoot`, `onDefend` etc.), loot/altar/mercador, finais Luz/Raiz, importação de cópia e paridade dos replays. **Preview não substitui o jogo clássico.**
 
-## P3B.2 — Mercador e economia entre estratos (16/10/2026; em validação)
+## P3B.2 — Mercador e economia entre estratos (16/10/2026; integrada)
 
 - [x] Integrar à escada o mercador do HTML clássico com os mesmos seis serviços e preços: poção (◈20), cura de 18 PV (◈16), foco cheio (◈16), ataque +1 (◈38), defesa +1 (◈38) e relicário (◈54).
 - [x] Manter a compra por ação determinística, sem turno nem RNG extra; impedir compras sem saldo e permitir retorno à escadaria sem descer.
@@ -21,7 +21,7 @@
 - [x] Cobrar 54 âmbar **somente após a equipagem confirmada**, inclusive em trocas por slots: nenhuma cobrança ao escolher, marcar remoções, recusar ou cancelar a transação. O estoque esgotado não concede recompensas gratuitas.
 - [x] Usar o mesmo modal de decisões para mouse, teclado (1–9/Enter/Esc), toque e gamepad; exibir saldo e falta de âmbar.
 - [x] Testes de paridade dos seis preços com o HTML, compras, saldo insuficiente, persistência de ofertas, cobrança única, mercado esgotado e transação de troca.
-- [ ] CI, compilação Phaser e merge aprovados; publicação automática isolada em `/phaser/`.
+- [x] [PR #40](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/40) integrado à `main` (`e8e9c4d`); [CI da branch #38992226895](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/38992226895) **127/127** testes e build Phaser/Vite. [Workflow pós-merge #38992297739](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/38992297739) publicou `phaser/index.html`, `assets/index-DMglLbkv.js` e `assets/index-BbSzixHU.css` na `main`. QA HTTP/visual real ainda pendente.
 - [ ] QA HTTP/visual real no Pages e controle/celular físicos.
 - [ ] Próximas entregas: finais narrativos Luz/Raiz e pós-jogo, fluxos de progresso, replays completos e balanceamento. HTML/PWA clássico continuam preservados.
 

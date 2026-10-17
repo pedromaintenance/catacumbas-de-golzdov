@@ -14,9 +14,9 @@ A próxima atualização Phaser introduz os **nove talentos exclusivos de classe
 
 O Phaser passa a usar o núcleo canônico de loot para coletar moedas, poções, cura, foco, armas, armaduras, armadilhas e relíquias. A UI de relicário permite escolher, recusar e substituir com confirmação (4 slots e raridades originais); altar e escada têm interação por decisão. Tecla **E**, botão INTERAGIR ou clique em destino explorado acionam a interação/rota, interrompida por combate ou modal. HUD mostra âmbar e ocupação da bolsa. [PR #39](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/39) integrado com **117/117 testes verdes**; o workflow pós-merge colocou os novos bundles no diretório `/phaser/` da main. QA de navegador e controles físicos permanece pendente. O HTML estável e as chaves de save clássico continuam preservados.
 
-### P3B.2 — Mercador entre estratos (em validação)
+### P3B.2 — Mercador entre estratos (integrada)
 
-O mercador está disponível na escada dos estratos I–IV da preview Phaser, com os seis produtos/preços da versão HTML clássica. As duas ofertas de relíquia não são ressorteadas ao recusar ou reabrir; o custo de ◈54 só sai da bolsa quando a equipagem é confirmada, inclusive em trocas com slots cheios. Compras não gastam turno e saldo insuficiente não altera a expedição. A versão estável HTML e suas chaves de save permanecem intocadas. CI e publicação em `/phaser/` dependem da validação do PR.
+O mercador está disponível na escada dos estratos I–IV da preview Phaser, com os seis produtos/preços da versão HTML clássica. As duas ofertas de relíquia não são ressorteadas ao recusar ou reabrir; o custo de ◈54 só sai da bolsa quando a equipagem é confirmada, inclusive em trocas com slots cheios. Compras não gastam turno e saldo insuficiente não altera a expedição. A versão estável HTML e suas chaves de save permanecem intocadas. [PR #40](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/40) integrado com **127/127 testes verdes**. Bundle publicado na pasta `/phaser/` da main via [workflow #38992297739](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/38992297739); QA externo do Pages continua pendente.
 
 ## Evolução 2.0 (em desenvolvimento)
 
