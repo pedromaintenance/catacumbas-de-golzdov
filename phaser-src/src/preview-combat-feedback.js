@@ -10,10 +10,12 @@ const colors=Object.freeze({
 const sane=(v)=>Number.isFinite(v)?v:0;
 export function combatCues(events,max=12){
  if(!Array.isArray(events))return [];
+ const limit=Number.isInteger(max)?Math.max(0,Math.min(24,max)):12;
+ if(!limit)return [];
  return events.filter(e=>e?.type==='combat-feedback'&&
   Object.hasOwn(colors,e.kind)&&Number.isInteger(e.x)&&Number.isInteger(e.y)&&
   e.x>=0&&e.y>=0&&e.x<WIDTH&&e.y<HEIGHT
- ).slice(-Math.max(0,Math.min(24,max))).map(e=>{
+ ).slice(-limit).map(e=>{
   const amount=Math.max(0,Math.floor(sane(e.amount)));
   let text='',description='';
   switch(e.kind){
