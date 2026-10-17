@@ -29,14 +29,15 @@ export class DungeonScene extends Phaser.Scene{
   this.run=existing||initialPreviewRun(fixedSeed(),startFloor());
   this.previewRun=this.run;
   normalizePreviewOutcome(this.run);
+  normalizePreviewOutcome(this.run);
   this.visible=previewVisible(this.run);
   this.worldCanvas=document.createElement('canvas');
   this.worldCanvas.width=WIDTH*TILE;this.worldCanvas.height=HEIGHT*TILE;
-  this.worldCtx=this.worldCanvas.getContext('2d');
-  this.worldCtx.imageSmoothingEnabled=false;
+  this.worldCtx=this.worldCanvas.getContext('2d');this.worldCtx.imageSmoothingEnabled=false;
   this.textures.addCanvas('classic-world-p3',this.worldCanvas);
   this.worldImage=this.add.image(0,0,'classic-world-p3').setOrigin(0).setDepth(0);
-  this.heroCanvas=document.createElement('canvas');this.heroCanvas.width=64;this.heroCanvas.height=64;
+  this.heroCanvas=document.createElement('canvas');
+  this.heroCanvas.width=64;this.heroCanvas.height=64;
   this.heroCtx=this.heroCanvas.getContext('2d');this.heroCtx.imageSmoothingEnabled=false;
   this.textures.addCanvas('classic-hero-p3',this.heroCanvas);
   this.hero=this.add.image(0,0,'classic-hero-p3').setDisplaySize(TILE*1.38,TILE*1.38).setDepth(10);
@@ -55,6 +56,7 @@ export class DungeonScene extends Phaser.Scene{
    else if(key===' '||key==='.') {e.preventDefault();this.perform({type:'WAIT'});}
    else if(key==='h'||key==='p')this.perform({type:'POTION'});
    else if(key==='f'||key==='enter'){e.preventDefault();this.attackNearest();}
+   else if(key==='r'){e.preventDefault();this.restart();}
    else if(key==='r'){e.preventDefault();this.restart();}
   };
   document.addEventListener('keydown',onKey);
@@ -140,6 +142,18 @@ export class DungeonScene extends Phaser.Scene{
    'scene-seed':g.seed.toString(16).toUpperCase().padStart(8,'0')
   };
   for(const [id,value] of Object.entries(pairs))if(el(id))el(id).textContent=value;
+  const bars={'hp-fill':p.maxhp>0?p.hp/p.maxhp:0,'focus-fill':p.maxmana>0?p.mana/p.maxmana:0};
+  for(const [id,ratio] of Object.entries(bars))if(el(id))el(id).style.width=(Math.max(0,Math.min(1,ratio))*100)+'%';
+  const end=el('run-ending');
+  if(end){
+   end.classList.toggle('hidden',!g.over);
+   if(g.over){
+    const victory=g.previewOutcome==='victory';
+    if(el('ending-kicker'))el('ending-kicker').textContent=victory?'O NOME SEPULTADO':'SUA HISTÓRIA FOI INTERROMPIDA';
+    if(el('ending-title'))el('ending-title').textContent=victory?'O nome resiste.':'O osso vence.';
+    if(el('ending-summary'))el('ending-summary').textContent='Estrato '+g.floor+' · '+g.turn+' turnos · '+g.kills+' abates';
+   }
+  }
   const bars={'hp-fill':p.maxhp>0?p.hp/p.maxhp:0,'focus-fill':p.maxmana>0?p.mana/p.maxmana:0};
   for(const [id,ratio] of Object.entries(bars))if(el(id))el(id).style.width=(Math.max(0,Math.min(1,ratio))*100)+'%';
   const end=el('run-ending');
