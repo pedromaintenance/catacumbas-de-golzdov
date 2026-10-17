@@ -13,6 +13,18 @@
 - [ ] Verificar via HTTP/visual a atualização no Pages e em Xbox/celular reais; sem presumir confirmação.
 - [ ] Próximos blocos P3: relíquias e gatilhos (`onAttack`, `onRoot`, `onDefend` etc.), loot/altar/mercador, finais Luz/Raiz, importação de cópia e paridade dos replays. **Preview não substitui o jogo clássico.**
 
+## P4A.3 — Olhos na Escuridão: condições, ameaças e combate por toque (17/10/2026; em validação)
+
+- [x] Novo painel expansível **OLHOS NA ESCURIDÃO** com até oito inimigos **atualmente visíveis**, ordenados por proximidade e ID, mostrando nome canônico, PV atual/máximo, distância e coordenadas. Mostra total visível sem listar o que permanece na neblina.
+- [x] Mostrar estados extraídos diretamente da run: **Atordoado**, **Enraizado**, **Chamas** e **Recarga** (esta última apenas para inimigos com ataque à distância), com número de turnos. Mostrar também Bastião, Revanche e Exaustão do herói.
+- [x] Botão contextual **ATACAR** em cada inimigo visível, habilitado somente com alcance e linha de visão válidos, sem seleção/aim/mercador/talento pendente. Dispara `previewAction({type:'ATTACK'})`, sem regras paralelas ou gasto de RNG ao inspecionar.
+- [x] Corrigir um bug visual anterior: os glifos de atordoamento/chamas eram enviados para uma consulta de visibilidade com coordenadas **fracionárias**, ficando invisíveis. Agora os glifos são desenhados após confirmar a visibilidade do inimigo, incluindo o novo marcador de raízes `根` e recarga `⌛`.
+- [x] Projeção `preview-status.js` pura, sem DOM, storage ou RNG; interface constrói elementos com `textContent`, suporte a teclado/toque/leitor de tela e layout responsivo.
+- [x] Testes de condições, limite/ordenação, neblina, alcance e obstrução, atualização da run no ataque, símbolos Canvas vistos/ocultos, pureza da projeção e conectividade da UI.
+- [ ] Validar CI, compilar Phaser/Vite e publicar somente `/phaser/` após merge aprovado.
+- [ ] QA real no Pages/celular/Xbox: conferir ícones pequenos, painel, scroll, foco em botões, alvos ocultos e condição alterando por turno.
+- [ ] Depois: replays de combate em cinco estratos com inimigos reais, PWA offline e controles/legibilidade mobile, preservando a edição HTML/PWA clássica.
+
 ## P4A.2 — Marcas do Combate: feedback de impacto e acessibilidade (17/10/2026; integrada)
 
 - [x] Emitir sinais `combat-feedback` **a partir de mutações reais do motor**: acerto e dano de inimigos, crítico, erro, abate, dano sofrido e esquiva; sem interpretar mensagens para inferir resultados, alterar cálculos, turno ou RNG.
