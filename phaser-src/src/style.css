@@ -178,7 +178,7 @@ body::before{content:"";pointer-events:none;position:fixed;inset:0;opacity:.08;b
 }
 
 /* P3B.3 — palavras finais, com foco visível e rolagem no celular. */
-.ending{overflow:auto;align-items:start;z-index:16}
+.ending{overflow:auto;align-items:start;z-index:9}
 .ending-content{max-width:570px;margin:auto;text-align:left;max-height:100%;overflow:auto}
 .ending-content h2{text-align:center}
 .ending-content #ending-story{font-size:14px;line-height:1.68;color:#e0cfc4}
