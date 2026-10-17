@@ -155,10 +155,12 @@ test('relíquias disparam onRoot e onTurnStart no núcleo Phaser',async()=>{
 });
 test('modal e auto-roteamento aparecem na cena; a preview mantém chaves de save isoladas',()=>{
  const html=read('phaser-src/index.html'),scene=read('phaser-src/src/scenes/DungeonScene.js');
- const adapter=read('phaser-src/src/preview-item-ui.js');
+ const adapter=read('phaser-src/src/preview-item-ui.js'),
+  route=read('phaser-src/src/preview-route.js');
  for(const id of ['item-selection','item-options','hero-coins','hero-relic-slots'])
   assert.match(html,new RegExp('id="'+id+'"'));
- assert.match(scene,/findPath\(/);
+ assert.match(route,/findPath\(/);
+ assert.match(scene,/planPreviewRoute\(/);
  assert.match(scene,/type:'INTERACT'/);
  assert.match(scene,/itemUI\.active\(\)/);
  assert.match(adapter,/RELIC_CONFIRM/);
