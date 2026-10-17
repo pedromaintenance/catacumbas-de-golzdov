@@ -2,6 +2,10 @@
 
 Esta versão é um PWA de verdade: instala a partir do GitHub Pages e funciona depois **sem conexão**, inclusive depois de fechar e reabrir o aplicativo.
 
+## Preview Phaser P2B.1 — primeiros testes
+
+A [**primeira preview interativa**](https://pedromaintenance.github.io/catacumbas-de-golzdov/phaser/) tem movimento, combate básico, espera, poção, HUD, exploração e save próprio. [PR #34](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/34) foi integrado com **90/90 testes verdes**; `phaser/index.html` e os assets estão na `main`. **A propagação pública do Pages ainda depende de verificação em navegador.** A preview é experimental: apenas Vigia, sem equivalência de talentos, mercador, relíquias e finais. Ela **não é PWA independente** e pode exigir conexão. O jogo clássico 1.3.6/cache v20 e seus saves continuam inalterados.
+
 ## Evolução 2.0 (em desenvolvimento)
 
 A evolução está documentada e acompanhada em:
@@ -26,7 +30,7 @@ A suíte verifica sintaxe, coerência do cache offline, migração de saves anti
 
 A migração de engine está [planejada e em execução](docs/ROADMAP_PHASER.md).
 
-**P2B.1 (prévia jogável experimental em validação):** a pasta [`phaser-src/`](phaser-src/README.md) contém a primeira vertical slice de Phaser 4.2.1/Vite 6.3.1, com movimento, ataque, turnos, HUD e save de preview independente. A CI [#38969595128](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/38969595128) aprovou **84/84 testes** e produziu um artefato de build no [PR #33](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/33); **o PR só disponibilizará `/phaser/` depois do merge com CI verde e publicação do bundle**. Ainda falta a paridade do P3 (classes, habilidades, itens, menus e finais) e PWA independente (P5). A rota principal e o PWA não são modificados por esse incremento.
+**P2B.1 (preview experimental integrada, com bundle em `phaser/`):** a pasta [`phaser-src/`](phaser-src/README.md) contém a primeira vertical slice de Phaser 4.2.1/Vite 6.3.1, com movimento, ataque, turnos, HUD e save de preview independente. A CI [#38969595128](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/38969595128) aprovou **84/84 testes** e produziu um artefato de build no [PR #33](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/33); **o PR só disponibilizará `/phaser/` depois do merge com CI verde e publicação do bundle**. Ainda falta a paridade do P3 (classes, habilidades, itens, menus e finais) e PWA independente (P5). A rota principal e o PWA não são modificados por esse incremento.
  Os incrementos P1A–P1C.3B.3B.2C **não incluem uma interface Phaser jogável**: extrai o RNG para `core/rng.js` e o gerador procedural para `core/dungeon.js`, módulos independentes do navegador reutilizáveis no futuro Phaser. Foram congelados 50 snapshots da geração original para evitar alterações acidentais de seed, spawn e loot. A versão atual continua neste endereço. O service worker do jogo atual não captura as navegações de `/phaser/` e foi atualizado para v20, incluindo os módulos core em cache. Uma preview jogável só será adicionada à subpasta `/phaser/` depois de criar o projeto Phaser/Vite e passar nos testes. A rota experimental **ainda não contém o jogo Phaser**. O plano mantém o save da versão atual intacto durante os testes. Atualize o jogo principal conectado à internet para permitir que o PWA instalado receba o service worker novo. Acompanhe a [issue #11](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/11).
 
 
