@@ -6,6 +6,10 @@ Atualizado em: 15/10/2026. Planejamento detalhado: [GAME_DESIGN_2.0.md](GAME_DES
 
 ## Histórico de execução
 
+- 17/10/2026: **P5B.1 Phaser — A Travessia dos Vivos (em validação)**. Corrigida seleção inicial de classe pelo Xbox (direcional/analógico + A) com indicação da opção, estado conectado/desconectado e bloqueio do A segurado para impedir ataque no primeiro turno; setas + Enter mantidas. Novo replay de QA pelos cinco estratos usa inimigos reais gerados, turnos da IA, combate e decisão do chefe, replays determinísticos e save/load. **Fixture usa buffs e teleporte controlado do herói** para testar transições e portanto não substitui campanha normal, balanceamento nem QA físico. Documentação/CI e publicação condicionadas à validação. HTML/PWA e saves clássicos preservados.
+
+
+
 - 17/10/2026: **P5A.1 Phaser — PWA offline independente (integrada)**. Manifesto e instalação próprios da preview; service worker com escopo `/phaser/` e caches `golzdov-phaser-offline-*`, sem alterar o SW/manifesto/cache do jogo HTML. Build Vite gera lista versionada de JS/CSS/HTML/ícones em cache, fallback offline para a tela da preview e ajuda manual para instalar no Chrome/Edge/Safari. [PR #46](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/46) integrado com **173/173 testes**, build Vite/Phaser e verificador de PWA verdes; [workflow #39035416868](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/39035416868) publicou `sw.js`, manifesto, dois ícones e bundles em `/phaser/`. QA offline real e instalação Android/iOS/desktop ainda pendentes; saves seguem separados.
 
 
