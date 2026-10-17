@@ -11,6 +11,7 @@ import {PREVIEW_ENDING_COPY,normalizePreviewEnding} from '../preview-endings.js'
 import {newPreviewSessionId,readPreviewHistory,archivePreviewRun,finishedPreviewRun} from '../preview-history.js';
 import {planPreviewRoute,nearPreviewThreat,routeCoordinates} from '../preview-route.js';
 import {combatCues,combatAnnouncement} from '../preview-combat-feedback.js';
+import {previewThreats} from '../preview-status.js';
 const TILE=36;
 const P={
  rock:0x11131d,wall:0x2c3343,floor:0x302b38,grid:0x4f4555,
@@ -157,6 +158,29 @@ export class DungeonScene extends Phaser.Scene{
    if(open)this.syncHistory();
   };
   chronicleToggle?.addEventListener('click',onChronicleToggle);
+  const threatToggle=el('threat-toggle'),threatList=el('threat-list');
+  const onThreatToggle=()=>{
+   if(!threatToggle||!threatList)return;
+   const expanded=threatList.classList.contains('hidden');
+   threatList.classList.toggle('hidden',!expanded);
+   threatToggle.setAttribute('aria-expanded',String(expanded));
+   threatToggle.textContent=expanded?'OCULTAR AMEAÇAS ▴':'VER AMEAÇAS ▾';
+   if(expanded)this.syncThreats();
+  };
+  const onThreatClick=e=>{
+   const button=e.target.closest('button[data-preview-enemy-id]');
+   if(!button||!threatList?.contains(button)||button.disabled)return;
+   if(this.classSelectionOpen||this.run.over||this.aim!==null||
+    this.run.pendingTalentChoices?.length||this.itemUI.active())return;
+   const id=Number(button.dataset.previewEnemyId);
+   const target=previewThreats(this.run,this.visible,30).threats
+    .find(t=>t.id===id&&t.canAttack);
+   if(!target)return this.report('O alvo não está mais ao alcance ou à vista.');
+   this.cancelAutoRoute();
+   this.perform({type:'ATTACK',enemyId:id});
+  };
+  threatToggle?.addEventListener('click',onThreatToggle);
+  threatList?.addEventListener('click',onThreatClick);
   const finalChoices=el('ending-choices');
   const onEndingClick=e=>{
    const button=e.target.closest('button[data-preview-ending]');
@@ -173,6 +197,8 @@ export class DungeonScene extends Phaser.Scene{
    this.clearCombatFeedback();
    talentList?.removeEventListener('click',onTalentClick);
    chronicleToggle?.removeEventListener('click',onChronicleToggle);
+   threatToggle?.removeEventListener('click',onThreatToggle);
+   threatList?.removeEventListener('click',onThreatClick);
    finalChoices?.removeEventListener('click',onEndingClick);
   });
   this.draw();this.sync();
@@ -364,6 +390,7 @@ export class DungeonScene extends Phaser.Scene{
   }
   this.syncHistory();
   this.syncAutoRoute();
+  this.syncThreats();
   const pairs={
    'hero-hp':p.hp+' / '+p.maxhp,
    'hero-focus':p.mana+' / '+p.maxmana,
@@ -430,6 +457,56 @@ export class DungeonScene extends Phaser.Scene{
    this.itemUI.active()?'Escolha uma opção no painel para continuar.':
    (g.previewLog?.at(-1)||'Explore os corredores do osso.'));
   if(el('recent-log'))el('recent-log').textContent=(g.previewLog||[]).slice(-3).join(' · ');
+ }
+ syncThreats(){
+  const list=el('threat-list'),summary=el('threat-summary'),heroStatus=el('hero-condition-summary');
+  if(!list||!summary||!heroStatus)return;
+  const data=previewThreats(this.run,this.visible);
+  summary.textContent=data.total?
+   data.total+' ameaça(s) à vista · '+data.threats.filter(e=>e.canAttack).length+
+   ' entre as exibidas ao alcance do ataque.':'Nenhum inimigo à vista.';
+  heroStatus.textContent=data.hero.length?
+   'Seu estado: '+data.hero.map(s=>s.label+
+    (s.turns?' '+s.turns+'t':s.stacks?' ×'+s.stacks:'')).join(' · ')+'.':
+   'Seu estado: normal.';
+  if(list.classList.contains('hidden'))return;
+  list.replaceChildren();
+  if(!data.threats.length){
+   const li=document.createElement('li');
+   li.className='threat-empty';li.textContent='A escuridão está silenciosa por enquanto.';
+   list.append(li);return;
+  }
+  for(const target of data.threats){
+   const li=document.createElement('li');li.className='threat-row';
+   const info=document.createElement('div');info.className='threat-info';
+   const heading=document.createElement('strong');
+   heading.textContent=(target.boss?'☠ ':'')+target.name+' · '+target.hp+'/'+target.maxhp+' PV';
+   const sub=document.createElement('span');sub.className='threat-distance';
+   sub.textContent='DISTÂNCIA '+target.distance+' · '+target.x+','+target.y;
+   info.append(heading,sub);
+   if(target.conditions.length){
+    const states=document.createElement('div');states.className='threat-states';
+    for(const condition of target.conditions){
+     const label=document.createElement('span');
+     label.className='threat-state state-'+condition.kind;
+     label.textContent=condition.label+' · '+condition.turns+'t';
+     states.append(label);
+    }
+    info.append(states);
+   }
+   const button=document.createElement('button');button.type='button';
+   button.dataset.previewEnemyId=String(target.id);
+   button.textContent=target.canAttack?'⚔ ATACAR':'FORA DE ALCANCE';
+   button.disabled=!target.canAttack||this.classSelectionOpen||this.run.over||
+    !!this.run.pendingTalentChoices?.length||this.itemUI.active()||this.aim!==null;
+   button.setAttribute('aria-label','Atacar '+target.name);
+   li.append(info,button);list.append(li);
+  }
+  if(data.total>data.threats.length){
+   const li=document.createElement('li');li.className='threat-empty';
+   li.textContent='Exibindo '+data.threats.length+' de '+data.total+' ameaças próximas.';
+   list.append(li);
+  }
  }
  syncHistory(){
   const body=el('chronicle-body'),stats=el('chronicle-stats'),list=el('chronicle-records');

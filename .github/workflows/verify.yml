@@ -29,6 +29,7 @@ jobs:
           node --check phaser-src/src/preview-history.js
           node --check phaser-src/src/preview-route.js
           node --check phaser-src/src/preview-combat-feedback.js
+          node --check phaser-src/src/preview-status.js
           node --check phaser-src/src/world.js
       - name: Testar RNG, saves, cache e geração de mapas
         run: node --test tests/*.test.cjs

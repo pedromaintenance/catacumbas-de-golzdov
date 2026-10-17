@@ -53,8 +53,24 @@ export function drawClassicMap(c,run,visible,tile=36){
       c.fillStyle=e.type==='boss'?'#e05d76':'#bb777d';
       c.fillRect(x-tile*.38,y-tile*.48,tile*.76*(Math.max(0,e.hp)/e.maxhp),3);
     }
-    if(e.stun>0)pin({x:e.x,y:e.y-0.6},'✧','#eac9a0');
-    if(e.smolder>0)pin({x:e.x-.3,y:e.y-.5},'✹','#eb8560');
+    // As posições fracionárias do marcador antigo eram enviadas ao
+    // lookup inteiro de visibilidade, que nunca as desenhava. O inimigo
+    // já passou pelo filtro visible: desenhar os sinais aqui é seguro.
+    const marks=[];
+    if(e.stun>0)marks.push(['✧','#eac9a0']);
+    if(e.root>0)marks.push(['根','#91d9b8']);
+    if(e.smolder>0)marks.push(['✹','#eb8560']);
+    if((e.type==='archer'||e.type==='boss')&&e.cd>0)marks.push(['⌛','#b0c7de']);
+    if(marks.length){
+      c.save();c.textAlign='center';c.textBaseline='middle';
+      c.font='bold '+Math.round(tile*.35)+'px Georgia';
+      c.shadowColor='#0d0d16';c.shadowBlur=tile*.11;
+      for(const [i,mark] of marks.entries()){
+        const ox=(i-(marks.length-1)/2)*tile*.25;
+        c.fillStyle=mark[1];c.fillText(mark[0],x+ox,y-tile*.68);
+      }
+      c.restore();
+    }
   }
 }
 export function drawClassicHero(c,hero,size=64){

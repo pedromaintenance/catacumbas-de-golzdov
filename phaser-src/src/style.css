@@ -237,3 +237,35 @@ body::before{content:"";pointer-events:none;position:fixed;inset:0;opacity:.08;b
  background:linear-gradient(100deg,#2d252d,#151922);color:#ecd1b2;
  font:600 12px/1.55 ui-monospace,monospace;min-height:39px;overflow-wrap:anywhere}
 @media(max-width:560px){.combat-status{padding:9px 11px;font-size:11px}}
+
+/* P4A.3 — leitura e ataque das ameaças visíveis, sem revelar neblina. */
+.threat-panel{border-top:1px solid #54424c;background:#161821;padding:11px 16px}
+.threat-heading{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.threat-heading h3{font:700 12px Georgia,serif;letter-spacing:.08em;color:#eed0aa;margin:0 0 5px}
+.threat-heading p{font:11px/1.5 ui-monospace,monospace;color:#d7c7b9;margin:2px 0}
+.threat-heading #hero-condition-summary{color:#b2cab5}
+.threat-heading button,.threat-row button{cursor:pointer;touch-action:manipulation;min-height:44px;
+ border:1px solid #ad8075;border-radius:6px;background:#40313d;color:#f8dfbe;
+ padding:10px 13px;font:700 11px ui-monospace,monospace}
+.threat-heading button:focus-visible,.threat-row button:focus-visible{outline:2px solid #f5cba6;outline-offset:2px}
+.threat-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;
+ margin:12px 0 0;padding:0;list-style:none}
+.threat-list.hidden{display:none}
+.threat-row{display:flex;gap:8px;justify-content:space-between;align-items:center;min-width:0;
+ background:#22222c;border:1px solid #62515b;border-radius:6px;padding:10px}
+.threat-info{display:flex;flex-direction:column;gap:5px;min-width:0}
+.threat-info strong{font:700 12px Georgia,serif;color:#f1d2b5}
+.threat-distance{font:10px ui-monospace,monospace;color:#b4a5a9}
+.threat-states{display:flex;flex-wrap:wrap;gap:4px}
+.threat-state{font:700 9px ui-monospace,monospace;color:#d4e0d2;
+ border:1px solid #65746f;border-radius:4px;padding:3px 5px}
+.state-smolder{color:#f2b393;border-color:#b06e57}
+.state-stun{color:#f3d8a5;border-color:#a78d56}
+.state-root{color:#abe1bd;border-color:#648a6b}
+.state-cooldown{color:#b7d5ea;border-color:#708b9d}
+.threat-row button{flex-shrink:0}
+.threat-row button:disabled{cursor:default;opacity:.55;border-color:#62616e;background:#292933}
+.threat-empty{grid-column:1/-1;padding:10px 5px;color:#a9a0a5;font:italic 12px Georgia,serif}
+@media(max-width:700px){.threat-list{grid-template-columns:1fr}}
+@media(max-width:520px){.threat-panel{padding:10px}.threat-heading{align-items:stretch;flex-direction:column}
+ .threat-heading button{width:100%}.threat-row{flex-wrap:wrap}.threat-row button{width:100%}}

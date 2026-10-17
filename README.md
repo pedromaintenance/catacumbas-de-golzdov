@@ -34,6 +34,10 @@ A preview Phaser destaca o caminho quando você clica ou toca em uma casa explor
 
 A preview Phaser apresenta sinais de dano real, acerto crítico, erro, abate e esquiva sobre o tabuleiro, com resumo textual acessível e respeito à preferência de movimento reduzido. Todos os indicadores vêm dos eventos da simulação, sem acrescentar RNG, turnos ou mudanças de combate. Código e testes ficam isolados da versão HTML. [PR #44](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/44) integrado com **157/157 testes aprovados**. [Workflow pós-merge #39025846463](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/39025846463) publicou a P4A.2 somente em `/phaser/`; playtest visual no Pages ainda pendente.
 
+### P4A.3 — Olhos na Escuridão (em validação)
+
+A preview Phaser acrescenta um painel expansível com inimigos **realmente visíveis**, PV, distância e condições de combate: atordoamento, enraizamento, chamas e recarga. Também mostra Bastião, Revanche e Exaustão do herói, além de permitir atacar diretamente uma ameaça válida no toque. Corrigidos os glifos que não apareciam no mapa por uso de coordenadas fracionárias; a leitura é pura, sem alteração de RNG ou turnos. Testes e publicação estão sujeitos à CI, e o HTML/PWA clássico continua intocado.
+
 ## Evolução 2.0 (em desenvolvimento)
 
 A evolução está documentada e acompanhada em:
