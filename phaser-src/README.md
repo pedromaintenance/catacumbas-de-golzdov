@@ -15,7 +15,7 @@ no branch `main`, a workflow constrói o bundle e atualiza **somente**
 - Gamepad: D-pad ou analógico esquerdo, A atacar, X poção e RB esperar.
 - `?seed=305419896&floor=4` inicia nova expedição nesse estrato **quando não houver save de preview**. REINICIAR apaga apenas o save de preview.
 
-## Novidades P5A.1 — O Osso Permanece: instalar e jogar offline (em validação)
+## Novidades P5A.1 — O Osso Permanece: instalar e jogar offline (integrada, 173/173 testes)
 
 - A página **/phaser/** recebe um botão **INSTALAR / AJUDA** no cabeçalho. Se o navegador permitir a instalação pelo próprio botão, use-o; caso contrário, o botão mostra as instruções do menu do navegador.
 - O manifesto e os ícones da preview são locais; os PNGs do projeto são copiados para `phaser/icons` durante a compilação. O aplicativo instalado tem identidade distinta do Golzdov HTML.

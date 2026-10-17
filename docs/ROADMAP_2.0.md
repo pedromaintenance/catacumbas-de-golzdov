@@ -6,7 +6,7 @@ Atualizado em: 15/10/2026. Planejamento detalhado: [GAME_DESIGN_2.0.md](GAME_DES
 
 ## Histórico de execução
 
-- 17/10/2026: **P5A.1 Phaser — PWA offline independente (em validação)**. Manifesto e instalação próprios da preview; service worker com escopo `/phaser/` e caches `golzdov-phaser-offline-*`, sem alterar o SW/manifesto/cache do jogo HTML. Build Vite gera lista versionada de JS/CSS/HTML/ícones em cache, fallback offline para a tela da preview e ajuda manual para instalar no Chrome/Edge/Safari. Testes em VM, CI e QA físico compõem os critérios; publicar somente após CI verde, mantendo saves separados.
+- 17/10/2026: **P5A.1 Phaser — PWA offline independente (integrada)**. Manifesto e instalação próprios da preview; service worker com escopo `/phaser/` e caches `golzdov-phaser-offline-*`, sem alterar o SW/manifesto/cache do jogo HTML. Build Vite gera lista versionada de JS/CSS/HTML/ícones em cache, fallback offline para a tela da preview e ajuda manual para instalar no Chrome/Edge/Safari. [PR #46](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/46) integrado com **173/173 testes**, build Vite/Phaser e verificador de PWA verdes; [workflow #39035416868](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/39035416868) publicou `sw.js`, manifesto, dois ícones e bundles em `/phaser/`. QA offline real e instalação Android/iOS/desktop ainda pendentes; saves seguem separados.
 
 
 
