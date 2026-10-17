@@ -13,6 +13,17 @@
 - [ ] Verificar via HTTP/visual a atualização no Pages e em Xbox/celular reais; sem presumir confirmação.
 - [ ] Próximos blocos P3: relíquias e gatilhos (`onAttack`, `onRoot`, `onDefend` etc.), loot/altar/mercador, finais Luz/Raiz, importação de cópia e paridade dos replays. **Preview não substitui o jogo clássico.**
 
+## P5A.1 — O Osso Permanece: PWA offline exclusivo da preview (17/10/2026; em validação)
+
+- [x] Manifesto `phaser-src/public/manifest.webmanifest` com identidade, nome, `start_url` e `scope` **exclusivos da pasta /phaser/**, sem substituir a instalação do HTML clássico. Ícones locais de 192/512 copiados do projeto durante a compilação para `/phaser/icons/`.
+- [x] Botão **INSTALAR / AJUDA** na própria página, que utiliza `beforeinstallprompt` quando o navegador oferece instalação e apresenta instruções manuais Chrome/Edge e Safari quando não houver prompt. Indicador textual acessível de preparo/ativação do cache, sem prometer suporte em browsers incompatíveis.
+- [x] Service worker **escopado em /phaser/**: não intercepta `/`, `/index.html`, `/sw.js`, outros projetos ou requisições não GET. A navegação offline entrega apenas o `index.html` da preview; não oferece fallback para rotas de aplicação inexistentes.
+- [x] Geração determinística no pós-build `scripts/build-phaser-pwa.cjs`: lê HTML compilado pelo Vite, verifica JS/CSS reais, copia PNGs locais, cria `sw.js` com lista de precache e hash de conteúdo. Atualização instala todo o bundle antes de ativar e remove apenas caches com prefixo `golzdov-phaser-offline-`, nunca `golzdov-offline-` do legado.
+- [x] Verificador técnico `scripts/verify-phaser-dist.cjs` ampliado para validar SW e conteúdo de cache, manifesto, ícones, paths relativos e bundle Phaser sem CDN. Testes em VM de cache, modo offline com query seed, isolamento de rotas, atualização e botão de instalação.
+- [ ] CI, Vite/Phaser, PR e publicação de `/phaser/` com `sw.js`, `manifest.webmanifest`, PNGs e bundles versionados, após aprovação completa.
+- [ ] QA manual no Pages: abrir online, recarregar para instalar/ativar SW, desligar rede, recarregar em modo avião, mover, salvar e retomar. Verificar instalação separada do app clássico em Chrome Android/desktop e Safari iOS; comportamento pode variar com o navegador.
+- [ ] Próximos blocos P5A.2 e P5B: QA físico Android/iOS/Xbox, atualização/rollback offline, observabilidade de falhas e replay completo dos cinco estratos com inimigos reais; preservar PWA e saves clássicos até a substituição formal P6.
+
 ## P4A.3 — Olhos na Escuridão: condições, ameaças e combate por toque (17/10/2026; integrada)
 
 - [x] Novo painel expansível **OLHOS NA ESCURIDÃO** com até oito inimigos **atualmente visíveis**, ordenados por proximidade e ID, mostrando nome canônico, PV atual/máximo, distância e coordenadas. Mostra total visível sem listar o que permanece na neblina.
