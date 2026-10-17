@@ -5,6 +5,7 @@ import {WIDTH,HEIGHT} from '../world.js';
 import {PREVIEW_CLASSES,PREVIEW_CLASS_IDS} from '../preview-classes.js';
 import {drawClassicMap,drawClassicHero} from '../classic-art.js';
 import {normalizePreviewOutcome} from '../preview-engine.js';
+import {pendingTalents} from '../preview-talents.js';
 const TILE=36;
 const P={
  rock:0x11131d,wall:0x2c3343,floor:0x302b38,grid:0x4f4555,
@@ -24,7 +25,7 @@ const startFloor=()=>{
  return Number.isInteger(n)&&n>=1&&n<=5?n:1;
 };
 export class DungeonScene extends Phaser.Scene{
- constructor(){super('DungeonScene');this.run=null;this.lastPadAt=0;this.aim=null;this.classSelectionOpen=false;}
+ constructor(){super('DungeonScene');this.run=null;this.lastPadAt=0;this.aim=null;this.classSelectionOpen=false;this.talentSelectedIndex=0;this.lastTalentKey='';}
  create(){
   const existing=loadPreview(storage());
   this.run=existing||initialPreviewRun(fixedSeed(),startFloor());
@@ -55,6 +56,13 @@ export class DungeonScene extends Phaser.Scene{
     if(classes[key]){e.preventDefault();this.chooseClass(classes[key]);}
     return;
    }
+   if(this.run.pendingTalentChoices?.length){
+    if(['1','2','3'].includes(key)){
+     e.preventDefault();this.chooseTalentAt(Number(key)-1);
+    }else if(key==='tab'){return;}
+    else e.preventDefault();
+    return;
+   }
    const movement={arrowup:[0,-1],w:[0,-1],arrowdown:[0,1],s:[0,1],
     arrowleft:[-1,0],a:[-1,0],arrowright:[1,0],d:[1,0]};
    if(key==='escape'){this.aim=null;this.sync();return;}
@@ -83,7 +91,7 @@ export class DungeonScene extends Phaser.Scene{
    button.addEventListener('click',listener);classButtons.push([button,listener]);
   }
   const pointerClick=pointer=>{
-   if(this.run.over||this.classSelectionOpen)return;
+   if(this.run.over||this.classSelectionOpen||this.run.pendingTalentChoices?.length)return;
    const x=Math.floor(pointer.worldX/TILE),y=Math.floor(pointer.worldY/TILE);
    if(x<0||y<0||x>=WIDTH||y>=HEIGHT)return;
    if(this.aim!==null){this.castAt(x,y);return;}
@@ -93,19 +101,26 @@ export class DungeonScene extends Phaser.Scene{
    if(distance===1)this.perform({type:'MOVE',dx:x-p.x,dy:y-p.y});
   };
   this.input.on('pointerdown',pointerClick);
+  const talentList=el('talent-options');
+  const onTalentClick=event=>{
+   const button=event.target.closest('button[data-preview-talent]');
+   if(button&&talentList.contains(button))this.chooseTalent(button.dataset.previewTalent);
+  };
+  talentList?.addEventListener('click',onTalentClick);
   this.events.once(Phaser.Scenes.Events.SHUTDOWN,()=>{
    document.removeEventListener('keydown',onKey);
    for(const [button,listener] of buttons)button.removeEventListener('click',listener);
    for(const [button,listener] of classButtons)button.removeEventListener('click',listener);
    this.scale.off('resize',resize);
    this.input.off('pointerdown',pointerClick);
+   talentList?.removeEventListener('click',onTalentClick);
   });
   this.draw();this.sync();
   this.syncClassPicker();
   if(existing)savePreview(storage(),this.run);
  }
  command(command){
-  if(this.classSelectionOpen)return;
+  if(this.classSelectionOpen||this.run.pendingTalentChoices?.length)return;
   const dirs={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};
   if(dirs[command]){
    if(this.aim!==null){this.report('Selecione um alvo para a habilidade, ou Esc para cancelar.');return;}
@@ -127,6 +142,7 @@ export class DungeonScene extends Phaser.Scene{
   this.run=initialPreviewRun(fixedSeed(),startFloor(),classId);
   this.previewRun=this.run;this.visible=previewVisible(this.run);
   this.aim=null;this.classSelectionOpen=false;
+  this.talentSelectedIndex=0;this.lastTalentKey='';
   this.syncClassPicker();
   savePreview(storage(),this.run);
   this.draw();this.sync();
@@ -136,7 +152,7 @@ export class DungeonScene extends Phaser.Scene{
   this.aim=null;this.classSelectionOpen=true;this.syncClassPicker();this.sync();
  }
  selectSkill(which){
-  if(this.classSelectionOpen||this.run.over)return;
+  if(this.classSelectionOpen||this.run.over||this.run.pendingTalentChoices?.length)return;
   const skill=PREVIEW_CLASSES[this.run.hero.classId].skills[which];
   if(!skill)return;
   if(this.run.hero.mana<skill.cost){
@@ -176,7 +192,7 @@ export class DungeonScene extends Phaser.Scene{
   }
  }
  attackNearest(){
-  if(this.classSelectionOpen||this.run.over)return;
+  if(this.classSelectionOpen||this.run.over||this.run.pendingTalentChoices?.length)return;
   const hero=this.run.hero;
   const options=this.run.enemies.filter(e=>e.hp>0&&this.visible.has(e.y*WIDTH+e.x))
    .sort((a,b)=>(Math.abs(a.x-hero.x)+Math.abs(a.y-hero.y))-(Math.abs(b.x-hero.x)+Math.abs(b.y-hero.y)));
@@ -186,7 +202,10 @@ export class DungeonScene extends Phaser.Scene{
   else this.report('Nenhum inimigo visível ao alcance do ataque.');
  }
  perform(action){
-  if(this.classSelectionOpen||this.run.over){this.report('Escolha uma classe ou inicie outra expedição.');return null;}
+  if(this.classSelectionOpen||this.run.over||
+    (this.run.pendingTalentChoices?.length&&action.type!=='CHOOSE_TALENT')){
+   this.report('Resolva a escolha de ascensão antes de continuar.');return null;
+  }
   const result=previewAction(this.run,action);
   this.visible=previewVisible(this.run);
   if(result.consumesTurn||result.events.length){
@@ -235,14 +254,56 @@ export class DungeonScene extends Phaser.Scene{
   if(el('hero-weapon'))el('hero-weapon').textContent=klass.weapon;
   for(let which=0;which<2;which++){
    const skill=klass.skills[which],btn=el('skill'+which+'-button');
-   if(btn){btn.textContent=skill.icon+' '+skill.short+' · '+skill.cost+'✧';btn.disabled=g.over||p.mana<skill.cost;}
+   if(btn){btn.textContent=skill.icon+' '+skill.short+' · '+skill.cost+'✧';btn.disabled=g.over||!!g.pendingTalentChoices?.length||p.mana<skill.cost;}
   }
   this.syncAim();
+  this.syncTalentPicker();
   if(el('scene-heading'))el('scene-heading').textContent=title[g.floor-1];
   if(el('scene-status'))el('scene-status').textContent=g.over
-   ?g.previewOutcome==='victory'?'VITÓRIA NO RECORTE P2B — reinicie para outra expedição.':'FIM DA EXPEDIÇÃO — reinicie para tentar novamente.'
-   :(g.previewLog?.at(-1)||'Explore os corredores do osso.');
+   ?g.previewOutcome==='victory'?'VITÓRIA NA PRÉVIA — reinicie para outra expedição.':'FIM DA EXPEDIÇÃO — reinicie para tentar novamente.'
+   :(g.pendingTalentChoices?.length?'ASCENSÃO: escolha um talento para continuar.':(g.previewLog?.at(-1)||'Explore os corredores do osso.'));
   if(el('recent-log'))el('recent-log').textContent=(g.previewLog||[]).slice(-3).join(' · ');
+ }
+ chooseTalent(id){
+  if(!this.run.pendingTalentChoices?.includes(id))return;
+  const result=this.perform({type:'CHOOSE_TALENT',talentId:id});
+  if(result?.status==='talent-chosen'){
+   this.talentSelectedIndex=0;
+   this.lastTalentKey='';
+   this.sync();
+  }
+ }
+ chooseTalentAt(index){
+  const choices=this.run.pendingTalentChoices||[];
+  if(choices[index])this.chooseTalent(choices[index]);
+ }
+ syncTalentPicker(){
+  const modal=el('talent-selection'),list=el('talent-options');
+  if(!modal||!list)return;
+  const choices=this.run.pendingTalentChoices||[];
+  const open=choices.length>0&&!this.classSelectionOpen&&!this.run.over;
+  modal.classList.toggle('hidden',!open);
+  if(!open){this.lastTalentKey='';return;}
+  this.aim=null;
+  const key=this.run.hero.classId+'|'+choices.join(',');
+  if(key===this.lastTalentKey)return;
+  this.lastTalentKey=key;this.talentSelectedIndex=0;
+  if(el('talent-desc'))el('talent-desc').textContent='Nível '+this.run.hero.level+
+   '. Escolha um talento; no máximo dois exclusivos da classe por expedição.';
+  list.replaceChildren();
+  for(const [i,t] of pendingTalents(this.run).entries()){
+   const button=document.createElement('button');
+   button.type='button';button.className='talent-card';
+   button.dataset.previewTalent=t.id;
+   const heading=document.createElement('strong');heading.textContent=t.icon+' '+t.title;
+   const category=document.createElement('small');
+   category.textContent=t.kind==='class'?'TALENTO DE CLASSE':'MELHORIA UNIVERSAL';
+   const description=document.createElement('span');description.textContent=t.desc;
+   const shortcut=document.createElement('b');shortcut.textContent=(i+1)+' · ESCOLHER';
+   button.append(heading,category,description,shortcut);
+   list.append(button);
+  }
+  list.querySelector('button')?.focus({preventScroll:true});
  }
  update(time){
   if(time-this.lastPadAt<175||this.run.over||this.classSelectionOpen)return;
@@ -250,6 +311,19 @@ export class DungeonScene extends Phaser.Scene{
   if(!pad)return;
   const pressed=i=>!!pad.buttons[i]?.pressed;
   const axis=(a)=>pad.axes[a]||0;
+  if(this.run.pendingTalentChoices?.length){
+   const options=this.run.pendingTalentChoices;
+   if(pressed(12)||pressed(14)||axis(1)<-.55){
+    this.talentSelectedIndex=(this.talentSelectedIndex+options.length-1)%options.length;
+   }else if(pressed(13)||pressed(15)||axis(1)>.55){
+    this.talentSelectedIndex=(this.talentSelectedIndex+1)%options.length;
+   }else if(pressed(0))this.chooseTalentAt(this.talentSelectedIndex);
+   else return;
+   this.lastPadAt=time;
+   for(const [i,button] of [...(el('talent-options')?.children||[])].entries())
+    button.classList.toggle('pad-selected',i===this.talentSelectedIndex);
+   return;
+  }
   let cmd=null;
   if(pressed(12)||axis(1)<-.55)cmd='up';
   else if(pressed(13)||axis(1)>.55)cmd='down';
