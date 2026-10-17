@@ -1,4 +1,4 @@
-# Phaser P3A.1 — classes e habilidades (preview experimental)
+# Phaser P3A.1 — classes e habilidades (CI 100/100, bundle na main)
 
 **Fonte:** `phaser-src/` (Phaser 4.2.1 + Vite 6.3.1). Depois de CI verde
 no branch `main`, a workflow constrói o bundle e atualiza **somente**
