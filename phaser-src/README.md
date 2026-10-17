@@ -15,7 +15,7 @@ no branch `main`, a workflow constrói o bundle e atualiza **somente**
 - Gamepad: D-pad ou analógico esquerdo, A atacar, X poção e RB esperar.
 - `?seed=305419896&floor=4` inicia nova expedição nesse estrato **quando não houver save de preview**. REINICIAR apaga apenas o save de preview.
 
-## Novidades P4A.2 — marcas de combate (em validação)
+## Novidades P4A.2 — marcas de combate (integrada, 157/157 testes)
 
 - Ao atacar, o mapa exibe dano real causado sobre o inimigo; **CRÍTICO**, **ERROU**, **ABATIDO**, **ESQUIVA** e dano recebido pelo herói usam sinais separados.
 - O resumo textual do último combate aparece abaixo dos controles, incluindo `aria-live` para leitores de tela.

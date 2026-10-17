@@ -6,7 +6,7 @@ Atualizado em: 15/10/2026. Planejamento detalhado: [GAME_DESIGN_2.0.md](GAME_DES
 
 ## Histórico de execução
 
-- 17/10/2026: **P4A.2 Phaser — Marcas do Combate (em validação)**. Eventos visuais emitidos dos resultados reais do motor: dano/crit/falha/abate contra inimigos e dano/esquiva do herói. Textos flutuantes não alteram RNG nem turnos; registro acessível `aria-live` e respeito a movimento reduzido. Testes de combate e publicação pendentes de confirmação. O HTML clássico não é alterado.
+- 17/10/2026: **P4A.2 Phaser — Marcas do Combate (integrada)**. Eventos visuais emitidos dos resultados reais do motor: dano/crit/falha/abate contra inimigos e dano/esquiva do herói. Textos flutuantes não alteram RNG nem turnos; registro acessível `aria-live` e respeito a movimento reduzido. [PR #44](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/44) integrado com **157/157 testes verdes**, build Vite/Phaser e [workflow #39025846463](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/39025846463) aprovados. Novos bundles apenas em `/phaser/`; QA real no navegador e dispositivos físicos continua pendente. O HTML clássico não é alterado.
 
 
 
