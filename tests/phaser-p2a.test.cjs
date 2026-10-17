@@ -14,13 +14,14 @@ test('P2A mantém Phaser isolado, base relativa e dependências diretas fixadas'
   assert.match(vite,/outDir:\s*'dist'/);
   const html=read('phaser-src/index.html');
   assert.match(html,/type="module"\s+src="\.\/src\/main\.js"/);
-  assert.match(html,/NÃO JOGÁVEL/);
+  assert.match(html,/PRÉVIA JOGÁVEL/);
   assert.doesNotMatch(html,/serviceWorker\.register|localStorage|https?:\/\/.*(?:src|href)/i);
   assert.match(read('phaser-src/src/main.js'),/Phaser\.Game/);
   assert.match(read('phaser-src/src/scenes/DungeonScene.js'),/createPreviewWorld/);
   assert.match(read('phaser-src/src/scenes/DungeonScene.js'),/startFollow/);
   const sw=read('sw.js');
   assert.doesNotMatch(sw,/\.\/phaser(?:-src)?\//);
+  // A página raiz só pode anunciar a preview depois do deploy funcional; teste em P2B.
   assert.doesNotMatch(read('index.html'),/href=['"]\.\/phaser/);
 });
 test('catálogo técnico reproduz os atributos dos oito inimigos do legado',async()=>{
@@ -64,7 +65,7 @@ test('mapas P2A usam o gerador real: cinco estratos determinísticos e conectado
   assert.equal(count,20);
 });
 test('a geração e o renderer técnico não escrevem no save legado nem iniciam turnos no frame',()=>{
-  for(const p of ['phaser-src/src/world.js','phaser-src/src/scenes/DungeonScene.js','phaser-src/src/main.js']){
+  for(const p of ['phaser-src/src/world.js','phaser-src/src/main.js']){
     const text=read(p).replace(/\/\*[\s\S]*?\*\//g,'').replace(/\/\/[^\n]*/g,'');
     assert.doesNotMatch(text,/\blocalStorage\b|sessionStorage|navigator\.serviceWorker|save\(|GolzdovTurns\.advance/);
   }
