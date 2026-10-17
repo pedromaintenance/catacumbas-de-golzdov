@@ -62,12 +62,14 @@ test('colisão com inimigo vira ataque e só avança um turno',async()=>{
  run.map.fill(1);run.seen.fill(true);
  run.enemies=[{id:5,type:'rat',x:16,y:15,hp:100,maxhp:100,atk:1,def:0,root:0,stun:0,cd:0}];
  run.enemyId=5;
- const turn=run.turn;
+ const turn=run.turn,rngBefore=run.rngState;
  const outcome=engine.previewAction(run,{type:'MOVE',dx:1,dy:0});
  assert.equal(outcome.consumesTurn,true);
  assert.equal(run.turn,turn+1);
  assert.equal(run.hero.x,15);
- assert.ok(run.enemies[0].hp<100);
+ assert.notEqual(run.rngState,rngBefore,'a tentativa deve consumir RNG do golpe');
+ assert.ok(run.enemies[0].hp<=100);
+ if(run.enemies[0].hp===100)assert.match(run.previewLog.join(' '),/Você erra/);
 });
 test('POTION aplica custo e heal; preview salva estado sem afetar produção',async()=>{
  const [engine,save]=await modules();const run=engine.initialPreviewRun(100,1);
