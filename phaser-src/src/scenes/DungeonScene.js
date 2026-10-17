@@ -197,6 +197,8 @@ export class DungeonScene extends Phaser.Scene{
    this.clearCombatFeedback();
    talentList?.removeEventListener('click',onTalentClick);
    chronicleToggle?.removeEventListener('click',onChronicleToggle);
+   threatToggle?.removeEventListener('click',onThreatToggle);
+   threatList?.removeEventListener('click',onThreatClick);
    finalChoices?.removeEventListener('click',onEndingClick);
   });
   this.draw();this.sync();
@@ -388,6 +390,7 @@ export class DungeonScene extends Phaser.Scene{
   }
   this.syncHistory();
   this.syncAutoRoute();
+  this.syncThreats();
   const pairs={
    'hero-hp':p.hp+' / '+p.maxhp,
    'hero-focus':p.mana+' / '+p.maxmana,
