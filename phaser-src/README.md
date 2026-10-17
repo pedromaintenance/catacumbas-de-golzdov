@@ -1,4 +1,6 @@
-# Phaser P3A.1 — classes e habilidades (CI 100/100, bundle na main)
+# Phaser P3A.2 — ascensão e talentos (branch em validação)
+
+A P3A.1 está integrada à main (CI 100/100). A P3A.2 adiciona ascensão por três alternativas, nove talentos exclusivos + três melhorias universais, e bloqueio de ações enquanto a escolha estiver pendente. As opções ficam no mesmo save de preview (sem modificar a versão estável). Após o teste e merge, o workflow recompila somente `/phaser/`; verifique o Pages antes de considerar a publicação confirmada.
 
 **Fonte:** `phaser-src/` (Phaser 4.2.1 + Vite 6.3.1). Depois de CI verde
 no branch `main`, a workflow constrói o bundle e atualiza **somente**
@@ -12,6 +14,14 @@ no branch `main`, a workflow constrói o bundle e atualiza **somente**
 - Toque: D-pad e botões ATACAR, ESPERAR, POÇÃO e REINICIAR. Também é possível tocar numa casa adjacente ou inimigo ao alcance no mapa.
 - Gamepad: D-pad ou analógico esquerdo, A atacar, X poção e RB esperar.
 - `?seed=305419896&floor=4` inicia nova expedição nesse estrato **quando não houver save de preview**. REINICIAR apaga apenas o save de preview.
+
+## Novidades P3A.2 — evolução por escolha
+
+- Ao subir de nível, selecione um dos três talentos; 1/2/3 no teclado, toque nas cartas, D-pad/analógico e A no gamepad.
+- A escolha pendente fica salva, bloqueia comandos de combate e não consome outro turno/RNG ao ser confirmada.
+- Até dois talentos exclusivos por expedição; melhorias universais podem repetir. Atributos e talentos seguem o HTML clássico.
+- Efeitos do Último Juramento, Muralha Viva e Olho Predador são ativados na preview; demais efeitos associados a habilidades usam o núcleo original.
+- Relíquias e sinergias, altares, mercado, e finais narrativos integrais ainda pendentes de paridade.
 
 ## Novidades P3A.1 — classe e magia
 

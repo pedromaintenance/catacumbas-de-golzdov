@@ -121,3 +121,31 @@ body::before{content:"";pointer-events:none;position:fixed;inset:0;opacity:.08;b
  .class-selection-content h2{font-size:24px;margin:4px 0}
  .class-status{font-size:10px}
 }
+
+/* P3A.2 — ascensão por escolhas persistentes, em tela cheia no palco. */
+.talent-selection{position:absolute;inset:0;z-index:13;overflow:auto;
+ padding:18px;display:grid;place-items:center;background:#08070ceF;backdrop-filter:blur(4px)}
+.talent-selection-content{width:min(100%,680px);padding:22px;
+ background:linear-gradient(145deg,#32202b,#10151c 78%);
+ border:1px solid #b78668;box-shadow:0 20px 80px #000c}
+.talent-selection-content h2{font:normal clamp(23px,4vw,36px) Georgia,serif;
+ color:#efd2b8;margin:8px 0}
+.talent-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:18px 0}
+.talent-card{min-height:195px;display:flex;flex-direction:column;gap:10px;
+ padding:16px 12px;text-align:left;cursor:pointer;border-radius:6px;
+ background:linear-gradient(160deg,#312630,#1b202a);border:1px solid #7b5b5f;color:#e5cebd}
+.talent-card strong{font:700 15px Georgia,serif;color:#efc891}
+.talent-card small{font:9px ui-monospace,monospace;letter-spacing:.1em;color:#a9959e}
+.talent-card span{font:12px/1.45 Georgia,serif;color:#cbb7b4;flex:1}
+.talent-card b{padding-top:9px;border-top:1px solid #65505a;
+ font:700 10px ui-monospace,monospace;color:#f4c88e}
+.talent-card:is(:hover,:focus-visible,.pad-selected){outline:2px solid #e1b07d;
+ background:#43323b;outline-offset:0}
+@media(max-width:650px){
+ .talent-selection{padding:7px;align-items:start}
+ .talent-selection-content{padding:14px}
+ .talent-options{grid-template-columns:1fr;gap:7px;margin:10px 0}
+ .talent-card{min-height:0;gap:5px;padding:10px 12px}
+ .talent-card span{font-size:11px}
+ .talent-card b{padding-top:5px}
+}

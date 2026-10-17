@@ -6,6 +6,9 @@ Atualizado em: 15/10/2026. Planejamento detalhado: [GAME_DESIGN_2.0.md](GAME_DES
 
 ## Histórico de execução
 
+- 16/10/2026: **P3A.2 Phaser — ascensão por escolha, em validação**. Os 9 talentos exclusivos e as 3 melhorias universais da build clássica foram portados sem mudar balanceamento; preview interrompe turnos para mostrar 3 alternativas, permite escolha por teclado/toque/Xbox, preserva opções no save experimental, sem escrever nas chaves do clássico. Habilitados efeitos defensivos de Muralha Viva/Último Juramento e crítico de Olho Predador. Testes de paridade e CI/build pendentes de verificação no PR. Preview permanece separada de `index.html`, e a P3B ainda prevê relíquias, mercado e finais.
+
+
 - 15/10/2026: **1.2C integrada à `main`** via PR #9, com 31 testes verdes. Inclui cinco raridades, duas ofertas por relicário, quatro espaços, troca transacional, maldição Nome Roubado e migração aditiva de saves. Publicação via Pages depende do mecanismo de deploy configurado; conferir visualmente no site público.
 
 - 14/10/2026: diagnóstico técnico no repositório (5 estratos, 3 classes, 10 relíquias, 7 inimigos comuns + chefe, 2 finais); priorização de builds e diferenças qualitativas entre partidas.

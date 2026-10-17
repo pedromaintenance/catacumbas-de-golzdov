@@ -1,7 +1,7 @@
 /* P2B vertical slice: movimentação, ataque, espera, poção e turno inimigo.
  * Reutiliza o dispatcher/IA/RNG/combate da build principal.
  * Sem navegador, Phaser, timers, áudio ou storage; nunca avança no render.
- * Talentos, relíquias, mercador, evolução por escolha e finais completos: P3.
+ * P3A.2 oferece progressão por escolha; relíquias, mercador e finais completos: P3B.
  */
 import './world.js';
 import '../../core/combat.js';
@@ -12,6 +12,7 @@ import '../../core/actions.js';
 import '../../core/defense.js';
 import {createPreviewWorld,ENEMIES,WIDTH,HEIGHT} from './world.js';
 import {PREVIEW_CLASSES} from './preview-classes.js';
+import {beginPreviewLevelUp,choosePreviewTalent} from './preview-talents.js';
 const host=typeof window!=='undefined'?window:globalThis;
 const idx=(x,y)=>y*WIDTH+x;
 const dist=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y);
@@ -21,6 +22,7 @@ export function initialPreviewRun(seed=0x52c4a190,floor=1,classId='vigia'){
  run.previewVersion=1;
  run.previewLog=['O '+PREVIEW_CLASSES[classId].name+' entra nas Costelas do Silêncio.'];
  run.previewOutcome=null;
+ run.pendingTalentChoices=null;
  return run;
 }
 // Saves P2B anteriores podiam conter PV=0 sem flag de encerramento.
@@ -61,7 +63,8 @@ function doAttack(run,enemy,melee,events){
  if(!enemy||enemy.hp<=0)return false;
  const hit=host.GolzdovActions.dispatch(run,{
   type:'ATTACK',enemyId:enemy.id,enemyName:ENEMIES[enemy.type]?.name||enemy.type,
-  melee,lineOfSight:host.GolzdovNavigation.lineClear(run.map,WIDTH,HEIGHT,run.hero.x,run.hero.y,enemy.x,enemy.y)
+  melee,lineOfSight:host.GolzdovNavigation.lineClear(run.map,WIDTH,HEIGHT,run.hero.x,run.hero.y,enemy.x,enemy.y),
+  predator:run.hero.talents.includes('e_predador'),muralha:run.hero.talents.includes('v_muralha')
  });
  for(const event of hit.events){
   if(event.type==='log')note(run,event.text,events);
@@ -97,11 +100,11 @@ function doSkill(run,action,events){
  return {status:result.status,consumesTurn:result.consumesTurn};
 }
 function damageHero(run,value,message,events){
- const damage=host.GolzdovDefense.reduce(run,value,{muralha:false});
+ const damage=host.GolzdovDefense.reduce(run,value,{muralha:run.hero.talents.includes('v_muralha')});
  for(const e of host.GolzdovDefense.apply(run,damage,message)){
   if(e.type==='log')note(run,e.text,events);
  }
- for(const e of host.GolzdovDefense.afterHurt(run,{juramento:false})){
+ for(const e of host.GolzdovDefense.afterHurt(run,{juramento:run.hero.talents.includes('v_juramento')})){
   if(e.type==='die')run.hero.hp=0;
  }
 }
@@ -126,12 +129,10 @@ function stepWorld(run,events){
   onReveal:()=>previewVisible(run),
   onDeath:()=>{run.over=true;run.previewOutcome='death';note(run,'A Carcaça recebe o seu nome. Fim da expedição.',events);},
   onLevelUp:()=>{
-   // P2B provisório: avanço simples para evitar travar o turno sem modal P3.
-   run.hero.level++;
-   run.hero.xp-=run.hero.nextXP;
-   run.hero.nextXP+=Math.ceil(run.hero.nextXP*.4);
-   run.hero.maxhp+=4;run.hero.hp=Math.min(run.hero.maxhp,run.hero.hp+4);
-   note(run,'Nível '+run.hero.level+' alcançado (evolução simplificada P2B).',events);
+   if(beginPreviewLevelUp(run)){
+    note(run,'Nível '+run.hero.level+' alcançado. Escolha um talento para prosseguir.',events);
+    events.push({type:'talent-choice',options:[...run.pendingTalentChoices]});
+   }
   },
   onReady:()=>{}
  });
@@ -151,6 +152,13 @@ function collectBasic(run,events){
 export function previewAction(run,action){
  const events=[];
  if(!run||normalizePreviewOutcome(run)||run.over)return {status:'inactive',consumesTurn:false,events};
+ if(action?.type==='CHOOSE_TALENT'){
+  const picked=choosePreviewTalent(run,action.talentId);
+  if(!picked)return {status:'invalid-talent',consumesTurn:false,events};
+  note(run,'Nível '+run.hero.level+': '+picked.title+'.',events);
+  return {status:'talent-chosen',consumesTurn:false,events};
+ }
+ if(run.pendingTalentChoices?.length)return {status:'choice-required',consumesTurn:false,events};
  const p=run.hero;
  let result;
  if(action?.type==='SKILL'){
@@ -178,6 +186,7 @@ export function previewAction(run,action){
  if(consumed&&!run.over&&run.stairs&&p.x===run.stairs.x&&p.y===run.stairs.y){
   if(run.floor<5){
    run.floor++;
+   run.hero.lastOathUsed=false;run.hero.oathWeakened=false;
    host.GolzdovDungeon.generateFloor(run,ENEMIES,WIDTH,HEIGHT);
    previewVisible(run);
    note(run,'Você alcançou o estrato '+run.floor+'.',events);

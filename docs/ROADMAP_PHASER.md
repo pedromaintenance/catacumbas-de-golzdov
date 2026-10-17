@@ -1,6 +1,18 @@
 # Roadmap de migração — Catacumbas de Golzdov → Phaser 4
 
 **Status:** P0–P1C.3B.3B.2C integrados à `main`. [PR #31](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/31): **80/80 testes verdes**, 252 replays de habilidades e 480 sequências multi-ação com saves. Build 1.3.6 / cache v20 no código principal para teste no Pages. P2A.1 **concluída** no [PR #33](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/33), CI **84/84** + bundle Vite/Phaser validado. P2B.1 **integrada** pelo [PR #34](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/34), CI **90/90**; o job pós-merge colocou `phaser/index.html` e assets na `main`. A rota [`/phaser/`](https://pedromaintenance.github.io/catacumbas-de-golzdov/phaser/) está preparada para teste, **sem confirmação externa de propagação do Pages ou teste de navegador físico**. P3A.1 **integrada** pelo [PR #37](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/37), CI **100/100**, novo bundle de classes e magias na main. P2B.2 **integrada** pelo [PR #36](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/36), CI **94/94 testes** e bundle Vite compilado. **Bundle atualizado em `phaser/` na `main`**, ainda sem playtest externo/browser confirmado. Rota clássica preservada.
+## P3A.2 — Ascensão e escolha de talentos (16/10/2026; em validação)
+
+- [x] Portar sem rebalanceamento os nove talentos específicos (3 por classe) e as três melhorias universais do HTML clássico para `phaser-src/src/preview-talents.js`.
+- [x] Substituir a progressão simplificada P2B por `nextXP = floor(nextXP * 1.48 + 6)`, recuperação de 4 PV sem alterar o máximo, e três alternativas de talento; no máximo **dois talentos exclusivos** por expedição.
+- [x] Persistir `pendingTalentChoices` no save da preview v1, com opções sorteadas **uma única vez** pelo RNG do núcleo; bloqueio de movimentos, combate e habilidades enquanto a escolha estiver pendente.
+- [x] Modal responsivo com suporte a mouse, toque, 1/2/3, D-pad e A; escolha válida sem turno adicional e sem nova rolagem aleatória.
+- [x] Habilitar Muralha Viva, Olho Predador e Último Juramento na ponte de combate/defesa. Os efeitos de seis talentos ofensivos já existiam em `core/skills.js`.
+- [x] Testes de igualdade com as tabelas canônicas, pausa, RNG, persistência, seleção, limite de talentos e juramento.
+- [ ] CI verde, compilação Phaser e PR aprovados; depois integrar na `main` para o workflow publicar **somente** `/phaser/`.
+- [ ] Verificar via HTTP/visual a atualização no Pages e em Xbox/celular reais; sem presumir confirmação.
+- [ ] Próximos blocos P3: relíquias e gatilhos (`onAttack`, `onRoot`, `onDefend` etc.), loot/altar/mercador, finais Luz/Raiz, importação de cópia e paridade dos replays. **Preview não substitui o jogo clássico.**
+
 **Data do diagnóstico:** 15/10/2026.
 **Acompanhamento GitHub:** [issue #11 — migração Phaser](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/11); [issue #12 — corrigir roteamento PWA](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/12).
 **Objetivo:** migrar a apresentação, a composição das cenas e a entrada para Phaser 4 sem alterar silenciosamente as regras do roguelike, perder os saves ou bloquear o GitHub Pages.
