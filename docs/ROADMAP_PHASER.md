@@ -342,6 +342,19 @@ docs/
 
 **Aceite:** teste `core` roda em Node sem browser, e uma mesma seed + sequência de ações gera o mesmo estado lógico (excluindo campos meramente visuais). Código antigo não é removido até o novo núcleo alcançar o comportamento desejado.
 
+### P3A.1 — Três classes e seis habilidades na prévia Phaser (16/10/2026)
+
+- [x] Copiar os **dados canônicos do HTML 1.3.6** (atributos, armas, armaduras, nomes e seis habilidades) para `phaser-src/src/preview-classes.js`, sem inventar novo balanceamento.
+- [x] Criar Vigia, Arcanista e Errante com os respectivos PV, foco, ataque, defesa, esquiva e alcance de arma; os desenhos dos heróis já distinguem as classes no renderer clássico.
+- [x] Introduzir seletor de classe antes da primeira expedição e ao reiniciar, acessível em desktop e celular. **O save da preview só é substituído ao confirmar a classe**, sem tocar nas chaves do HTML.
+- [x] Integrar as duas habilidades de cada classe no `GolzdovActions.dispatch({type:'SKILL'})`: instantânea ou com mira. Usar `core/skills.js` para efeito, `core/combat.js` para dano, `core/turns.js` para **um turno por ação válida**.
+- [x] Adicionar botões de habilidade, mira por clique/toque ou alvo próximo por F/A, seleção por teclas 1/2 e comandos de gamepad Y/B. Foco insuficiente e alvo inválido não devem consumir turno/RNG.
+- [x] Criar testes de paridade de classe/dados contra `index.html`, 3 classes × 3 estratos determinísticos, seis habilidades, validação de custo/alcance, save e controles. 
+- [ ] Validar CI, merge e publicação do novo bundle em `/phaser/`. Confirmar versão exibida no Pages e testar em dispositivo real.
+- [ ] **P3A.2/P3B:** gatilhos de relíquias `onAttack`/`onRoot`, talentos, mira avançada Xbox, seleção/progressão de talentos, loot completo, mercador e finais. **A seleção de classe e as seis magias não significam paridade completa.**
+
+**Segurança:** usa `carcaca_golzdov_phaser_preview_run_v1` e não importa nem substitui saves do jogo clássico. Não muda `index.html` raiz ou `sw.js`. [Issue #35 — P3](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/35).
+
 ### P2B.2 — Paridade visual inicial e tela de derrota (17/10/2026)
 
 - [x] **Portar a arte procedural da versão HTML**, e não criar uma segunda estética: sprites de herói e oito criaturas, itens, pisos, paredes e as cinco paletas originais em `phaser-src/src/classic-art.js`.

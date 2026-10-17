@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import {initialPreviewRun,previewAction,previewVisible} from '../preview-engine.js';
 import {loadPreview,savePreview,clearPreview} from '../preview-save.js';
 import {WIDTH,HEIGHT} from '../world.js';
+import {PREVIEW_CLASSES,PREVIEW_CLASS_IDS} from '../preview-classes.js';
 import {drawClassicMap,drawClassicHero} from '../classic-art.js';
 import {normalizePreviewOutcome} from '../preview-engine.js';
 const TILE=36;
@@ -23,12 +24,12 @@ const startFloor=()=>{
  return Number.isInteger(n)&&n>=1&&n<=5?n:1;
 };
 export class DungeonScene extends Phaser.Scene{
- constructor(){super('DungeonScene');this.run=null;this.lastPadAt=0;}
+ constructor(){super('DungeonScene');this.run=null;this.lastPadAt=0;this.aim=null;this.classSelectionOpen=false;}
  create(){
   const existing=loadPreview(storage());
   this.run=existing||initialPreviewRun(fixedSeed(),startFloor());
+  this.classSelectionOpen=!existing;
   this.previewRun=this.run;
-  normalizePreviewOutcome(this.run);
   normalizePreviewOutcome(this.run);
   this.visible=previewVisible(this.run);
   this.worldCanvas=document.createElement('canvas');
@@ -48,16 +49,27 @@ export class DungeonScene extends Phaser.Scene{
   const resize=()=>this.cameras.main.setZoom(Math.max(.85,Math.min(1.6,this.scale.width/650)));
   resize();this.scale.on('resize',resize);
   const onKey=e=>{
-   const key=e.key.toLowerCase(),movement={
-    arrowup:[0,-1],w:[0,-1],arrowdown:[0,1],s:[0,1],
-    arrowleft:[-1,0],a:[-1,0],arrowright:[1,0],d:[1,0]
-   };
+   const key=e.key.toLowerCase();
+   if(this.classSelectionOpen){
+    const classes={1:'vigia',2:'arcanista',3:'errante'};
+    if(classes[key]){e.preventDefault();this.chooseClass(classes[key]);}
+    return;
+   }
+   const movement={arrowup:[0,-1],w:[0,-1],arrowdown:[0,1],s:[0,1],
+    arrowleft:[-1,0],a:[-1,0],arrowright:[1,0],d:[1,0]};
+   if(key==='escape'){this.aim=null;this.sync();return;}
+   if(key==='1'||key==='2'){e.preventDefault();this.selectSkill(Number(key)-1);return;}
+   if(key==='r'){e.preventDefault();this.restart();return;}
+   if(key==='f'||key==='enter'){
+    e.preventDefault();
+    if(this.aim!==null)this.castNearest();
+    else this.attackNearest();
+    return;
+   }
+   if(this.aim!==null&&movement[key]){e.preventDefault();this.report('MIRA ATIVA: toque no alvo ou F para confirmar. Esc cancela.');return;}
    if(movement[key]){e.preventDefault();this.perform({type:'MOVE',dx:movement[key][0],dy:movement[key][1]});}
-   else if(key===' '||key==='.') {e.preventDefault();this.perform({type:'WAIT'});}
+   else if(key===' '||key==='.'){e.preventDefault();this.perform({type:'WAIT'});}
    else if(key==='h'||key==='p')this.perform({type:'POTION'});
-   else if(key==='f'||key==='enter'){e.preventDefault();this.attackNearest();}
-   else if(key==='r'){e.preventDefault();this.restart();}
-   else if(key==='r'){e.preventDefault();this.restart();}
   };
   document.addEventListener('keydown',onKey);
   const buttons=[];
@@ -65,10 +77,16 @@ export class DungeonScene extends Phaser.Scene{
    const listener=()=>this.command(button.dataset.previewAction);
    button.addEventListener('click',listener);buttons.push([button,listener]);
   }
+  const classButtons=[];
+  for(const button of document.querySelectorAll('[data-preview-class]')){
+   const listener=()=>this.chooseClass(button.dataset.previewClass);
+   button.addEventListener('click',listener);classButtons.push([button,listener]);
+  }
   const pointerClick=pointer=>{
-   if(this.run.over)return;
+   if(this.run.over||this.classSelectionOpen)return;
    const x=Math.floor(pointer.worldX/TILE),y=Math.floor(pointer.worldY/TILE);
    if(x<0||y<0||x>=WIDTH||y>=HEIGHT)return;
+   if(this.aim!==null){this.castAt(x,y);return;}
    const p=this.run.hero,enemy=this.run.enemies.find(e=>e.hp>0&&e.x===x&&e.y===y);
    const distance=Math.abs(x-p.x)+Math.abs(y-p.y);
    if(enemy&&distance<=p.range)return this.perform({type:'ATTACK',enemyId:enemy.id});
@@ -78,40 +96,97 @@ export class DungeonScene extends Phaser.Scene{
   this.events.once(Phaser.Scenes.Events.SHUTDOWN,()=>{
    document.removeEventListener('keydown',onKey);
    for(const [button,listener] of buttons)button.removeEventListener('click',listener);
+   for(const [button,listener] of classButtons)button.removeEventListener('click',listener);
    this.scale.off('resize',resize);
    this.input.off('pointerdown',pointerClick);
   });
-  this.draw();
-  this.sync();
-  savePreview(storage(),this.run);
+  this.draw();this.sync();
+  this.syncClassPicker();
+  if(existing)savePreview(storage(),this.run);
  }
  command(command){
+  if(this.classSelectionOpen)return;
   const dirs={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};
-  if(dirs[command])this.perform({type:'MOVE',dx:dirs[command][0],dy:dirs[command][1]});
+  if(dirs[command]){
+   if(this.aim!==null){this.report('Selecione um alvo para a habilidade, ou Esc para cancelar.');return;}
+   this.perform({type:'MOVE',dx:dirs[command][0],dy:dirs[command][1]});
+  }
   if(command==='wait')this.perform({type:'WAIT'});
   if(command==='potion')this.perform({type:'POTION'});
-  if(command==='attack')this.attackNearest();
+  if(command==='attack'){if(this.aim!==null)this.castNearest();else this.attackNearest();}
+  if(command==='skill0'||command==='skill1')this.selectSkill(Number(command.slice(-1)));
   if(command==='restart')this.restart();
  }
- restart(){
+ syncClassPicker(){
+  const picker=el('class-selection');
+  if(picker)picker.classList.toggle('hidden',!this.classSelectionOpen);
+ }
+ chooseClass(classId){
+  if(!PREVIEW_CLASSES[classId])return;
   clearPreview(storage());
-  this.run=initialPreviewRun(fixedSeed(),startFloor());
-  this.previewRun=this.run;
-  this.visible=previewVisible(this.run);
+  this.run=initialPreviewRun(fixedSeed(),startFloor(),classId);
+  this.previewRun=this.run;this.visible=previewVisible(this.run);
+  this.aim=null;this.classSelectionOpen=false;
+  this.syncClassPicker();
   savePreview(storage(),this.run);
   this.draw();this.sync();
  }
+ restart(){
+  // Abrir a seleção não apaga a campanha; só escolher uma classe o faz.
+  this.aim=null;this.classSelectionOpen=true;this.syncClassPicker();this.sync();
+ }
+ selectSkill(which){
+  if(this.classSelectionOpen||this.run.over)return;
+  const skill=PREVIEW_CLASSES[this.run.hero.classId].skills[which];
+  if(!skill)return;
+  if(this.run.hero.mana<skill.cost){
+   this.aim=null;this.report('Foco insuficiente: '+skill.cost+' necessários.');this.syncAim();return;
+  }
+  if(skill.target){
+   this.aim=this.aim===which?null:which;
+   this.syncAim();
+   this.report(this.aim===null?'Mira cancelada.':'MIRA: '+skill.name+' · toque no mapa ou F para alvo próximo.');
+  }else{
+   this.aim=null;
+   this.perform({type:'SKILL',which});
+  }
+ }
+ castAt(x,y){
+  if(this.classSelectionOpen||this.aim===null)return;
+  const which=this.aim;
+  const result=this.perform({type:'SKILL',which,x,y});
+  if(result?.consumesTurn){this.aim=null;this.syncAim();}
+ }
+ castNearest(){
+  if(this.aim===null)return;
+  const skill=PREVIEW_CLASSES[this.run.hero.classId].skills[this.aim],p=this.run.hero;
+  const dist=e=>Math.abs(e.x-p.x)+Math.abs(e.y-p.y);
+  const foe=this.run.enemies.filter(e=>e.hp>0&&this.visible.has(e.y*WIDTH+e.x)&&dist(e)<=skill.range)
+   .filter(e=>window.GolzdovNavigation.lineClear(this.run.map,WIDTH,HEIGHT,p.x,p.y,e.x,e.y))
+   .sort((a,b)=>dist(a)-dist(b)||a.id-b.id)[0];
+  if(foe)this.castAt(foe.x,foe.y);
+  else this.report('Nenhum alvo válido para '+skill.name+'. Toque em uma posição visível.');
+ }
+ syncAim(){
+  const hint=el('aim-hint'),aiming=this.aim!==null;
+  if(hint){hint.classList.toggle('hidden',!aiming);if(aiming)hint.textContent='✧ MIRANDO '+PREVIEW_CLASSES[this.run.hero.classId].skills[this.aim].name+' · clique no mapa ou F · ESC cancela';}
+  for(let which=0;which<2;which++){
+   const btn=el('skill'+which+'-button');
+   if(btn)btn.classList.toggle('aiming',this.aim===which);
+  }
+ }
  attackNearest(){
-  if(this.run.over)return;
+  if(this.classSelectionOpen||this.run.over)return;
   const hero=this.run.hero;
   const options=this.run.enemies.filter(e=>e.hp>0&&this.visible.has(e.y*WIDTH+e.x))
    .sort((a,b)=>(Math.abs(a.x-hero.x)+Math.abs(a.y-hero.y))-(Math.abs(b.x-hero.x)+Math.abs(b.y-hero.y)));
-  const enemy=options.find(e=>Math.abs(e.x-hero.x)+Math.abs(e.y-hero.y)<=hero.range);
+  const enemy=options.find(e=>Math.abs(e.x-hero.x)+Math.abs(e.y-hero.y)<=hero.range&&
+   window.GolzdovNavigation.lineClear(this.run.map,WIDTH,HEIGHT,hero.x,hero.y,e.x,e.y));
   if(enemy)this.perform({type:'ATTACK',enemyId:enemy.id});
   else this.report('Nenhum inimigo visível ao alcance do ataque.');
  }
  perform(action){
-  if(this.run.over){this.report('Expedição encerrada. Inicie outra.');return;}
+  if(this.classSelectionOpen||this.run.over){this.report('Escolha uma classe ou inicie outra expedição.');return null;}
   const result=previewAction(this.run,action);
   this.visible=previewVisible(this.run);
   if(result.consumesTurn||result.events.length){
@@ -120,6 +195,7 @@ export class DungeonScene extends Phaser.Scene{
   if(result.status==='blocked')this.report('Uma parede de ossos impede a passagem.');
   if(result.status==='out-of-range')this.report('O inimigo está fora do alcance.');
   this.draw();this.sync();
+  return result;
  }
  report(message){if(el('scene-status'))el('scene-status').textContent=message;}
  draw(){
@@ -154,6 +230,14 @@ export class DungeonScene extends Phaser.Scene{
     if(el('ending-summary'))el('ending-summary').textContent='Estrato '+g.floor+' · '+g.turn+' turnos · '+g.kills+' abates';
    }
   }
+  const klass=PREVIEW_CLASSES[p.classId]||PREVIEW_CLASSES.vigia;
+  if(el('hero-class'))el('hero-class').textContent=klass.name;
+  if(el('hero-weapon'))el('hero-weapon').textContent=klass.weapon;
+  for(let which=0;which<2;which++){
+   const skill=klass.skills[which],btn=el('skill'+which+'-button');
+   if(btn){btn.textContent=skill.icon+' '+skill.short+' · '+skill.cost+'✧';btn.disabled=g.over||p.mana<skill.cost;}
+  }
+  this.syncAim();
   if(el('scene-heading'))el('scene-heading').textContent=title[g.floor-1];
   if(el('scene-status'))el('scene-status').textContent=g.over
    ?g.previewOutcome==='victory'?'VITÓRIA NO RECORTE P2B — reinicie para outra expedição.':'FIM DA EXPEDIÇÃO — reinicie para tentar novamente.'
@@ -161,7 +245,7 @@ export class DungeonScene extends Phaser.Scene{
   if(el('recent-log'))el('recent-log').textContent=(g.previewLog||[]).slice(-3).join(' · ');
  }
  update(time){
-  if(time-this.lastPadAt<175||this.run.over)return;
+  if(time-this.lastPadAt<175||this.run.over||this.classSelectionOpen)return;
   const pad=navigator.getGamepads?.()?.find(p=>p&&p.connected);
   if(!pad)return;
   const pressed=i=>!!pad.buttons[i]?.pressed;
@@ -172,8 +256,10 @@ export class DungeonScene extends Phaser.Scene{
   else if(pressed(14)||axis(0)<-.55)cmd='left';
   else if(pressed(15)||axis(0)>.55)cmd='right';
   else if(pressed(0))cmd='attack';
+  else if(pressed(3))cmd='skill0';
+  else if(pressed(1))cmd=this.aim===null?'skill1':'cancel-aim';
   else if(pressed(2))cmd='potion';
   else if(pressed(5))cmd='wait';
-  if(cmd){this.lastPadAt=time;this.command(cmd);}
+  if(cmd){this.lastPadAt=time;if(cmd==='cancel-aim'){this.aim=null;this.syncAim();}else this.command(cmd);}
  }
 }

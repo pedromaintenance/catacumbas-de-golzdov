@@ -1,4 +1,4 @@
-# Phaser P2B.2 — arte clássica em Phaser (preview jogável)
+# Phaser P3A.1 — classes e habilidades (preview experimental)
 
 **Fonte:** `phaser-src/` (Phaser 4.2.1 + Vite 6.3.1). Depois de CI verde
 no branch `main`, a workflow constrói o bundle e atualiza **somente**
@@ -12,6 +12,13 @@ no branch `main`, a workflow constrói o bundle e atualiza **somente**
 - Toque: D-pad e botões ATACAR, ESPERAR, POÇÃO e REINICIAR. Também é possível tocar numa casa adjacente ou inimigo ao alcance no mapa.
 - Gamepad: D-pad ou analógico esquerdo, A atacar, X poção e RB esperar.
 - `?seed=305419896&floor=4` inicia nova expedição nesse estrato **quando não houver save de preview**. REINICIAR apaga apenas o save de preview.
+
+## Novidades P3A.1 — classe e magia
+
+- Vigia de Thargrid, Arcanista Yokai e Errante de Ironwood, com os atributos da versão HTML. Seleção ao iniciar ou pedir nova expedição; o save experimental só é substituído ao confirmar outra classe.
+- Duas habilidades por classe: **1/2** no teclado ou botões da interface. Mira pelo toque/clique no alvo ou **F** para selecionar inimigo próximo; **Esc** cancela mira.
+- Gamepad: **Y/B** ativam as habilidades; **A** confirma o alvo. Há limitação de mira por cursor/controle físico ainda a resolver em P3A.2.
+- Foco e linha de visão são validados pelo dispatcher de habilidades; ações inválidas não gastam turno.
 
 ## Novidades P2B.2 — identidade visual restaurada
 
@@ -36,7 +43,7 @@ no branch `main`, a workflow constrói o bundle e atualiza **somente**
 
 ## Limitações conhecidas — não é paridade P3
 
-- Classe fixa: Vigia; não há seleção de classe, habilidades, talentos, mercador,
+- Três classes selecionáveis e seis habilidades básicas integradas, mas não há talentos, mercador,
   altar, relíquias equipáveis, todos os tipos de coleta nem dois finais narrativos.
   Itens ainda sem interação exibem mensagem de recurso futuro.
 - Progressão ao subir de nível é simplificada e será substituída pelos talentos
