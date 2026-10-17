@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
 <meta name="theme-color" content="#0b0c11"/>
 <meta name="description" content="Catacumbas de Golzdov — prévia jogável isolada em Phaser 4"/>
-<title>Golzdov · Phaser P3B.4 — Crônicas das Expedições</title>
+<title>Golzdov · Phaser P4A.1 — Caminhos do Osso</title>
 </head><body>
 <main class="app">
 <header class="masthead"><p class="eyebrow">CARCAÇA / CATACUMBAS DE GOLZDOV</p>
@@ -13,7 +13,7 @@
 <section class="panel" aria-labelledby="scene-heading">
 <div class="panel-heading"><div><span class="marker">EXPEDIÇÃO EXPERIMENTAL</span>
 <h2 id="scene-heading">Costelas do Silêncio</h2><p class="class-status">⚔ <strong id="hero-class">Vigia de Thargrid</strong> · <span id="hero-weapon">Martelo das Montanhas</span></p></div>
-<span class="prototype">P3B.4 · CRÔNICAS</span></div>
+<span class="prototype">P4A.1 · CAMINHADA E CONTROLE</span></div>
 <div class="hud" aria-label="Estado da expedição">
 <div class="resource hp" aria-label="Pontos de vida"><span>♥ VIDA <b id="hero-hp">43 / 43</b></span><div class="resource-track"><div id="hp-fill" class="resource-fill"></div></div></div>
 <div class="resource focus" aria-label="Foco"><span>✧ FOCO <b id="hero-focus">8 / 8</b></span><div class="resource-track"><div id="focus-fill" class="resource-fill"></div></div></div>
@@ -64,6 +64,10 @@
   <p class="class-warning">Ao escolher uma classe, uma expedição anterior desta preview será substituída. A campanha HTML permanece intocada.</p>
  </div>
 </div></div>
+<div id="route-feedback" class="route-feedback hidden" role="status" aria-live="polite">
+ <span id="route-text">Caminhando até o destino…</span>
+ <button type="button" data-preview-action="cancel-route" aria-label="Interromper caminhada automática">✕ PARAR CAMINHADA</button>
+</div>
 <div id="aim-hint" class="aim-hint hidden" aria-live="polite"></div>
 <div class="controls" aria-label="Controles de jogo">
 <div class="dpad"><button data-preview-action="up" aria-label="Mover para cima">▲</button>
@@ -96,9 +100,9 @@
 </section>
 <footer class="note"><p><b>Teclado:</b> setas/WASD para mover; 1/2 para habilidades, clique no alvo ou F para confirmar, Esc cancela mira; F/Enter para atacar;
 H/P para poção; E para interagir na casa atual; Espaço para esperar; 1/2/3 para escolher talentos na ascensão. <b>Xbox:</b> D-pad/analógico, A atacar,
-X poção, Y/B habilidades, RB esperar. Clique em um item ou destino explorado para caminhar até ele, ou toque na casa vizinha.</p>
+X poção, Y/B habilidades, RB esperar. Clique em um item ou destino explorado para caminhar até ele; o trajeto será destacado no mapa e pausará diante de ameaças próximas. **Xbox: B interrompe a caminhada;** Esc ou o botão PARAR também cancelam.</p>
 <p>Os turnos só avançam após uma ação válida. Save automático independente da versão clássica.
-A preview inclui os finais Luz 光 / Raiz 根, mercador, relicários e um histórico independente das 20 últimas expedições. As estatísticas se acumulam somente ao concluir uma expedição; uma decisão final pendente não é contada. O jogo clássico e seus saves continuam intactos.</p>
+A preview inclui os finais Luz 光 / Raiz 根, mercador, relicários, navegação destacada e um histórico independente das 20 últimas expedições. As estatísticas se acumulam somente ao concluir uma expedição; uma decisão final pendente não é contada. O jogo clássico e seus saves continuam intactos.</p>
 <a href="../">Voltar ao jogo clássico</a></footer>
 </main>
 <script type="module" src="./src/main.js"></script>

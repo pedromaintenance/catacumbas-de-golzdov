@@ -218,3 +218,16 @@ body::before{content:"";pointer-events:none;position:fixed;inset:0;opacity:.08;b
 .chronicle-records li span{font:11px/1.5 ui-monospace,monospace;color:#bcaeae;overflow-wrap:anywhere}
 .chronicle-note{font:italic 11px/1.6 Georgia,serif;color:#b4a5a1;margin:12px 0 0}
 @media(max-width:560px){.chronicle{margin:8px}.chronicle-heading{padding:10px}}
+
+/* P4A.1 — indicação de rota: visível e cancelável no desktop/mobile. */
+.route-feedback{display:flex;align-items:center;justify-content:space-between;gap:10px;
+ padding:10px 15px;background:linear-gradient(95deg,#2b2835,#171b27);
+ border-block:1px solid #736357;color:#e5d5be}
+.route-feedback span{font:11px/1.5 ui-monospace,monospace;letter-spacing:.02em}
+.route-feedback button{flex-shrink:0;min-height:44px;cursor:pointer;touch-action:manipulation;
+ padding:8px 13px;border-radius:5px;background:#4d3037;border:1px solid #c08777;
+ color:#ffe0bb;font:700 10px ui-monospace,monospace}
+.route-feedback button:focus-visible{outline:2px solid #ffdaad;outline-offset:2px}
+.route-feedback.hidden{display:none}
+@media(max-width:540px){.route-feedback{padding:8px;flex-wrap:wrap}
+ .route-feedback button{width:100%}}

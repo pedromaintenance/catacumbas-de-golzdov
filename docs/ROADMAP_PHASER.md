@@ -13,6 +13,18 @@
 - [ ] Verificar via HTTP/visual a atualização no Pages e em Xbox/celular reais; sem presumir confirmação.
 - [ ] Próximos blocos P3: relíquias e gatilhos (`onAttack`, `onRoot`, `onDefend` etc.), loot/altar/mercador, finais Luz/Raiz, importação de cópia e paridade dos replays. **Preview não substitui o jogo clássico.**
 
+## P4A.1 — Caminhos do Osso: navegação, feedback e segurança (17/10/2026; em validação)
+
+- [x] A rota automática de clique/toque mostra **quadrados do trajeto, marcador de destino e passos restantes**, desenhados em overlay Phaser, sem mutação de mapa, RNG ou save.
+- [x] Botão contextual **PARAR CAMINHADA** com área de toque acessível e estado de rota em `aria-live`. Tecla Esc, botão B do controle Xbox, D-pad/analógico ou ataque manual interrompem a caminhada automaticamente.
+- [x] Resolver precedência de gamepad: B cancela antes do próximo passo, sem disparar acidentalmente a habilidade 2 enquanto permanecer pressionado. Input manual tem prioridade sobre o piloto automático.
+- [x] Interromper rota quando surgir inimigo vivo, visível, a até três casas; a simulação não ataca sozinha nem muda a ordem de resolução de turnos. Escolhas de relicário/altar/escada continuam interrompendo o trajeto.
+- [x] Planejamento em `preview-route.js` reaproveita BFS canônica `GolzdovNavigation.findPath`, rejeitando paredes, neblina, inimigos e destinos inválidos. Cursor/caminhada automática só existe na interface, jamais no save.
+- [x] Testes puros de rota/ameaça e integração de passagem por **cinco estratos gerados de verdade, três seeds**, com caminhada até escadas, menus, descida, recarga de save, verificação de estoque e decisão final. Para isolar topologia, esse teste remove inimigos/itens: **não é teste de balanceamento de combate nem playtest visual completo**.
+- [ ] CI, build Vite/Phaser e PR verdes, seguida de publicação somente em `/phaser/`.
+- [ ] QA físico no Pages, Android/iOS e Xbox (câmera/ponteiro, ameaça, B durante caminhada e acessibilidade).
+- [ ] P4A.2/P5: feedback visual de combate, otimização mobile, PWA/offline da preview e replays integrais com inimigos reais. Preservar rota clássica até aprovação formal da P6.
+
 ## P3B.4 — Crônicas e pós-jogo persistente (16/10/2026; integrada)
 
 - [x] Criar **arquivo de crônicas da preview**, separado do save de execução e das duas chaves do jogo clássico: `carcaca_golzdov_phaser_history_v1`, sem importar ou substituir metadados HTML.
