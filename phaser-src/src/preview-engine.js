@@ -11,14 +11,15 @@ import '../../core/turns.js';
 import '../../core/actions.js';
 import '../../core/defense.js';
 import {createPreviewWorld,ENEMIES,WIDTH,HEIGHT} from './world.js';
+import {PREVIEW_CLASSES} from './preview-classes.js';
 const host=typeof window!=='undefined'?window:globalThis;
 const idx=(x,y)=>y*WIDTH+x;
 const dist=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y);
 const cell=(run,x,y)=>x>0&&y>0&&x<WIDTH-1&&y<HEIGHT-1&&run.map[idx(x,y)]===1;
-export function initialPreviewRun(seed=0x52c4a190,floor=1){
- const {run}=createPreviewWorld(seed,floor);
+export function initialPreviewRun(seed=0x52c4a190,floor=1,classId='vigia'){
+ const {run}=createPreviewWorld(seed,floor,classId);
  run.previewVersion=1;
- run.previewLog=['Você entra nas Costelas do Silêncio.'];
+ run.previewLog=['O '+PREVIEW_CLASSES[classId].name+' entra nas Costelas do Silêncio.'];
  run.previewOutcome=null;
  return run;
 }
@@ -43,6 +44,19 @@ function note(run,message,events){
  run.previewLog=(run.previewLog||[]).concat(message).slice(-7);
  events.push({type:'message',text:message});
 }
+function applyHeroHit(run,enemy,damage,label,events,source='basic'){
+ if(!enemy||enemy.hp<=0)return;
+ for(const impact of host.GolzdovCombat.damageEnemy(run,enemy,damage,label,ENEMIES,source)){
+  if(impact.type==='log')note(run,impact.text,events);
+  if(impact.type==='defeat-enemy'){
+   run.kills++;
+   run.hero.xp+=ENEMIES[enemy.type].xp||0;
+   run.hero.coins+=ENEMIES[enemy.type].gold||0;
+   note(run,ENEMIES[enemy.type].name+' derrotado.',events);
+   if(enemy.type==='boss')run.bossDown=true;
+  }
+ }
+}
 function doAttack(run,enemy,melee,events){
  if(!enemy||enemy.hp<=0)return false;
  const hit=host.GolzdovActions.dispatch(run,{
@@ -51,20 +65,36 @@ function doAttack(run,enemy,melee,events){
  });
  for(const event of hit.events){
   if(event.type==='log')note(run,event.text,events);
-  if(event.type==='hero-hit'){
-   for(const impact of host.GolzdovCombat.damageEnemy(run,enemy,event.damage,event.label,ENEMIES,'basic')){
-    if(impact.type==='log')note(run,impact.text,events);
-    if(impact.type==='defeat-enemy'){
-     run.kills++;
-     run.hero.xp+=ENEMIES[enemy.type].xp||0;
-     run.hero.coins+=ENEMIES[enemy.type].gold||0;
-     note(run,ENEMIES[enemy.type].name+' derrotado.',events);
-     if(enemy.type==='boss')run.bossDown=true;
-    }
-   }
-  }
+  if(event.type==='hero-hit')
+   applyHeroHit(run,enemy,event.damage,event.label,events,event.source);
  }
  return hit.consumesTurn;
+}
+function doSkill(run,action,events){
+ const def=PREVIEW_CLASSES[run.hero.classId];
+ const which=action.which,skill=def?.skills?.[which];
+ if(!Number.isInteger(which)||!skill)return {status:'invalid-skill',consumesTurn:false};
+ const phase=skill.target?'targeted':'instant';
+ if(phase==='targeted'&&(!Number.isInteger(action.x)||!Number.isInteger(action.y)||
+  action.x<0||action.y<0||action.x>=WIDTH||action.y>=HEIGHT))
+  return {status:'invalid-target',consumesTurn:false};
+ const visible=previewVisible(run);
+ const result=host.GolzdovActions.dispatch(run,{
+  type:'SKILL',phase,which,skills:def.skills,x:action.x,y:action.y,
+  isVisible:(x,y)=>visible.has(idx(x,y)),
+  lineClear:(x0,y0,x1,y1)=>host.GolzdovNavigation.lineClear(run.map,WIDTH,HEIGHT,x0,y0,x1,y1),
+  enemyAt:(x,y)=>run.enemies.find(e=>e.hp>0&&e.x===x&&e.y===y),
+  hit:(enemy,damage,label,source)=>applyHeroHit(run,enemy,damage,label,events,source),
+  onRoot:()=>{} // gatilhos de relíquias e sinergias completos: P3B.
+ });
+ for(const e of result.events){
+  if(e.type==='log')note(run,e.text,events);
+  if(e.type==='turn')stepWorld(run,events);
+ }
+ if(result.status==='no-focus')note(run,'Foco insuficiente para '+skill.name+'.',events);
+ if(result.status==='unreachable')note(run,'O alvo está fora do alcance ou atrás de uma parede.',events);
+ if(result.status==='empty')note(run,'Selecione um inimigo válido.',events);
+ return {status:result.status,consumesTurn:result.consumesTurn};
 }
 function damageHero(run,value,message,events){
  const damage=host.GolzdovDefense.reduce(run,value,{muralha:false});
@@ -123,6 +153,10 @@ export function previewAction(run,action){
  if(!run||normalizePreviewOutcome(run)||run.over)return {status:'inactive',consumesTurn:false,events};
  const p=run.hero;
  let result;
+ if(action?.type==='SKILL'){
+  const out=doSkill(run,action,events);
+  return {...out,events};
+ }
  if(action?.type==='ATTACK'){
   const enemy=run.enemies.find(e=>e.id===action.enemyId&&e.hp>0);
   const consumesTurn=doAttack(run,enemy,false,events);
