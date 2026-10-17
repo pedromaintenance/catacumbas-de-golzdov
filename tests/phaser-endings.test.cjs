@@ -119,7 +119,7 @@ test('interface final oferece teclado, toque, gamepad, botões e reinício sem a
  assert.match(scene,/pendingFinalChoice/);
  assert.match(scene,/chooseEnding\(/);
  assert.match(scene,/normalizePreviewEnding/);
- assert.match(scene,/pressed\(0\)\)this.chooseEnding/);
+ assert.match(scene,/this\.padLatch\.consume\(0\)\)this.chooseEnding/);
  assert.match(css,/\.ending-choices/);
  assert.doesNotMatch(scene,/carcaca_golzdov_run_v1|carcaca_golzdov_meta_v1/);
 });
