@@ -15,6 +15,15 @@ no branch `main`, a workflow constrói o bundle e atualiza **somente**
 - Gamepad: D-pad ou analógico esquerdo, A atacar, X poção e RB esperar.
 - `?seed=305419896&floor=4` inicia nova expedição nesse estrato **quando não houver save de preview**. REINICIAR apaga apenas o save de preview.
 
+## Novidades P3B.3 — finais Luz/Raiz (em validação)
+
+- Ao derrotar o Escrivão Sem Nome, o combate pára e aparece **O NOME SEPULTADO**. Escolha **Revelar o Nome (Luz 光)** ou **Guardar o Nome (Raiz 根)**. As narrativas são as mesmas do HTML clássico.
+- Use 1/2, setas e Enter, toque/clique nas cartas ou direcional e A no Xbox. A escolha é definitiva na expedição, sem gastar um turno.
+- Fechar/reabrir a página mantém a decisão pendente ou o epílogo escolhido, na chave isolada da preview.
+- Quem já tinha um save encerrado com `previewOutcome='victory'` recebe essa escolha ao atualizar, sem perder progresso.
+- Para testar rapidamente o último estrato, abra `/phaser/?floor=5&seed=305419896` e confirme uma **nova expedição**: o parâmetro de estrato só vale quando se inicia uma nova run (um save anterior pode ser retomado).
+- A meta/histórico de vitórias e QA real de cinco estratos serão tratados em etapa posterior.
+
 ## Novidades P3B.2 — mercador entre estratos (integrada, 127/127 testes)
 
 - Na escada dos estratos 1–4, escolha **MERCADOR** para abrir seis serviços pelos preços oficiais do HTML: 20/16/16/38/38/54 âmbar.

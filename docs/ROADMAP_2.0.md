@@ -6,6 +6,10 @@ Atualizado em: 15/10/2026. Planejamento detalhado: [GAME_DESIGN_2.0.md](GAME_DES
 
 ## Histórico de execução
 
+- 16/10/2026: **P3B.3 — finais da preview Phaser (em validação)**. A queda do Escrivão abre a decisão Luz 光/Raiz 根, com narrativa canônica, interface teclado/toque/Xbox e epílogo persistido no save experimental. Saves P2B–P3B.2 já encerrados com vitória são migrados para uma decisão pendente sem alterar seed/RNG/turnos. Testes de paridade narrativa e CI pendentes da validação final. Próximos: histórico/pós-jogo e campanha completa; jogo HTML/PWA preservado.
+
+
+
 - 16/10/2026: **P3B.2 — mercador da preview Phaser (integrada)**. Na escada, seis ofertas idênticas ao HTML clássico; compras usam âmbar e não geram turnos, preços preservados. O relicário possui sorteio determinístico persistido por estrato (sem reroll ao cancelar/recarregar), quatro slots e troca com débito de ◈54 apenas ao confirmar. UI usa controles de escolha existentes. [PR #40](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/40) integrado, **127/127 testes** e build verde; workflow [#38992297739](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/38992297739) publicou somente `/phaser/`. QA no Pages/dispositivo permanece pendente; finais narrativos continuam pendentes.
 
 

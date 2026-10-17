@@ -13,6 +13,18 @@
 - [ ] Verificar via HTTP/visual a atualização no Pages e em Xbox/celular reais; sem presumir confirmação.
 - [ ] Próximos blocos P3: relíquias e gatilhos (`onAttack`, `onRoot`, `onDefend` etc.), loot/altar/mercador, finais Luz/Raiz, importação de cópia e paridade dos replays. **Preview não substitui o jogo clássico.**
 
+## P3B.3 — O Nome Sepultado: Luz e Raiz (16/10/2026; em validação)
+
+- [x] Substituir o término genérico ao derrotar o Escrivão Sem Nome pela **decisão final**: revelar o Nome (Luz 光) ou guardar o Nome (Raiz 根), com os textos originais de `showFinalChoice` e `showVictoryEnding` da versão HTML.
+- [x] Encerrar a simulação e impedir novos turnos/RNG ao matar o chefe. Escolher Luz ou Raiz uma única vez, sem consumo adicional de turno ou sorteio; exibir epílogo específico e estatísticas da expedição.
+- [x] Persistir decisão pendente e caminho escolhido na chave isolada `carcaca_golzdov_phaser_preview_run_v1`. Ao recarregar, reabrir a decisão ou exibir o epílogo já finalizado, sem trocar o resultado.
+- [x] Migrar saves da preview anterior com `bossDown`, `over` e `previewOutcome='victory'` para a nova decisão, sem tocar no estado de herói, seed, RNG ou contagem de turnos.
+- [x] Interface narrativa responsiva com controles 1/2, setas + Enter, mouse/toque e direcional + A no Xbox; botão de nova expedição só após resolver a decisão. Tela de derrota utiliza o texto canônico.
+- [x] Testes de coerência narrativa com a base HTML, ambos os finais, bloqueio de entradas, idempotência, morte, saves antigos/novos e compatibilidade das chaves do clássico.
+- [ ] CI e bundle Phaser aprovados; merge e publicação isolada em `/phaser/` após sucesso.
+- [ ] QA visual/HTTP no Pages, caminho completo até o chefe e Xbox/celular físicos. O recorte da preview permanece **separado do PWA HTML**.
+- [ ] Próximos marcos: tela de início/pós-jogo, histórico de expedições (metadados exclusivos da preview), replays de cinco estratos, paridade de interface, PWA/QA mobile.
+
 ## P3B.2 — Mercador e economia entre estratos (16/10/2026; integrada)
 
 - [x] Integrar à escada o mercador do HTML clássico com os mesmos seis serviços e preços: poção (◈20), cura de 18 PV (◈16), foco cheio (◈16), ataque +1 (◈38), defesa +1 (◈38) e relicário (◈54).
