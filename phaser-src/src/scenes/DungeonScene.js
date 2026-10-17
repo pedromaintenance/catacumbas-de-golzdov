@@ -10,6 +10,7 @@ import {PreviewItemUI} from '../preview-item-ui.js';
 import {PREVIEW_ENDING_COPY,normalizePreviewEnding} from '../preview-endings.js';
 import {newPreviewSessionId,readPreviewHistory,archivePreviewRun,finishedPreviewRun} from '../preview-history.js';
 import {planPreviewRoute,nearPreviewThreat,routeCoordinates} from '../preview-route.js';
+import {combatCues,combatAnnouncement} from '../preview-combat-feedback.js';
 const TILE=36;
 const P={
  rock:0x11131d,wall:0x2c3343,floor:0x302b38,grid:0x4f4555,
@@ -29,7 +30,7 @@ const startFloor=()=>{
  return Number.isInteger(n)&&n>=1&&n<=5?n:1;
 };
 export class DungeonScene extends Phaser.Scene{
- constructor(){super('DungeonScene');this.run=null;this.lastPadAt=0;this.aim=null;this.classSelectionOpen=false;this.talentSelectedIndex=0;this.lastTalentKey='';this.itemUI=null;this.autoPath=[];this.routeTarget=null;this.routeGraphics=null;this.nextAutoAt=0;this.finalSelectedIndex=0;this.routeCancelUntilRelease=false;}
+ constructor(){super('DungeonScene');this.run=null;this.lastPadAt=0;this.aim=null;this.classSelectionOpen=false;this.talentSelectedIndex=0;this.lastTalentKey='';this.itemUI=null;this.autoPath=[];this.routeTarget=null;this.routeGraphics=null;this.nextAutoAt=0;this.finalSelectedIndex=0;this.routeCancelUntilRelease=false;this.combatObjects=new Set();}
  create(){
   const existing=loadPreview(storage());
   this.run=existing||initialPreviewRun(fixedSeed(),startFloor());
@@ -169,6 +170,7 @@ export class DungeonScene extends Phaser.Scene{
    this.scale.off('resize',resize);
    this.input.off('pointerdown',pointerClick);
    this.itemUI?.destroy();
+   this.clearCombatFeedback();
    talentList?.removeEventListener('click',onTalentClick);
    chronicleToggle?.removeEventListener('click',onChronicleToggle);
    finalChoices?.removeEventListener('click',onEndingClick);
@@ -201,6 +203,8 @@ export class DungeonScene extends Phaser.Scene{
  }
  chooseClass(classId){
   if(!PREVIEW_CLASSES[classId])return;
+  this.clearCombatFeedback();
+  if(el('combat-status'))el('combat-status').textContent='Nenhum confronto registrado nesta expedição.';
   clearPreview(storage());
   this.run=initialPreviewRun(fixedSeed(),startFloor(),classId);
   this.run.previewSessionId=newPreviewSessionId();
@@ -280,6 +284,7 @@ export class DungeonScene extends Phaser.Scene{
   if(result.status==='blocked')this.report('Uma parede de ossos impede a passagem.');
   if(result.status==='out-of-range')this.report('O inimigo está fora do alcance.');
   this.draw();this.sync();
+  this.showCombatFeedback(result.events);
   return result;
  }
  beginAutoRoute(path,x,y){
@@ -313,6 +318,34 @@ export class DungeonScene extends Phaser.Scene{
    this.routeGraphics.lineStyle(3,0xf8dd9c,1);
    this.routeGraphics.strokeCircle((this.routeTarget.x+.5)*TILE,
     (this.routeTarget.y+.5)*TILE,TILE*.35);
+  }
+ }
+ clearCombatFeedback(){
+  for(const object of this.combatObjects){
+   this.tweens.killTweensOf(object);
+   object.destroy();
+  }
+  this.combatObjects.clear();
+ }
+ showCombatFeedback(events){
+  const cues=combatCues(events);
+  if(!cues.length)return;
+  const status=el('combat-status');
+  if(status)status.textContent=combatAnnouncement(cues);
+  const reducedMotion=window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches??false;
+  for(const [i,cue] of cues.entries()){
+   const text=this.add.text((cue.x+.5)*TILE,(cue.y+.23)*TILE-i%3*3,
+    cue.text,{
+     fontFamily:'monospace',fontSize:cue.critical?'19px':'15px',
+     fontStyle:'bold',color:'#'+cue.color.toString(16).padStart(6,'0'),
+     stroke:'#100e16',strokeThickness:4,
+     backgroundColor:'#100e16c9',padding:{x:4,y:3}
+    }).setOrigin(.5,1).setDepth(50);
+   this.combatObjects.add(text);
+   const done=()=>{this.combatObjects.delete(text);text.destroy();};
+   if(reducedMotion)this.time.delayedCall(1050,done);
+   else this.tweens.add({targets:text,y:text.y-22,alpha:0,
+    duration:950,ease:'Sine.easeOut',onComplete:done});
   }
  }
  report(message){if(el('scene-status'))el('scene-status').textContent=message;}
