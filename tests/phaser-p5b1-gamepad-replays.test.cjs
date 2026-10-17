@@ -75,7 +75,14 @@ async function replay(seed,classId){
   const [x,y]=adjacent(run,foe.x,foe.y);
   hero.x=x;hero.y=y;
   const rngBefore=run.rngState,turnsBefore=run.turn;
-  let attempts=0,hadCombatEvent=false,hadEnemyAi=false;
+  // Força uma resposta da IA com um turno real ao lado do monstro,
+  // antes que o ataque de QA (com dano elevado) termine o encontro.
+  const enemyTurn=m.previewAction(run,{type:'WAIT'});
+  assert.equal(enemyTurn.status,'applied');
+  assert.equal(enemyTurn.consumesTurn,true);
+  let attempts=0,hadCombatEvent=false;
+  const hadEnemyAi=enemyTurn.events.some(x=>x.type==='combat-feedback'&&
+   (x.kind==='dodge'||x.kind==='hero-hit'));
   while(foe.hp>0&&attempts++<25){
    const beforeTurn=run.turn;
    const out=m.previewAction(run,{type:'ATTACK',enemyId:initialEnemyId});
@@ -84,8 +91,6 @@ async function replay(seed,classId){
    assert.equal(run.turn,beforeTurn+1);
    hadCombatEvent ||=out.events.some(x=>x.type==='combat-feedback'&&
     ['enemy-hit','miss','enemy-defeat'].includes(x.kind));
-   hadEnemyAi ||=out.events.some(x=>x.type==='combat-feedback'&&
-    (x.kind==='dodge'||x.kind==='hero-hit'));
   }
   assert.equal(foe.hp,0,'ataque do jogo deve derrotar o monstro real');
   assert.ok(hadCombatEvent,'eventos reais de combate emitidos');
