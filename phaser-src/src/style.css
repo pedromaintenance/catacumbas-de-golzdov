@@ -40,3 +40,47 @@ body::before{content:"";pointer-events:none;position:fixed;inset:0;opacity:.08;b
  .actions{grid-template-columns:repeat(2,minmax(105px,1fr))}
  .actions button{font-size:10px;padding:11px 8px}.hud{font-size:10px;gap:8px}
  .stage{height:50vh;min-height:300px}}
+
+/* P2B.2 — composição mais próxima do Canvas clássico, mantendo HUD em DOM. */
+.panel{max-width:790px;margin-inline:auto;border-color:#6b5051;background:#101017}
+.panel-heading{background:linear-gradient(110deg,#292027,#14141d);border-bottom-color:#624548}
+.stage{width:min(100%,620px);height:min(63vh,680px);min-height:410px;margin:0 auto;
+ border-left:1px solid #46353b;border-right:1px solid #46353b;
+ box-shadow:0 0 0 1px #09090e,0 0 75px #000b;background:#07080c}
+.canvas-parent{z-index:1}
+.hud{align-items:stretch;gap:12px;background:#19161d;color:#a99c97}
+.hud>span{display:flex;align-items:center;gap:6px}
+.hud>span b{font-size:12px;color:#e6cd9b}
+.resource{width:132px;min-width:110px;font:11px ui-monospace,monospace}
+.resource>span{display:flex;justify-content:space-between;color:#aa998f;font-weight:800}
+.resource b{color:#f0d7a7;font-size:12px}
+.resource-track{height:6px;background:#0b1016;border-radius:3px;overflow:hidden;margin-top:6px;
+ border:1px solid #403a3e}
+.resource-fill{height:100%;width:100%;transition:width 130ms linear}
+.hp .resource-fill{background:linear-gradient(90deg,#7d343d,#d9756f)}
+.focus .resource-fill{background:linear-gradient(90deg,#315f70,#8cbac3)}
+.hidden{display:none!important}
+.ending{z-index:9;position:absolute;inset:0;display:grid;place-items:center;padding:24px;
+ background:#07070cce;backdrop-filter:blur(2px)}
+.ending-content{max-width:370px;width:100%;text-align:center;background:
+ radial-gradient(ellipse at top,#352631,#16131d 65%,#100e15);
+ border:1px solid #997a71;box-shadow:0 30px 75px #000c, inset 0 0 0 5px #1d1820;
+ padding:32px 22px;color:#e9d7c2}
+.ending-content h2{font:normal clamp(24px,5vw,34px) Georgia,serif;line-height:1.1;margin:16px 0;color:#f1cab7}
+.ending-content p{font-size:13px;line-height:1.6;color:#b8a8a2}
+.ending-content .ending-hint{font-style:italic;color:#91868a}
+.ending-content button{margin-top:12px;background:linear-gradient(120deg,#743b45,#48292f);
+ color:#ffdfc7;border:1px solid #a26a6c;border-radius:6px;padding:14px 19px;
+ font:bold 11px ui-monospace,monospace;letter-spacing:.12em;cursor:pointer}
+.ending-content button:hover{filter:brightness(1.2)}
+.controls{max-width:790px;margin-inline:auto}
+.masthead{margin-bottom:18px}
+@media(max-width:560px){
+ .app{padding:10px 0 16px}
+ .masthead{padding-inline:10px}
+ .panel{border-left:0;border-right:0}
+ .stage{width:100%;height:52vh;min-height:315px}
+ .resource{min-width:112px;width:calc(50% - 8px)}
+ .hud{justify-content:space-between;gap:10px;padding:12px}
+ .hud>span{font-size:10px}
+}
