@@ -85,7 +85,8 @@ test('pós-build coleta hash real dos bundles, cópia de ícones e versão muda 
   assert.ok(one.precache.includes('./assets/index-Q9.css'));
   assert.equal(fs.statSync(path.join(dir,'icons/icon-512.png')).size,
    fs.statSync(path.join(ROOT,'icons/icon-512.png')).size);
-  assert.ok(one.worker.includes(one.cache));
+  assert.ok(one.worker.includes(one.version));
+  assert.ok(one.worker.includes('golzdov-phaser-offline-'));
   const two=generatePreviewPwa(dir);
   assert.equal(one.version,two.version,'sem mudanças não deve invalidar cache');
   fs.writeFileSync(path.join(dir,'assets/index-Ab12.js'),'bundle realmente atualizado');
