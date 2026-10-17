@@ -15,6 +15,14 @@ no branch `main`, a workflow constrói o bundle e atualiza **somente**
 - Gamepad: D-pad ou analógico esquerdo, A atacar, X poção e RB esperar.
 - `?seed=305419896&floor=4` inicia nova expedição nesse estrato **quando não houver save de preview**. REINICIAR apaga apenas o save de preview.
 
+## Novidades P4A.1 — caminhos visíveis e interrupção segura (em validação)
+
+- Clique/toque em um ponto explorado para ver **a rota desenhada no mapa**, destino marcado e contador de passos.
+- Toque **PARAR CAMINHADA**, pressione **Esc**, **B no Xbox** ou execute movimento/ataque manual para interromper. O B cancela sem conjurar a habilidade 2 acidentalmente.
+- Ao avistar inimigo vivo em até três casas, a caminhada pausa antes de movimentar novamente. O herói não luta automaticamente.
+- Movimento e coleta continuam gastando os turnos habituais; desenhar ou interromper a rota não gasta turno/RNG e não entra no save.
+- Testes de integração cobrem transições entre os cinco estratos em três seeds, menu da escada e final. Inimigos e itens são omitidos nesses testes de **topologia**; ainda falta playtest de combate real em cinco estratos, especialmente no celular e Xbox.
+
 ## Novidades P3B.4 — crônicas de expedições (integrada, 145/145 testes)
 
 - Abra **VER HISTÓRICO** abaixo dos controles para consultar partidas encerradas. Somente derrotas e epílogos Luz/Raiz confirmados entram na contagem; decisão pendente não conta.
