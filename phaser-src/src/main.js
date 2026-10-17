@@ -2,9 +2,11 @@ import Phaser from 'phaser';
 import {BootScene} from './scenes/BootScene.js';
 import {DungeonScene} from './scenes/DungeonScene.js';
 import './style.css';
+import {initPreviewPwa} from './preview-pwa.js';
 
 // Sem alterações na rota principal, SW ou localStorage.
 // No P2A Phaser apresenta o mapa; os turnos não são executados pelo render.
+initPreviewPwa();
 const game=new Phaser.Game({
   type:Phaser.AUTO,
   parent:'phaser-canvas',
