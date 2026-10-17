@@ -9,14 +9,14 @@ import '../../core/navigation.js';
 export const WIDTH=35;
 export const HEIGHT=35;
 export const ENEMIES=Object.freeze({
-  rat:{hp:8,atk:4,def:0},
-  guard:{hp:15,atk:6,def:2},
-  slime:{hp:18,atk:5,def:1},
-  archer:{hp:13,atk:6,def:1},
-  kappa:{hp:17,atk:7,def:1},
-  specter:{hp:20,atk:8,def:1},
-  knight:{hp:26,atk:9,def:3},
-  boss:{hp:106,atk:13,def:3}
+  rat:{name:'Rato de Ossos',hp:8,atk:4,def:0,xp:6,gold:2},
+  guard:{name:'Sentinela Óssea',hp:15,atk:6,def:2,xp:11,gold:5},
+  slime:{name:'Lodo de Medula',hp:18,atk:5,def:1,xp:10,gold:4},
+  archer:{name:'Arqueiro da Corte',hp:13,atk:6,def:1,xp:13,gold:6,range:4},
+  kappa:{name:'Kappa-Escriba',hp:17,atk:7,def:1,xp:15,gold:6},
+  specter:{name:'Eco Sem Nome',hp:20,atk:8,def:1,xp:17,gold:8},
+  knight:{name:'Cavaleiro Vazio',hp:26,atk:9,def:3,xp:22,gold:11},
+  boss:{name:'Escrivão Sem Nome',hp:106,atk:13,def:3,xp:100,gold:90,range:3}
 });
 const host=typeof window!=='undefined'?window:globalThis;
 const FIXED_SEED=0x52c4a190;
