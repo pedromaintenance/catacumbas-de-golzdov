@@ -18,16 +18,52 @@ jobs:
       - name: Testar RNG, saves, cache e geração de mapas
         run: node --test tests/*.test.cjs
 
-      - name: Instalar Phaser/Vite para validar o laboratório P2A
+      - name: Instalar Phaser/Vite para validar o preview jogável P2B
         run: npm install --prefix phaser-src --no-audit --no-fund
-      - name: Compilar cena Phaser isolada
+      - name: Compilar preview Phaser jogável
         run: npm run --prefix phaser-src build
       - name: Verificar bundle sem CDN e com base relativa
         run: node scripts/verify-phaser-dist.cjs
       - name: Arquivar bundle técnico para inspeção (sem publicar Pages)
         uses: actions/upload-artifact@v4
         with:
-          name: golzdov-phaser-p2a
+          name: golzdov-phaser-p2b
           path: phaser-src/dist/
           if-no-files-found: error
           retention-days: 7
+
+  publicar-preview:
+    name: Publicar apenas /phaser/ depois dos testes
+    # Publicação pós-merge: PR nunca modifica os arquivos do Pages.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: smoke
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout da main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Construir artefatos isolados
+        run: |
+          npm install --prefix phaser-src --no-audit --no-fund
+          npm run --prefix phaser-src build
+          node scripts/verify-phaser-dist.cjs
+      - name: Atualizar somente /phaser/ e lockfile do preview
+        run: |
+          mkdir -p phaser
+          rsync -a --delete phaser-src/dist/ phaser/
+          git add -A -f phaser/
+          git add -f phaser-src/package-lock.json
+          if ! git diff --cached --quiet; then
+            git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -m "build(phaser): publicar preview P2B [skip ci]"
+            git push origin HEAD:main
+          else
+            echo "Preview compilado já coincide com os arquivos publicados."
+          fi
