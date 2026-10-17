@@ -4,9 +4,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
 <meta name="theme-color" content="#0b0c11"/>
 <meta name="description" content="Catacumbas de Golzdov — prévia jogável isolada em Phaser 4"/>
-<title>Golzdov · Phaser P3B.3 — O Nome Sepultado</title>
-  <script type="module" crossorigin src="./assets/index-BBnVlTOT.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-AZsgjZtz.css">
+<title>Golzdov · Phaser P3B.4 — Crônicas das Expedições</title>
+  <script type="module" crossorigin src="./assets/index-BE0NbQp3.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-DajqIWb5.css">
 </head><body>
 <main class="app">
 <header class="masthead"><p class="eyebrow">CARCAÇA / CATACUMBAS DE GOLZDOV</p>
@@ -15,7 +15,7 @@
 <section class="panel" aria-labelledby="scene-heading">
 <div class="panel-heading"><div><span class="marker">EXPEDIÇÃO EXPERIMENTAL</span>
 <h2 id="scene-heading">Costelas do Silêncio</h2><p class="class-status">⚔ <strong id="hero-class">Vigia de Thargrid</strong> · <span id="hero-weapon">Martelo das Montanhas</span></p></div>
-<span class="prototype">P3B.3 · LUZ E RAIZ</span></div>
+<span class="prototype">P3B.4 · CRÔNICAS</span></div>
 <div class="hud" aria-label="Estado da expedição">
 <div class="resource hp" aria-label="Pontos de vida"><span>♥ VIDA <b id="hero-hp">43 / 43</b></span><div class="resource-track"><div id="hp-fill" class="resource-fill"></div></div></div>
 <div class="resource focus" aria-label="Foco"><span>✧ FOCO <b id="hero-focus">8 / 8</b></span><div class="resource-track"><div id="focus-fill" class="resource-fill"></div></div></div>
@@ -84,12 +84,23 @@
 <div class="panel-footer"><span id="scene-status" aria-live="polite">Entrando na Carcaça…</span>
 <span>SEED <b id="scene-seed">—</b></span></div>
 <div id="recent-log" class="log" aria-live="polite"></div>
+<section id="chronicle" class="chronicle" aria-labelledby="chronicle-title">
+ <div class="chronicle-heading">
+  <h3 id="chronicle-title">☷ CRÔNICAS DAS EXPEDIÇÕES</h3>
+  <button id="chronicle-toggle" type="button" aria-expanded="false" aria-controls="chronicle-body">VER HISTÓRICO <span aria-hidden="true">⌄</span></button>
+ </div>
+ <div id="chronicle-body" class="hidden">
+  <p id="chronicle-stats" class="chronicle-stats">Nenhuma expedição concluída nesta preview.</p>
+  <ol id="chronicle-records" class="chronicle-records" aria-label="Últimas expedições encerradas"></ol>
+  <p class="chronicle-note">As 20 crônicas mais recentes ficam armazenadas apenas nesta preview; reiniciar não as apaga.</p>
+ </div>
+</section>
 </section>
 <footer class="note"><p><b>Teclado:</b> setas/WASD para mover; 1/2 para habilidades, clique no alvo ou F para confirmar, Esc cancela mira; F/Enter para atacar;
 H/P para poção; E para interagir na casa atual; Espaço para esperar; 1/2/3 para escolher talentos na ascensão. <b>Xbox:</b> D-pad/analógico, A atacar,
 X poção, Y/B habilidades, RB esperar. Clique em um item ou destino explorado para caminhar até ele, ou toque na casa vizinha.</p>
 <p>Os turnos só avançam após uma ação válida. Save automático independente da versão clássica.
-A preview inclui talentos, mercador, relicários, altares e finais Luz 光 / Raiz 根 após derrotar o Escrivão Sem Nome. A decisão final e o epílogo permanecem no save experimental; a rota HTML original continua intacta.</p>
+A preview inclui os finais Luz 光 / Raiz 根, mercador, relicários e um histórico independente das 20 últimas expedições. As estatísticas se acumulam somente ao concluir uma expedição; uma decisão final pendente não é contada. O jogo clássico e seus saves continuam intactos.</p>
 <a href="../">Voltar ao jogo clássico</a></footer>
 </main>
 </body></html>
