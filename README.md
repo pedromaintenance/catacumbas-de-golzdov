@@ -26,6 +26,10 @@ A preview Phaser agora apresenta a decisão final **Luz 光 / Raiz 根** quando 
 
 A preview Phaser ganhou histórico próprio dos 20 últimos resultados e um painel expansível de estatísticas de expedições, vitórias, derrotas, melhor estrato, abates e caminhos Luz/Raiz. Só o final definitivo é arquivado, sem duplicar contagens ao recarregar a página. O histórico fica na chave `carcaca_golzdov_phaser_history_v1`, separada da run experimental e dos dados do jogo clássico. O botão REINICIAR passa a funcionar também nos estados finais. [PR #42](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/42) integrado com **145/145 testes** e [workflow #38993888149](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/38993888149) aprovado. Bundles da P3B.4 publicados somente em `/phaser/`; QA visual no Pages ainda pendente.
 
+### P4A.1 — Caminhos do Osso (em validação)
+
+A preview Phaser destaca o caminho quando você clica ou toca em uma casa explorada, marca o destino, mostra os passos restantes e oferece o botão **PARAR CAMINHADA**. Esc, B no Xbox ou comandos manuais interrompem a rota; inimigos visíveis próximos também pausam o avanço, sem gasto adicional de turno ou RNG pela UI. Incluídos testes de transição por cinco estratos/3 seeds sem inimigos, para validar topologia, menus e saves. **Não são uma prova de balanceamento de combate.** O HTML estável e seus saves não são alterados. Publicação condicionada à CI.
+
 ## Evolução 2.0 (em desenvolvimento)
 
 A evolução está documentada e acompanhada em:
