@@ -92,7 +92,7 @@ async function replay(seed,classId){
    hadCombatEvent ||=out.events.some(x=>x.type==='combat-feedback'&&
     ['enemy-hit','miss','enemy-defeat'].includes(x.kind));
   }
-  assert.equal(foe.hp,0,'ataque do jogo deve derrotar o monstro real');
+  assert.ok(foe.hp<=0,'ataque do jogo deve derrotar o monstro real (PV podem ficar negativos pela regra canônica)');
   assert.ok(hadCombatEvent,'eventos reais de combate emitidos');
   assert.ok(hadEnemyAi,'IA deve responder a um ataque adjacente');
   assert.ok(run.turn>turnsBefore);
