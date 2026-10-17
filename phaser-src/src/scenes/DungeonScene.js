@@ -619,11 +619,11 @@ export class DungeonScene extends Phaser.Scene{
   list.querySelector('button')?.focus({preventScroll:true});
  }
  update(time){
-  const pad=navigator.getGamepads?.()?.find(p=>p&&p.connected);
-  this.syncGamepadState(!!pad);
+  const gamepad=navigator.getGamepads?.()?.find(p=>p&&p.connected);
+  this.syncGamepadState(!!gamepad);
   if(this.classSelectionOpen){
-   if(!pad||time-this.lastPadAt<175)return;
-   const input=classPickerInput(pad);
+   if(!gamepad||time-this.lastPadAt<175)return;
+   const input=classPickerInput(gamepad);
    if(!input)return;
    this.lastPadAt=time;
    if(input.type==='move')this.moveClassPicker(input.delta);
@@ -635,7 +635,7 @@ export class DungeonScene extends Phaser.Scene{
   }
   // Segurar A ao confirmar a classe nunca executa um ataque no primeiro turno.
   if(this.waitClassARelease){
-   if(pad?.buttons?.[0]?.pressed)return;
+   if(gamepad?.buttons?.[0]?.pressed)return;
    this.waitClassARelease=false;
   }
   if(this.run.pendingFinalChoice){
