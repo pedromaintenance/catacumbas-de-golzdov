@@ -6,6 +6,10 @@ Atualizado em: 15/10/2026. Planejamento detalhado: [GAME_DESIGN_2.0.md](GAME_DES
 
 ## Histórico de execução
 
+- 16/10/2026: **P3B.1 Phaser — correção de interação com itens (em validação)**. Completar todas as oito categorias de coleta pelo núcleo de loot, relicários com catálogo canônico, quatro slots e trocas confirmadas, altares, escadas com opção e caminhada até o item pelo mapa conhecido. HUD com âmbar/bolsa, controles por teclado/toque/Xbox, eventos de relicário integrados. Testes e publicação no Pages dependem da CI verde do PR; o HTML clássico não muda.
+
+
+
 - 16/10/2026: **P3A.2 Phaser — ascensão por escolha, integrada à main**. Os 9 talentos exclusivos e as 3 melhorias universais da build clássica foram portados sem mudar balanceamento; preview interrompe turnos para mostrar 3 alternativas, permite escolha por teclado/toque/Xbox, preserva opções no save experimental, sem escrever nas chaves do clássico. Habilitados efeitos defensivos de Muralha Viva/Último Juramento e crítico de Olho Predador. [PR #38](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/38) integrado; **107/107 testes** e build aprovados na CI; workflow pós-merge publicou novo bundle em `/phaser/`. Teste HTTP/visual no Pages e dispositivos reais continuam pendentes. Preview permanece separada de `index.html`, e a P3B ainda prevê relíquias, mercado e finais.
 
 
