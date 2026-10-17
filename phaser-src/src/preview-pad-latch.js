@@ -11,8 +11,8 @@ export class PreviewPadLatch{
   const current=new Set();
   for(const [index,button] of (pad.buttons||[]).entries())
    if(button?.pressed)current.add(index);
-  const changed=!this.connected||context!==this.context;
-  if(changed)this.pending.clear();
+  const changed=this.connected&&context!==this.context;
+  if(changed||!this.connected)this.pending.clear();
   for(const index of current)
    if(!this.previous.has(index)&&!changed)this.pending.add(index);
   this.previous=current;this.context=context;this.connected=true;
@@ -31,4 +31,13 @@ export function previewInputContext(scene){
  if(scene.itemUI?.active())return 'item';
  if(scene.autoPath?.length)return 'route';
  return 'exploration';
+}
+
+export function previewBackChoiceIndex(items){
+ if(!Array.isArray(items))return -1;
+ for(const type of ['RELIC_BACK','RELIC_SKIP','SHOP_CLOSE','STAIRS_CANCEL']){
+  const index=items.findIndex(item=>item?.type===type);
+  if(index>=0)return index;
+ }
+ return -1;
 }
