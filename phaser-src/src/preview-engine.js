@@ -1,7 +1,7 @@
 /* P2B vertical slice: movimentação, ataque, espera, poção e turno inimigo.
  * Reutiliza o dispatcher/IA/RNG/combate da build principal.
  * Sem navegador, Phaser, timers, áudio ou storage; nunca avança no render.
- * P3B.2 integra o mercador; finais narrativos completos permanecem em P3C.
+ * P3B.3 traz o confronto final Luz/Raiz e encerramentos canônicos.
  */
 import './world.js';
 import '../../core/combat.js';
@@ -18,6 +18,7 @@ import {PREVIEW_CLASSES} from './preview-classes.js';
 import {beginPreviewLevelUp,choosePreviewTalent} from './preview-talents.js';
 import {PREVIEW_RELICS,ensurePreviewRelicOffer,resolvePreviewRelicChoice} from './preview-relics.js';
 import {buyPreviewShopGood,shopGood} from './preview-shop.js';
+import {beginPreviewFinalDecision,choosePreviewEnding,normalizePreviewEnding} from './preview-endings.js';
 const host=typeof window!=='undefined'?window:globalThis;
 const idx=(x,y)=>y*WIDTH+x;
 const dist=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y);
@@ -31,6 +32,7 @@ export function initialPreviewRun(seed=0x52c4a190,floor=1,classId='vigia'){
  run.pendingShrineChoice=false;
  run.pendingStairs=false;
  run.pendingShop=false;
+ run.pendingFinalChoice=false;
  return run;
 }
 // Saves P2B anteriores podiam conter PV=0 sem flag de encerramento.
@@ -155,7 +157,12 @@ function enemyStep(run,e,events){
 }
 function stepWorld(run,events){
  host.GolzdovTurns.advance(run,{
-  onVictory:()=>{run.over=true;run.previewOutcome='victory';note(run,'O Escrivão Sem Nome foi derrotado!',events);},
+  onVictory:()=>{
+   if(beginPreviewFinalDecision(run)){
+    note(run,'O Escrivão Sem Nome foi derrotado. A palavra original desperta.',events);
+    events.push({type:'final-decision'});
+   }
+  },
   onStart:()=>relicEvent(run,'onTurnStart',{},events),
   onEnemy:(enemy)=>enemyStep(run,enemy,events),
   onReveal:()=>previewVisible(run),
@@ -204,8 +211,16 @@ function enterSpecialCell(run,events){
 }
 export function previewAction(run,action){
  const events=[];
- if(!run||normalizePreviewOutcome(run)||run.over)return {status:'inactive',consumesTurn:false,events};
+ if(!run)return {status:'inactive',consumesTurn:false,events};
+ normalizePreviewEnding(run);
  const type=action?.type;
+ if(type==='CHOOSE_ENDING'){
+  if(!choosePreviewEnding(run,action.ending))
+   return {status:'invalid-ending',consumesTurn:false,events};
+  note(run,'Você escolheu o caminho da '+(action.ending==='luz'?'Luz 光.':'Raiz 根.'),events);
+  return {status:'ending-chosen',consumesTurn:false,events};
+ }
+ if(normalizePreviewOutcome(run)||run.over)return {status:'inactive',consumesTurn:false,events};
  if(type==='CHOOSE_TALENT'){
   const picked=choosePreviewTalent(run,action.talentId);
   if(!picked)return {status:'invalid-talent',consumesTurn:false,events};
