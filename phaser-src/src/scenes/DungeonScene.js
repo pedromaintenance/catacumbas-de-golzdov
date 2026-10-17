@@ -13,6 +13,7 @@ import {planPreviewRoute,nearPreviewThreat,routeCoordinates} from '../preview-ro
 import {combatCues,combatAnnouncement} from '../preview-combat-feedback.js';
 import {classPickerInput,nextClassPickerIndex} from '../preview-gamepad-picker.js';
 import {previewThreats} from '../preview-status.js';
+import {PreviewPadLatch,previewInputContext} from '../preview-pad-latch.js';
 const TILE=36;
 const P={
  rock:0x11131d,wall:0x2c3343,floor:0x302b38,grid:0x4f4555,
@@ -32,7 +33,7 @@ const startFloor=()=>{
  return Number.isInteger(n)&&n>=1&&n<=5?n:1;
 };
 export class DungeonScene extends Phaser.Scene{
- constructor(){super('DungeonScene');this.run=null;this.lastPadAt=0;this.aim=null;this.classSelectionOpen=false;this.talentSelectedIndex=0;this.lastTalentKey='';this.itemUI=null;this.autoPath=[];this.routeTarget=null;this.routeGraphics=null;this.nextAutoAt=0;this.finalSelectedIndex=0;this.routeCancelUntilRelease=false;this.combatObjects=new Set();this.classPickerIndex=0;this.waitClassARelease=false;this.lastPadConnected=null;}
+ constructor(){super('DungeonScene');this.run=null;this.lastPadAt=0;this.aim=null;this.classSelectionOpen=false;this.talentSelectedIndex=0;this.lastTalentKey='';this.itemUI=null;this.autoPath=[];this.routeTarget=null;this.routeGraphics=null;this.nextAutoAt=0;this.finalSelectedIndex=0;this.routeCancelUntilRelease=false;this.combatObjects=new Set();this.classPickerIndex=0;this.waitClassARelease=false;this.lastPadConnected=null;this.padLatch=new PreviewPadLatch();}
  create(){
   const existing=loadPreview(storage());
   this.run=existing||initialPreviewRun(fixedSeed(),startFloor());
@@ -96,6 +97,9 @@ export class DungeonScene extends Phaser.Scene{
    if(this.itemUI.active()){
     e.preventDefault();this.itemUI.key(key);return;
    }
+   // Quando um botão HTML mantém o foco, Enter/Espaço pertencem a ele.
+   // Evita que um clique de acessibilidade acione ataque/espera em paralelo.
+   if(e.target instanceof Element&&e.target.closest('button,a,input,textarea,select,[contenteditable="true"]'))return;
    const movement={arrowup:[0,-1],w:[0,-1],arrowdown:[0,1],s:[0,1],
     arrowleft:[-1,0],a:[-1,0],arrowright:[1,0],d:[1,0]};
    if(key==='escape'){
@@ -621,13 +625,14 @@ export class DungeonScene extends Phaser.Scene{
  update(time){
   const gamepad=navigator.getGamepads?.()?.find(p=>p&&p.connected);
   this.syncGamepadState(!!gamepad);
+  this.padLatch.sample(gamepad,previewInputContext(this));
   if(this.classSelectionOpen){
    if(!gamepad||time-this.lastPadAt<175)return;
    const input=classPickerInput(gamepad);
    if(!input)return;
    this.lastPadAt=time;
    if(input.type==='move')this.moveClassPicker(input.delta);
-   if(input.type==='confirm'){
+   if(input.type==='confirm'&&this.padLatch.consume(0)){
     this.waitClassARelease=true;
     this.chooseClass(PREVIEW_CLASS_IDS[this.classPickerIndex]);
    }
@@ -645,7 +650,7 @@ export class DungeonScene extends Phaser.Scene{
    const pressed=i=>!!pad.buttons[i]?.pressed,axis=i=>pad.axes[i]||0;
    if(pressed(12)||pressed(14)||axis(0)<-.55||axis(1)<-.55)this.selectEnding(-1);
    else if(pressed(13)||pressed(15)||axis(0)>.55||axis(1)>.55)this.selectEnding(1);
-   else if(pressed(0))this.chooseEnding(this.finalSelectedIndex===0?'luz':'raiz');
+   else if(this.padLatch.consume(0))this.chooseEnding(this.finalSelectedIndex===0?'luz':'raiz');
    else return;
    this.lastPadAt=time;return;
   }
@@ -653,7 +658,7 @@ export class DungeonScene extends Phaser.Scene{
   if(this.itemUI.active()&&!this.run.pendingTalentChoices?.length){
    if(time-this.lastPadAt<175)return;
    const pad=navigator.getGamepads?.()?.find(p=>p&&p.connected);
-   if(pad&&this.itemUI.pad(pad))this.lastPadAt=time;
+   if(pad&&this.itemUI.pad(pad,this.padLatch))this.lastPadAt=time;
    return;
   }
   // Entradas físicas têm precedência sobre a rota automática. Xbox B
@@ -667,7 +672,7 @@ export class DungeonScene extends Phaser.Scene{
    const pad=navigator.getGamepads?.()?.find(p=>p&&p.connected);
    if(pad&&time-this.lastPadAt>=175){
     const pressed=i=>!!pad.buttons[i]?.pressed,axis=i=>pad.axes[i]||0;
-    if(pressed(1)){
+    if(this.padLatch.consume(1)){
      this.routeCancelUntilRelease=true;this.lastPadAt=time;
      this.cancelAutoRoute('Caminhada interrompida pelo controle.');return;
     }
@@ -676,7 +681,7 @@ export class DungeonScene extends Phaser.Scene{
     else if(pressed(13)||axis(1)>.55)manual='down';
     else if(pressed(14)||axis(0)<-.55)manual='left';
     else if(pressed(15)||axis(0)>.55)manual='right';
-    else if(pressed(0))manual='attack';
+    else if(this.padLatch.consume(0))manual='attack';
     if(manual){
      this.lastPadAt=time;this.command(manual);return;
     }
@@ -707,7 +712,7 @@ export class DungeonScene extends Phaser.Scene{
     this.talentSelectedIndex=(this.talentSelectedIndex+options.length-1)%options.length;
    }else if(pressed(13)||pressed(15)||axis(1)>.55){
     this.talentSelectedIndex=(this.talentSelectedIndex+1)%options.length;
-   }else if(pressed(0))this.chooseTalentAt(this.talentSelectedIndex);
+   }else if(this.padLatch.consume(0))this.chooseTalentAt(this.talentSelectedIndex);
    else return;
    this.lastPadAt=time;
    for(const [i,button] of [...(el('talent-options')?.children||[])].entries())
@@ -719,11 +724,11 @@ export class DungeonScene extends Phaser.Scene{
   else if(pressed(13)||axis(1)>.55)cmd='down';
   else if(pressed(14)||axis(0)<-.55)cmd='left';
   else if(pressed(15)||axis(0)>.55)cmd='right';
-  else if(pressed(0))cmd='attack';
-  else if(pressed(3))cmd='skill0';
-  else if(pressed(1))cmd=this.aim===null?'skill1':'cancel-aim';
-  else if(pressed(2))cmd='potion';
-  else if(pressed(5))cmd='wait';
+  else if(this.padLatch.consume(0))cmd='attack';
+  else if(this.padLatch.consume(3))cmd='skill0';
+  else if(this.padLatch.consume(1))cmd=this.aim===null?'skill1':'cancel-aim';
+  else if(this.padLatch.consume(2))cmd='potion';
+  else if(this.padLatch.consume(5))cmd='wait';
   if(cmd){this.lastPadAt=time;if(cmd==='cancel-aim'){this.aim=null;this.syncAim();}else this.command(cmd);}
  }
 }
