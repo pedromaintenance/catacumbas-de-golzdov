@@ -9,17 +9,24 @@
 <main class="app">
 <header class="masthead"><p class="eyebrow">CARCAÇA / CATACUMBAS DE GOLZDOV</p>
 <h1>O osso ainda <em>respira.</em></h1>
-<p class="subtitle">PRÉVIA JOGÁVEL · PHASER 4 · P2B</p></header>
+<p class="subtitle">PRÉVIA JOGÁVEL · PHASER 4 · ARTE DO JOGO CLÁSSICO</p></header>
 <section class="panel" aria-labelledby="scene-heading">
 <div class="panel-heading"><div><span class="marker">EXPEDIÇÃO EXPERIMENTAL</span>
 <h2 id="scene-heading">Costelas do Silêncio</h2></div>
-<span class="prototype">P2B · VERTICAL SLICE</span></div>
+<span class="prototype">P2B.2 · ARTE RESTAURADA</span></div>
 <div class="hud" aria-label="Estado da expedição">
-<span>PV <b id="hero-hp">43 / 43</b></span><span>FOCO <b id="hero-focus">8 / 8</b></span>
+<div class="resource hp" aria-label="Pontos de vida"><span>♥ VIDA <b id="hero-hp">43 / 43</b></span><div class="resource-track"><div id="hp-fill" class="resource-fill"></div></div></div>
+<div class="resource focus" aria-label="Foco"><span>✧ FOCO <b id="hero-focus">8 / 8</b></span><div class="resource-track"><div id="focus-fill" class="resource-fill"></div></div></div>
 <span>NÍVEL <b id="hero-level">1</b></span><span>ESTRATO <b id="run-floor">1 / 5</b></span>
 <span>TURNOS <b id="run-turn">0</b></span><span>POÇÕES <b id="hero-potions">2</b></span>
 <span>ABATES <b id="run-kills">0</b></span></div>
-<div id="phaser-stage" class="stage"><div id="phaser-canvas" class="canvas-parent"></div></div>
+<div id="phaser-stage" class="stage"><div id="phaser-canvas" class="canvas-parent"></div>
+<div id="run-ending" class="ending hidden" role="dialog" aria-modal="true" aria-labelledby="ending-title">
+  <div class="ending-content"><span class="marker" id="ending-kicker">SUA HISTÓRIA FOI INTERROMPIDA</span>
+  <h2 id="ending-title">O osso vence.</h2><p id="ending-summary"></p>
+  <p class="ending-hint">Sua história ainda ecoa na Carcaça.</p>
+  <button data-preview-action="restart">↺ NOVA EXPEDIÇÃO</button></div>
+</div></div>
 <div class="controls" aria-label="Controles de jogo">
 <div class="dpad"><button data-preview-action="up" aria-label="Mover para cima">▲</button>
 <div><button data-preview-action="left" aria-label="Mover para a esquerda">◀</button>
