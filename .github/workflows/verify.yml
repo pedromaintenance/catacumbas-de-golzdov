@@ -32,6 +32,7 @@ jobs:
           node --check phaser-src/src/preview-status.js
           node --check phaser-src/src/preview-pwa.js
           node --check phaser-src/src/preview-gamepad-picker.js
+          node --check phaser-src/src/preview-pad-latch.js
           node --check phaser-src/sw-template.js
           node --check scripts/build-phaser-pwa.cjs
           node --check phaser-src/src/world.js
