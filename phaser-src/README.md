@@ -15,6 +15,16 @@ no branch `main`, a workflow constrói o bundle e atualiza **somente**
 - Gamepad: D-pad ou analógico esquerdo, A atacar, X poção e RB esperar.
 - `?seed=305419896&floor=4` inicia nova expedição nesse estrato **quando não houver save de preview**. REINICIAR apaga apenas o save de preview.
 
+## Novidades P5A.1 — O Osso Permanece: instalar e jogar offline (em validação)
+
+- A página **/phaser/** recebe um botão **INSTALAR / AJUDA** no cabeçalho. Se o navegador permitir a instalação pelo próprio botão, use-o; caso contrário, o botão mostra as instruções do menu do navegador.
+- O manifesto e os ícones da preview são locais; os PNGs do projeto são copiados para `phaser/icons` durante a compilação. O aplicativo instalado tem identidade distinta do Golzdov HTML.
+- O service worker da preview opera **somente sob /phaser/**. Cacheia `index.html`, JS/CSS versionados do Phaser, manifesto e dois ícones, além da rota base. A versão de cache muda com os arquivos de cada build.
+- **Como testar:** conecte-se, carregue a página até o indicador sinalizar cache preparado; recarregue online uma vez para confirmar controle; desligue a internet e recarregue a preview. Movimento, saves locais e crônicas devem funcionar sem rede. Ao reconectar, novas builds são captadas pelo processo de atualização do SW.
+- O `sw.js` da raiz e os saves `carcaca_golzdov_run_v1` / `carcaca_golzdov_meta_v1` **não são alterados**. Não use esta preview como substituta do jogo clássico até a etapa P6.
+- Limites: navegador deve suportar Service Worker e CacheStorage; a instalação pela UI do sistema operacional depende de cada navegador. Teste real no GitHub Pages/Android/iOS ainda é necessário.
+- Construção: `npm ci --prefix phaser-src && npm run --prefix phaser-src build` gera também `dist/sw.js` e `dist/manifest.webmanifest`. `node scripts/verify-phaser-dist.cjs` verifica os arquivos offline.
+
 ## Novidades P4A.3 — Olhos na Escuridão (integrada, 165/165 testes)
 
 - Abra **VER AMEAÇAS** abaixo do combate para inspecionar até oito inimigos atualmente visíveis: vida, posição e distância. O painel não mostra inimigos escondidos pela neblina.
