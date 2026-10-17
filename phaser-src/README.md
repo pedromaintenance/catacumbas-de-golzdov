@@ -15,6 +15,14 @@ no branch `main`, a workflow constrói o bundle e atualiza **somente**
 - Gamepad: D-pad ou analógico esquerdo, A atacar, X poção e RB esperar.
 - `?seed=305419896&floor=4` inicia nova expedição nesse estrato **quando não houver save de preview**. REINICIAR apaga apenas o save de preview.
 
+## Novidades P5B.1 — A Travessia dos Vivos (em validação)
+
+- **Xbox, do zero:** na tela de seleção inicial, use o **D-pad ou analógico esquerdo** para alternar Vigia/Arcanista/Errante e pressione **A** para começar. A opção escolhida recebe contorno âmbar.
+- Segurar **A** depois de escolher a classe não provoca ataque no primeiro turno. O status **CONTROLE CONECTADO / DESCONECTADO** abaixo dos botões mostra se o navegador detecta um gamepad.
+- Teclado pode usar **1/2/3**, setas/WASD + Enter/Espaço e o mouse/toque continua selecionando a carta normalmente. Painéis de crônicas, inimigos e instalação não recebem ações de combate ao navegar no teclado.
+- A suíte de testes exercita inimigos gerados (sem removê-los), combate e IA de verdade, o Escrivão Sem Nome, cinco estratos, persistência entre andares e replays determinísticos para as três classes. Apenas no teste automatizado o herói é reforçado e reposicionado; não equivale a uma run natural nem a gamepad físico.
+- Verifique em Xbox/Android: escolher classe sem mouse, segurar A ao entrar, reiniciar após morte, desconectar/reconectar controle e jogar normalmente.
+
 ## Novidades P5A.1 — O Osso Permanece: instalar e jogar offline (integrada, 173/173 testes)
 
 - A página **/phaser/** recebe um botão **INSTALAR / AJUDA** no cabeçalho. Se o navegador permitir a instalação pelo próprio botão, use-o; caso contrário, o botão mostra as instruções do menu do navegador.

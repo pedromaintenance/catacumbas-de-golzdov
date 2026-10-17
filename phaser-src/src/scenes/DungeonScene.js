@@ -11,6 +11,7 @@ import {PREVIEW_ENDING_COPY,normalizePreviewEnding} from '../preview-endings.js'
 import {newPreviewSessionId,readPreviewHistory,archivePreviewRun,finishedPreviewRun} from '../preview-history.js';
 import {planPreviewRoute,nearPreviewThreat,routeCoordinates} from '../preview-route.js';
 import {combatCues,combatAnnouncement} from '../preview-combat-feedback.js';
+import {classPickerInput,nextClassPickerIndex} from '../preview-gamepad-picker.js';
 import {previewThreats} from '../preview-status.js';
 const TILE=36;
 const P={
@@ -31,7 +32,7 @@ const startFloor=()=>{
  return Number.isInteger(n)&&n>=1&&n<=5?n:1;
 };
 export class DungeonScene extends Phaser.Scene{
- constructor(){super('DungeonScene');this.run=null;this.lastPadAt=0;this.aim=null;this.classSelectionOpen=false;this.talentSelectedIndex=0;this.lastTalentKey='';this.itemUI=null;this.autoPath=[];this.routeTarget=null;this.routeGraphics=null;this.nextAutoAt=0;this.finalSelectedIndex=0;this.routeCancelUntilRelease=false;this.combatObjects=new Set();}
+ constructor(){super('DungeonScene');this.run=null;this.lastPadAt=0;this.aim=null;this.classSelectionOpen=false;this.talentSelectedIndex=0;this.lastTalentKey='';this.itemUI=null;this.autoPath=[];this.routeTarget=null;this.routeGraphics=null;this.nextAutoAt=0;this.finalSelectedIndex=0;this.routeCancelUntilRelease=false;this.combatObjects=new Set();this.classPickerIndex=0;this.waitClassARelease=false;this.lastPadConnected=null;}
  create(){
   const existing=loadPreview(storage());
   this.run=existing||initialPreviewRun(fixedSeed(),startFloor());
@@ -60,11 +61,18 @@ export class DungeonScene extends Phaser.Scene{
   resize();this.scale.on('resize',resize);
   const onKey=e=>{
    // Teclas usadas para abrir as crônicas não devem atacar ou passar turnos.
-   if(e.target instanceof Element&&e.target.closest('#chronicle'))return;
+   if(e.target instanceof Element&&e.target.closest('#chronicle,#threat-panel,.pwa-panel'))return;
    const key=e.key.toLowerCase();
    if(this.classSelectionOpen){
     const classes={1:'vigia',2:'arcanista',3:'errante'};
-    if(classes[key]){e.preventDefault();this.chooseClass(classes[key]);}
+    if(classes[key]){e.preventDefault();this.chooseClass(classes[key]);return;}
+    if(['arrowleft','arrowup','a','w'].includes(key)){
+     e.preventDefault();this.moveClassPicker(-1);
+    }else if(['arrowright','arrowdown','d','s'].includes(key)){
+     e.preventDefault();this.moveClassPicker(1);
+    }else if(key==='enter'||key===' '){
+     e.preventDefault();this.chooseClass(PREVIEW_CLASS_IDS[this.classPickerIndex]);
+    }
     return;
    }
    if(this.run.pendingFinalChoice){
@@ -226,6 +234,24 @@ export class DungeonScene extends Phaser.Scene{
  syncClassPicker(){
   const picker=el('class-selection');
   if(picker)picker.classList.toggle('hidden',!this.classSelectionOpen);
+  for(const [index,button] of [...document.querySelectorAll('[data-preview-class]')].entries()){
+   const selected=this.classSelectionOpen&&index===this.classPickerIndex;
+   button.classList.toggle('pad-selected',selected);
+   button.setAttribute('aria-current',selected?'true':'false');
+  }
+ }
+ moveClassPicker(delta){
+  this.classPickerIndex=nextClassPickerIndex(this.classPickerIndex,delta,PREVIEW_CLASS_IDS.length);
+  this.syncClassPicker();
+  this.report('Classe selecionada: '+PREVIEW_CLASSES[PREVIEW_CLASS_IDS[this.classPickerIndex]].name+
+   '. Pressione A ou Enter para iniciar.');
+ }
+ syncGamepadState(connected){
+  if(this.lastPadConnected===connected)return;
+  this.lastPadConnected=connected;
+  const node=el('gamepad-status');
+  if(node)node.textContent=connected?'CONTROLE CONECTADO · DIRECIONAL + A PARA ESCOLHER CLASSE':
+   'CONTROLE DESCONECTADO · USE TECLADO OU TOQUE';
  }
  chooseClass(classId){
   if(!PREVIEW_CLASSES[classId])return;
@@ -243,7 +269,8 @@ export class DungeonScene extends Phaser.Scene{
  }
  restart(){
   // Abrir a seleção não apaga a campanha; só escolher uma classe o faz.
-  this.cancelAutoRoute();this.aim=null;this.classSelectionOpen=true;this.syncClassPicker();this.sync();
+  this.cancelAutoRoute();this.aim=null;this.classPickerIndex=0;
+  this.classSelectionOpen=true;this.syncClassPicker();this.sync();
  }
  selectSkill(which){
   if(this.classSelectionOpen||this.run.over||this.run.pendingTalentChoices?.length||this.itemUI.active())return;
@@ -592,7 +619,25 @@ export class DungeonScene extends Phaser.Scene{
   list.querySelector('button')?.focus({preventScroll:true});
  }
  update(time){
-  if(this.classSelectionOpen)return;
+  const gamepad=navigator.getGamepads?.()?.find(p=>p&&p.connected);
+  this.syncGamepadState(!!gamepad);
+  if(this.classSelectionOpen){
+   if(!gamepad||time-this.lastPadAt<175)return;
+   const input=classPickerInput(gamepad);
+   if(!input)return;
+   this.lastPadAt=time;
+   if(input.type==='move')this.moveClassPicker(input.delta);
+   if(input.type==='confirm'){
+    this.waitClassARelease=true;
+    this.chooseClass(PREVIEW_CLASS_IDS[this.classPickerIndex]);
+   }
+   return;
+  }
+  // Segurar A ao confirmar a classe nunca executa um ataque no primeiro turno.
+  if(this.waitClassARelease){
+   if(gamepad?.buttons?.[0]?.pressed)return;
+   this.waitClassARelease=false;
+  }
   if(this.run.pendingFinalChoice){
    if(time-this.lastPadAt<175)return;
    const pad=navigator.getGamepads?.()?.find(p=>p&&p.connected);
