@@ -33,7 +33,7 @@ test('P5B.1: cena não ataca com A segurado após confirmar e limpa marcação',
  assert.match(scene,/if\(this\.waitClassARelease\)\{\s*if\(gamepad\?\.buttons\?\.\[0\]\?\.pressed\)return/);
  assert.match(scene,/this\.chooseClass\(PREVIEW_CLASS_IDS\[this\.classPickerIndex\]\)/);
  assert.match(scene,/this\.moveClassPicker\(input\.delta\)/);
- assert.match(scene,/this\.syncGamepadState\(!!pad\)/);
+ assert.match(scene,/this\.syncGamepadState\(!!gamepad\)/);
  assert.match(scene,/closest\('#chronicle,#threat-panel,\.pwa-panel'\)/);
  assert.match(html,/id="gamepad-status"/);
  assert.match(html,/direcional\/analógico escolhe, A confirma/);
@@ -112,7 +112,7 @@ async function replay(seed,classId){
    const chosen=m.previewAction(run,{type:'CHOOSE_ENDING',ending:'luz'});
    assert.equal(chosen.status,'ending-chosen');
    assert.equal(run.previewOutcome,'luz');
-   assert.equal(run.turn,turn);
+   assert.equal(run.turn,turns);
    assert.equal(run.rngState,state);
    assert.equal(saves.savePreview(storage,run),true);
    assert.equal(saves.loadPreview(storage).previewOutcome,'luz');
