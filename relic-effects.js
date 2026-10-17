@@ -130,4 +130,4 @@
   root.GolzdovRelicEffects = Object.freeze({
     dispatch, synergiesFor, RELIC_EFFECTS, SYNERGIES
   });
-})(window);
+})(typeof window!=='undefined'?window:globalThis);
