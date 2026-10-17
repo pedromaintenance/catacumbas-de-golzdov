@@ -9,6 +9,7 @@ import {pendingTalents} from '../preview-talents.js';
 import {PreviewItemUI} from '../preview-item-ui.js';
 import {PREVIEW_ENDING_COPY,normalizePreviewEnding} from '../preview-endings.js';
 import {newPreviewSessionId,readPreviewHistory,archivePreviewRun,finishedPreviewRun} from '../preview-history.js';
+import {planPreviewRoute,nearPreviewThreat,routeCoordinates} from '../preview-route.js';
 const TILE=36;
 const P={
  rock:0x11131d,wall:0x2c3343,floor:0x302b38,grid:0x4f4555,
@@ -28,7 +29,7 @@ const startFloor=()=>{
  return Number.isInteger(n)&&n>=1&&n<=5?n:1;
 };
 export class DungeonScene extends Phaser.Scene{
- constructor(){super('DungeonScene');this.run=null;this.lastPadAt=0;this.aim=null;this.classSelectionOpen=false;this.talentSelectedIndex=0;this.lastTalentKey='';this.itemUI=null;this.autoPath=[];this.nextAutoAt=0;this.finalSelectedIndex=0;}
+ constructor(){super('DungeonScene');this.run=null;this.lastPadAt=0;this.aim=null;this.classSelectionOpen=false;this.talentSelectedIndex=0;this.lastTalentKey='';this.itemUI=null;this.autoPath=[];this.routeTarget=null;this.routeGraphics=null;this.nextAutoAt=0;this.finalSelectedIndex=0;this.routeCancelUntilRelease=false;}
  create(){
   const existing=loadPreview(storage());
   this.run=existing||initialPreviewRun(fixedSeed(),startFloor());
@@ -43,6 +44,7 @@ export class DungeonScene extends Phaser.Scene{
   this.worldCtx=this.worldCanvas.getContext('2d');this.worldCtx.imageSmoothingEnabled=false;
   this.textures.addCanvas('classic-world-p3',this.worldCanvas);
   this.worldImage=this.add.image(0,0,'classic-world-p3').setOrigin(0).setDepth(0);
+  this.routeGraphics=this.add.graphics().setDepth(4);
   this.heroCanvas=document.createElement('canvas');
   this.heroCanvas.width=64;this.heroCanvas.height=64;
   this.heroCtx=this.heroCanvas.getContext('2d');this.heroCtx.imageSmoothingEnabled=false;
@@ -86,10 +88,14 @@ export class DungeonScene extends Phaser.Scene{
    }
    const movement={arrowup:[0,-1],w:[0,-1],arrowdown:[0,1],s:[0,1],
     arrowleft:[-1,0],a:[-1,0],arrowright:[1,0],d:[1,0]};
-   if(key==='escape'){this.aim=null;this.autoPath=[];this.sync();return;}
+   if(key==='escape'){
+    e.preventDefault();
+    if(this.autoPath.length){this.cancelAutoRoute('Caminhada interrompida.');return;}
+    this.aim=null;this.sync();return;
+   }
    if(key==='1'||key==='2'){e.preventDefault();this.selectSkill(Number(key)-1);return;}
    if(key==='r'){e.preventDefault();this.restart();return;}
-   if(key==='e'){e.preventDefault();this.autoPath=[];this.perform({type:'INTERACT'});return;}
+   if(key==='e'){e.preventDefault();this.cancelAutoRoute();this.perform({type:'INTERACT'});return;}
    if(key==='f'||key==='enter'){
     e.preventDefault();
     if(this.aim!==null)this.castNearest();
@@ -97,7 +103,7 @@ export class DungeonScene extends Phaser.Scene{
     return;
    }
    if(this.aim!==null&&movement[key]){e.preventDefault();this.report('MIRA ATIVA: toque no alvo ou F para confirmar. Esc cancela.');return;}
-   if(movement[key]){e.preventDefault();this.autoPath=[];this.perform({type:'MOVE',dx:movement[key][0],dy:movement[key][1]});}
+   if(movement[key]){e.preventDefault();this.cancelAutoRoute();this.perform({type:'MOVE',dx:movement[key][0],dy:movement[key][1]});}
    else if(key===' '||key==='.'){e.preventDefault();this.perform({type:'WAIT'});}
    else if(key==='h'||key==='p')this.perform({type:'POTION'});
   };
@@ -113,10 +119,10 @@ export class DungeonScene extends Phaser.Scene{
    button.addEventListener('click',listener);classButtons.push([button,listener]);
   }
   const pointerClick=pointer=>{
-   if(this.run.over||this.classSelectionOpen||this.run.pendingTalentChoices?.length)return;
+   if(this.run.over||this.classSelectionOpen||this.run.pendingTalentChoices?.length||this.itemUI.active())return;
    const x=Math.floor(pointer.worldX/TILE),y=Math.floor(pointer.worldY/TILE);
    if(x<0||y<0||x>=WIDTH||y>=HEIGHT)return;
-   this.autoPath=[];
+   this.cancelAutoRoute();
    if(this.aim!==null){this.castAt(x,y);return;}
    const p=this.run.hero,enemy=this.run.enemies.find(e=>e.hp>0&&e.x===x&&e.y===y);
    const distance=Math.abs(x-p.x)+Math.abs(y-p.y);
@@ -126,11 +132,11 @@ export class DungeonScene extends Phaser.Scene{
    }
    if(distance===0){this.perform({type:'INTERACT'});return;}
    if(distance===1){this.perform({type:'MOVE',dx:x-p.x,dy:y-p.y});return;}
-   const path=window.GolzdovNavigation.findPath(this.run,WIDTH,HEIGHT,x,y);
-   if(path?.length){
-    this.autoPath=path;this.nextAutoAt=0;
-    this.report('Caminhando até o destino. Outra ação cancela a rota.');
-   }else this.report('Destino inacessível ou ainda não explorado.');
+   const path=planPreviewRoute(this.run,x,y);
+   if(!path)return this.report('Destino inacessível ou ainda não explorado.');
+   if(nearPreviewThreat(this.run,this.visible))
+    return this.report('Há um inimigo próximo. Resolva o combate antes de caminhar automaticamente.');
+   this.beginAutoRoute(path,x,y);
   };
   this.input.on('pointerdown',pointerClick);
   const talentList=el('talent-options');
@@ -172,11 +178,12 @@ export class DungeonScene extends Phaser.Scene{
   if(existing)savePreview(storage(),this.run);
  }
  command(command){
+  if(command==='cancel-route'){this.cancelAutoRoute('Caminhada interrompida.');return;}
   // REINICIAR sempre abre a seleção, inclusive após morte, epílogo ou
   // durante um modal. O save atual só é trocado ao confirmar outra classe.
   if(command==='restart'){this.restart();return;}
   if(this.classSelectionOpen||this.run.pendingTalentChoices?.length||this.itemUI.active()||this.run.over)return;
-  this.autoPath=[];
+  this.cancelAutoRoute();
   const dirs={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};
   if(dirs[command]){
    if(this.aim!==null){this.report('Selecione um alvo para a habilidade, ou Esc para cancelar.');return;}
@@ -198,7 +205,7 @@ export class DungeonScene extends Phaser.Scene{
   this.run=initialPreviewRun(fixedSeed(),startFloor(),classId);
   this.run.previewSessionId=newPreviewSessionId();
   this.previewRun=this.run;this.visible=previewVisible(this.run);
-  this.aim=null;this.classSelectionOpen=false;this.autoPath=[];
+  this.aim=null;this.classSelectionOpen=false;this.cancelAutoRoute();
   this.talentSelectedIndex=0;this.lastTalentKey='';this.finalSelectedIndex=0;
   this.syncClassPicker();
   savePreview(storage(),this.run);
@@ -206,7 +213,7 @@ export class DungeonScene extends Phaser.Scene{
  }
  restart(){
   // Abrir a seleção não apaga a campanha; só escolher uma classe o faz.
-  this.autoPath=[];this.aim=null;this.classSelectionOpen=true;this.syncClassPicker();this.sync();
+  this.cancelAutoRoute();this.aim=null;this.classSelectionOpen=true;this.syncClassPicker();this.sync();
  }
  selectSkill(which){
   if(this.classSelectionOpen||this.run.over||this.run.pendingTalentChoices?.length||this.itemUI.active())return;
@@ -275,6 +282,39 @@ export class DungeonScene extends Phaser.Scene{
   this.draw();this.sync();
   return result;
  }
+ beginAutoRoute(path,x,y){
+  this.autoPath=path;this.routeTarget={x,y};this.nextAutoAt=0;
+  this.syncAutoRoute();
+  this.report('Caminhando até o destino. Esc, B ou PARAR interrompem a rota.');
+ }
+ cancelAutoRoute(message=''){
+  const wasActive=this.autoPath.length>0;
+  this.autoPath=[];this.routeTarget=null;
+  this.syncAutoRoute();
+  if(wasActive&&message)this.report(message);
+ }
+ syncAutoRoute(){
+  const active=this.autoPath.length>0&&!this.run.over&&!this.classSelectionOpen;
+  const container=el('route-feedback'),text=el('route-text');
+  if(container)container.classList.toggle('hidden',!active);
+  if(text&&active)text.textContent='ROTA ATIVA · '+this.autoPath.length+
+   ' passo(s) · destino '+(this.routeTarget?.x??'?')+','+(this.routeTarget?.y??'?');
+  if(!this.routeGraphics)return;
+  this.routeGraphics.clear();
+  if(!active){if(!this.autoPath.length)this.routeTarget=null;return;}
+  const points=routeCoordinates(this.run.hero,this.autoPath);
+  this.routeGraphics.lineStyle(2,0xe4be8b,.8);
+  this.routeGraphics.fillStyle(0xe4be8b,.35);
+  for(const p of points){
+   this.routeGraphics.strokeRect((p.x+.15)*TILE,(p.y+.15)*TILE,TILE*.7,TILE*.7);
+   this.routeGraphics.fillCircle((p.x+.5)*TILE,(p.y+.5)*TILE,3);
+  }
+  if(this.routeTarget){
+   this.routeGraphics.lineStyle(3,0xf8dd9c,1);
+   this.routeGraphics.strokeCircle((this.routeTarget.x+.5)*TILE,
+    (this.routeTarget.y+.5)*TILE,TILE*.35);
+  }
+ }
  report(message){if(el('scene-status'))el('scene-status').textContent=message;}
  draw(){
   drawClassicMap(this.worldCtx,this.run,this.visible,TILE);
@@ -290,6 +330,7 @@ export class DungeonScene extends Phaser.Scene{
    if(archive.status==='archived')savePreview(storage(),g);
   }
   this.syncHistory();
+  this.syncAutoRoute();
   const pairs={
    'hero-hp':p.hp+' / '+p.maxhp,
    'hero-focus':p.mana+' / '+p.maxmana,
@@ -460,13 +501,44 @@ export class DungeonScene extends Phaser.Scene{
    if(pad&&this.itemUI.pad(pad))this.lastPadAt=time;
    return;
   }
+  // Entradas físicas têm precedência sobre a rota automática. Xbox B
+  // interrompe sem ativar a habilidade 2 enquanto permanecer pressionado.
+  if(this.routeCancelUntilRelease){
+   const pad=navigator.getGamepads?.()?.find(p=>p&&p.connected);
+   if(pad?.buttons[1]?.pressed)return;
+   this.routeCancelUntilRelease=false;
+  }
   if(!this.run.pendingTalentChoices?.length&&this.autoPath.length){
+   const pad=navigator.getGamepads?.()?.find(p=>p&&p.connected);
+   if(pad&&time-this.lastPadAt>=175){
+    const pressed=i=>!!pad.buttons[i]?.pressed,axis=i=>pad.axes[i]||0;
+    if(pressed(1)){
+     this.routeCancelUntilRelease=true;this.lastPadAt=time;
+     this.cancelAutoRoute('Caminhada interrompida pelo controle.');return;
+    }
+    let manual=null;
+    if(pressed(12)||axis(1)<-.55)manual='up';
+    else if(pressed(13)||axis(1)>.55)manual='down';
+    else if(pressed(14)||axis(0)<-.55)manual='left';
+    else if(pressed(15)||axis(0)>.55)manual='right';
+    else if(pressed(0))manual='attack';
+    if(manual){
+     this.lastPadAt=time;this.command(manual);return;
+    }
+   }
    if(time<this.nextAutoAt)return;
+   if(nearPreviewThreat(this.run,this.visible)){
+    this.cancelAutoRoute('Ameaça próxima! Caminhada pausada; escolha a próxima ação.');return;
+   }
    const [dx,dy]=this.autoPath.shift();
    const result=this.perform({type:'MOVE',dx,dy});
    this.nextAutoAt=time+155;
    if(result?.status!=='applied'||this.itemUI.active()||
-    this.run.pendingTalentChoices?.length||this.run.over)this.autoPath=[];
+    this.run.pendingTalentChoices?.length||this.run.over)
+    this.cancelAutoRoute('Caminhada interrompida por combate ou interação.');
+   else if(nearPreviewThreat(this.run,this.visible))
+    this.cancelAutoRoute('Inimigo avistado! A caminhada foi interrompida.');
+   else this.syncAutoRoute();
    return;
   }
   if(time-this.lastPadAt<175)return;
