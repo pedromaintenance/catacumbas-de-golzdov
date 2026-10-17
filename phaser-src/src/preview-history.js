@@ -46,6 +46,8 @@ export function archivePreviewRun(storage,run,at=new Date().toISOString()){
   'legacy-'+[int(run.seed),int(run.turn),int(run.kills),run.previewOutcome,
    run.hero.classId,int(run.hero.level),int(run.treasure)].join('-');
  const meta=readPreviewHistory(storage);
+ // Arquivo no save impede recontagem mesmo quando a crônica saiu das últimas 20.
+ if(run.previewArchivedId===id)return {status:'already-archived',meta};
  if(meta.records.some(x=>x.id===id)){
   run.previewArchivedId=id;
   return {status:'already-archived',meta};
