@@ -1,6 +1,6 @@
 # Roadmap de migração — Catacumbas de Golzdov → Phaser 4
 
-**Status:** P0–P1C.3B.3B.2C integrados à `main`. [PR #31](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/31): **80/80 testes verdes**, 252 replays de habilidades e 480 sequências multi-ação com saves. Build 1.3.6 / cache v20 no código principal para teste no Pages. P2A.1 **concluída** no [PR #33](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/33), CI **84/84** + bundle Vite/Phaser validado. P2B.1 **integrada** pelo [PR #34](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/34), CI **90/90**; o job pós-merge colocou `phaser/index.html` e assets na `main`. A rota [`/phaser/`](https://pedromaintenance.github.io/catacumbas-de-golzdov/phaser/) está preparada para teste, **sem confirmação externa de propagação do Pages ou teste de navegador físico**. Rota clássica preservada.
+**Status:** P0–P1C.3B.3B.2C integrados à `main`. [PR #31](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/31): **80/80 testes verdes**, 252 replays de habilidades e 480 sequências multi-ação com saves. Build 1.3.6 / cache v20 no código principal para teste no Pages. P2A.1 **concluída** no [PR #33](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/33), CI **84/84** + bundle Vite/Phaser validado. P2B.1 **integrada** pelo [PR #34](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/34), CI **90/90**; o job pós-merge colocou `phaser/index.html` e assets na `main`. A rota [`/phaser/`](https://pedromaintenance.github.io/catacumbas-de-golzdov/phaser/) está preparada para teste, **sem confirmação externa de propagação do Pages ou teste de navegador físico**. P2B.2 — arte clássica portada, HUD e tela terminal — em validação. Rota clássica preservada.
 **Data do diagnóstico:** 15/10/2026.
 **Acompanhamento GitHub:** [issue #11 — migração Phaser](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/11); [issue #12 — corrigir roteamento PWA](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/12).
 **Objetivo:** migrar a apresentação, a composição das cenas e a entrada para Phaser 4 sem alterar silenciosamente as regras do roguelike, perder os saves ou bloquear o GitHub Pages.
@@ -341,6 +341,19 @@ docs/
 - [ ] Cobrir migração de save e determinismo em milhares de gerações, incluindo troca de relíquias e escolhas pendentes.
 
 **Aceite:** teste `core` roda em Node sem browser, e uma mesma seed + sequência de ações gera o mesmo estado lógico (excluindo campos meramente visuais). Código antigo não é removido até o novo núcleo alcançar o comportamento desejado.
+
+### P2B.2 — Paridade visual inicial e tela de derrota (17/10/2026)
+
+- [x] **Portar a arte procedural da versão HTML**, e não criar uma segunda estética: sprites de herói e oito criaturas, itens, pisos, paredes e as cinco paletas originais em `phaser-src/src/classic-art.js`.
+- [x] Integrar a composição original ao Phaser usando texturas Canvas atualizadas por ação (sem sorteio nem novo turno na renderização); câmera e mundo compartilham o núcleo determinístico.
+- [x] Enriquecer HUD com barras visíveis de PV/foco e reorganizar o palco para manter a leitura da masmorra em desktop e celular; botões táteis e gamepad continuam como no P2B.
+- [x] Tela de derrota/vitória na própria cena, com comando de nova expedição; corrigir saves P2B que guardavam **PV 0 sem flag `over`**, bloqueando turnos indevidos ao retomar.
+- [x] Adicionar testes de paleta idêntica à original, sprites/pisos, desenho sem mutação de RNG, save legado intocado e encerramento de partida.
+- [ ] Validar CI do PR, build Phaser/Vite e publicação do bundle na `main`; após merge conferir `phaser/index.html` e assets.
+- [ ] Teste visual real e de desempenho com dispositivo: o screenshot de referência mostra o P2B rudimentar; QA manual do P2B.2 ainda é necessário.
+- [ ] A paridade funcional P3 (classes, talentos, magia, relíquias, mercador e finais narrativos) e a interface P4 completa permanecem **pendentes**.
+
+**Aceite:** o jogo da rota clássica segue na **build 1.3.6 / cache v20** sem mudanças; o renderer Phaser passa a apresentar **a mesma linguagem visual** dos sprites, pisos e itens originais, mantendo os saves em chaves isoladas. [Issue #35 — P3](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/35).
 
 ### P2B.1 — Primeira prévia jogável de exploração/combate (16/10/2026)
 
