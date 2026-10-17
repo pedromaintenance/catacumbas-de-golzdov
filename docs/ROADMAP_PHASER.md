@@ -386,6 +386,8 @@ docs/
 
 ### P3 — Paridade de combate e progressão (2–3 PRs)
 
+**Execução rastreada:** [issue #35 — P3A/P3B](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/35), com três classes, habilidades, relíquias, progressão e finais completos. A preview P2B.1 é limitada e não substitui estas etapas.
+
 - [ ] Três classes + ambas as habilidades, mira e projéteis, custo de mana, alcance, linha de visão e interrupções.
 - [ ] Todo o ciclo de turnos: movimento, busca de caminho, inimigos corpo a corpo/distância, IA e boss.
 - [ ] Onze relíquias, cinco raridades, três sinergias, 4 slots/legado e trocas confirmadas; 9 talentos de classe.
