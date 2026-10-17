@@ -17,7 +17,7 @@ test('P2A mantém Phaser isolado, base relativa e dependências diretas fixadas'
   assert.match(html,/PRÉVIA JOGÁVEL/);
   assert.doesNotMatch(html,/serviceWorker\.register|localStorage|https?:\/\/.*(?:src|href)/i);
   assert.match(read('phaser-src/src/main.js'),/Phaser\.Game/);
-  assert.match(read('phaser-src/src/scenes/DungeonScene.js'),/createPreviewWorld/);
+  assert.match(read('phaser-src/src/scenes/DungeonScene.js'),/initialPreviewRun/);
   assert.match(read('phaser-src/src/scenes/DungeonScene.js'),/startFollow/);
   const sw=read('sw.js');
   assert.doesNotMatch(sw,/\.\/phaser(?:-src)?\//);
