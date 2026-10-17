@@ -6,6 +6,7 @@ import {PREVIEW_CLASSES,PREVIEW_CLASS_IDS} from '../preview-classes.js';
 import {drawClassicMap,drawClassicHero} from '../classic-art.js';
 import {normalizePreviewOutcome} from '../preview-engine.js';
 import {pendingTalents} from '../preview-talents.js';
+import {PreviewItemUI} from '../preview-item-ui.js';
 const TILE=36;
 const P={
  rock:0x11131d,wall:0x2c3343,floor:0x302b38,grid:0x4f4555,
@@ -25,11 +26,12 @@ const startFloor=()=>{
  return Number.isInteger(n)&&n>=1&&n<=5?n:1;
 };
 export class DungeonScene extends Phaser.Scene{
- constructor(){super('DungeonScene');this.run=null;this.lastPadAt=0;this.aim=null;this.classSelectionOpen=false;this.talentSelectedIndex=0;this.lastTalentKey='';}
+ constructor(){super('DungeonScene');this.run=null;this.lastPadAt=0;this.aim=null;this.classSelectionOpen=false;this.talentSelectedIndex=0;this.lastTalentKey='';this.itemUI=null;this.autoPath=[];this.nextAutoAt=0;}
  create(){
   const existing=loadPreview(storage());
   this.run=existing||initialPreviewRun(fixedSeed(),startFloor());
   this.classSelectionOpen=!existing;
+  this.itemUI=new PreviewItemUI(this);
   this.previewRun=this.run;
   normalizePreviewOutcome(this.run);
   this.visible=previewVisible(this.run);
@@ -63,11 +65,15 @@ export class DungeonScene extends Phaser.Scene{
     else e.preventDefault();
     return;
    }
+   if(this.itemUI.active()){
+    e.preventDefault();this.itemUI.key(key);return;
+   }
    const movement={arrowup:[0,-1],w:[0,-1],arrowdown:[0,1],s:[0,1],
     arrowleft:[-1,0],a:[-1,0],arrowright:[1,0],d:[1,0]};
-   if(key==='escape'){this.aim=null;this.sync();return;}
+   if(key==='escape'){this.aim=null;this.autoPath=[];this.sync();return;}
    if(key==='1'||key==='2'){e.preventDefault();this.selectSkill(Number(key)-1);return;}
    if(key==='r'){e.preventDefault();this.restart();return;}
+   if(key==='e'){e.preventDefault();this.autoPath=[];this.perform({type:'INTERACT'});return;}
    if(key==='f'||key==='enter'){
     e.preventDefault();
     if(this.aim!==null)this.castNearest();
@@ -75,7 +81,7 @@ export class DungeonScene extends Phaser.Scene{
     return;
    }
    if(this.aim!==null&&movement[key]){e.preventDefault();this.report('MIRA ATIVA: toque no alvo ou F para confirmar. Esc cancela.');return;}
-   if(movement[key]){e.preventDefault();this.perform({type:'MOVE',dx:movement[key][0],dy:movement[key][1]});}
+   if(movement[key]){e.preventDefault();this.autoPath=[];this.perform({type:'MOVE',dx:movement[key][0],dy:movement[key][1]});}
    else if(key===' '||key==='.'){e.preventDefault();this.perform({type:'WAIT'});}
    else if(key==='h'||key==='p')this.perform({type:'POTION'});
   };
@@ -94,11 +100,21 @@ export class DungeonScene extends Phaser.Scene{
    if(this.run.over||this.classSelectionOpen||this.run.pendingTalentChoices?.length)return;
    const x=Math.floor(pointer.worldX/TILE),y=Math.floor(pointer.worldY/TILE);
    if(x<0||y<0||x>=WIDTH||y>=HEIGHT)return;
+   this.autoPath=[];
    if(this.aim!==null){this.castAt(x,y);return;}
    const p=this.run.hero,enemy=this.run.enemies.find(e=>e.hp>0&&e.x===x&&e.y===y);
    const distance=Math.abs(x-p.x)+Math.abs(y-p.y);
-   if(enemy&&distance<=p.range)return this.perform({type:'ATTACK',enemyId:enemy.id});
-   if(distance===1)this.perform({type:'MOVE',dx:x-p.x,dy:y-p.y});
+   if(enemy){
+    if(distance<=p.range)return this.perform({type:'ATTACK',enemyId:enemy.id});
+    this.report('Inimigo fora do alcance. Aproxime-se para atacar.');return;
+   }
+   if(distance===0){this.perform({type:'INTERACT'});return;}
+   if(distance===1){this.perform({type:'MOVE',dx:x-p.x,dy:y-p.y});return;}
+   const path=window.GolzdovNavigation.findPath(this.run,WIDTH,HEIGHT,x,y);
+   if(path?.length){
+    this.autoPath=path;this.nextAutoAt=0;
+    this.report('Caminhando até o destino. Outra ação cancela a rota.');
+   }else this.report('Destino inacessível ou ainda não explorado.');
   };
   this.input.on('pointerdown',pointerClick);
   const talentList=el('talent-options');
@@ -113,6 +129,7 @@ export class DungeonScene extends Phaser.Scene{
    for(const [button,listener] of classButtons)button.removeEventListener('click',listener);
    this.scale.off('resize',resize);
    this.input.off('pointerdown',pointerClick);
+   this.itemUI?.destroy();
    talentList?.removeEventListener('click',onTalentClick);
   });
   this.draw();this.sync();
@@ -120,7 +137,8 @@ export class DungeonScene extends Phaser.Scene{
   if(existing)savePreview(storage(),this.run);
  }
  command(command){
-  if(this.classSelectionOpen||this.run.pendingTalentChoices?.length)return;
+  if(this.classSelectionOpen||this.run.pendingTalentChoices?.length||this.itemUI.active())return;
+  this.autoPath=[];
   const dirs={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};
   if(dirs[command]){
    if(this.aim!==null){this.report('Selecione um alvo para a habilidade, ou Esc para cancelar.');return;}
@@ -128,6 +146,7 @@ export class DungeonScene extends Phaser.Scene{
   }
   if(command==='wait')this.perform({type:'WAIT'});
   if(command==='potion')this.perform({type:'POTION'});
+  if(command==='interact')this.perform({type:'INTERACT'});
   if(command==='attack'){if(this.aim!==null)this.castNearest();else this.attackNearest();}
   if(command==='skill0'||command==='skill1')this.selectSkill(Number(command.slice(-1)));
   if(command==='restart')this.restart();
@@ -141,7 +160,7 @@ export class DungeonScene extends Phaser.Scene{
   clearPreview(storage());
   this.run=initialPreviewRun(fixedSeed(),startFloor(),classId);
   this.previewRun=this.run;this.visible=previewVisible(this.run);
-  this.aim=null;this.classSelectionOpen=false;
+  this.aim=null;this.classSelectionOpen=false;this.autoPath=[];
   this.talentSelectedIndex=0;this.lastTalentKey='';
   this.syncClassPicker();
   savePreview(storage(),this.run);
@@ -149,10 +168,10 @@ export class DungeonScene extends Phaser.Scene{
  }
  restart(){
   // Abrir a seleção não apaga a campanha; só escolher uma classe o faz.
-  this.aim=null;this.classSelectionOpen=true;this.syncClassPicker();this.sync();
+  this.autoPath=[];this.aim=null;this.classSelectionOpen=true;this.syncClassPicker();this.sync();
  }
  selectSkill(which){
-  if(this.classSelectionOpen||this.run.over||this.run.pendingTalentChoices?.length)return;
+  if(this.classSelectionOpen||this.run.over||this.run.pendingTalentChoices?.length||this.itemUI.active())return;
   const skill=PREVIEW_CLASSES[this.run.hero.classId].skills[which];
   if(!skill)return;
   if(this.run.hero.mana<skill.cost){
@@ -192,7 +211,7 @@ export class DungeonScene extends Phaser.Scene{
   }
  }
  attackNearest(){
-  if(this.classSelectionOpen||this.run.over||this.run.pendingTalentChoices?.length)return;
+  if(this.classSelectionOpen||this.run.over||this.run.pendingTalentChoices?.length||this.itemUI.active())return;
   const hero=this.run.hero;
   const options=this.run.enemies.filter(e=>e.hp>0&&this.visible.has(e.y*WIDTH+e.x))
    .sort((a,b)=>(Math.abs(a.x-hero.x)+Math.abs(a.y-hero.y))-(Math.abs(b.x-hero.x)+Math.abs(b.y-hero.y)));
@@ -208,9 +227,10 @@ export class DungeonScene extends Phaser.Scene{
   }
   const result=previewAction(this.run,action);
   this.visible=previewVisible(this.run);
-  if(result.consumesTurn||result.events.length){
-   savePreview(storage(),this.run);
-  }
+  if(result.consumesTurn||result.events.length||[
+   'relic-swap-required','relic-swap-pending','relic-back','relic-equipped',
+   'relic-skipped','stairs-cancelled','descended','shrine-used'
+  ].includes(result.status))savePreview(storage(),this.run);
   if(result.status==='blocked')this.report('Uma parede de ossos impede a passagem.');
   if(result.status==='out-of-range')this.report('O inimigo está fora do alcance.');
   this.draw();this.sync();
@@ -234,6 +254,8 @@ export class DungeonScene extends Phaser.Scene{
    'run-floor':g.floor+' / 5',
    'hero-potions':String(p.potions),
    'run-kills':String(g.kills),
+   'hero-coins':String(p.coins),
+   'hero-relic-slots':window.GolzdovRelicOffers.occupied(p)+' / '+window.GolzdovRelicOffers.capacity(p),
    'scene-seed':g.seed.toString(16).toUpperCase().padStart(8,'0')
   };
   for(const [id,value] of Object.entries(pairs))if(el(id))el(id).textContent=value;
@@ -258,10 +280,13 @@ export class DungeonScene extends Phaser.Scene{
   }
   this.syncAim();
   this.syncTalentPicker();
+  this.itemUI?.sync();
   if(el('scene-heading'))el('scene-heading').textContent=title[g.floor-1];
   if(el('scene-status'))el('scene-status').textContent=g.over
    ?g.previewOutcome==='victory'?'VITÓRIA NA PRÉVIA — reinicie para outra expedição.':'FIM DA EXPEDIÇÃO — reinicie para tentar novamente.'
-   :(g.pendingTalentChoices?.length?'ASCENSÃO: escolha um talento para continuar.':(g.previewLog?.at(-1)||'Explore os corredores do osso.'));
+   :(g.pendingTalentChoices?.length?'ASCENSÃO: escolha um talento para continuar.':
+   this.itemUI.active()?'Escolha uma opção no painel para continuar.':
+   (g.previewLog?.at(-1)||'Explore os corredores do osso.'));
   if(el('recent-log'))el('recent-log').textContent=(g.previewLog||[]).slice(-3).join(' · ');
  }
  chooseTalent(id){
@@ -306,7 +331,23 @@ export class DungeonScene extends Phaser.Scene{
   list.querySelector('button')?.focus({preventScroll:true});
  }
  update(time){
-  if(time-this.lastPadAt<175||this.run.over||this.classSelectionOpen)return;
+  if(this.run.over||this.classSelectionOpen)return;
+  if(this.itemUI.active()&&!this.run.pendingTalentChoices?.length){
+   if(time-this.lastPadAt<175)return;
+   const pad=navigator.getGamepads?.()?.find(p=>p&&p.connected);
+   if(pad&&this.itemUI.pad(pad))this.lastPadAt=time;
+   return;
+  }
+  if(!this.run.pendingTalentChoices?.length&&this.autoPath.length){
+   if(time<this.nextAutoAt)return;
+   const [dx,dy]=this.autoPath.shift();
+   const result=this.perform({type:'MOVE',dx,dy});
+   this.nextAutoAt=time+155;
+   if(result?.status!=='applied'||this.itemUI.active()||
+    this.run.pendingTalentChoices?.length||this.run.over)this.autoPath=[];
+   return;
+  }
+  if(time-this.lastPadAt<175)return;
   const pad=navigator.getGamepads?.()?.find(p=>p&&p.connected);
   if(!pad)return;
   const pressed=i=>!!pad.buttons[i]?.pressed;
