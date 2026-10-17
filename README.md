@@ -46,6 +46,10 @@ A preview de `/phaser/` recebe manifesto próprio, botão **INSTALAR / AJUDA** e
 
 A prévia Phaser permite escolher a classe **somente com o Xbox** (D-pad/analógico + A), exibindo foco e status do controle. Segurar A após confirmar não executa um ataque automático. A suíte de regressão percorre os cinco estratos enfrentando inimigos gerados de verdade, com IA e saves ativos, inclusive o chefe e a escolha final; a fixture dá buffs ao herói e o reposiciona para isolar essas transições, então não constitui uma campanha natural/balanceada. Jogo clássico e saves intocados. [PR #47](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/47) integrado com **177/177 testes** e [publicação #39038943319](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/39038943319) bem-sucedida em `/phaser/`. Falta verificar a interface num controle Xbox e dispositivo mobile reais.
 
+### P5B.2 — O Gesto Preciso (em validação)
+
+O controle Xbox da preview Phaser separa movimentos contínuos de ações únicas: **segurar A/B/X/Y/RB não repete ataques, compras, habilidades, talentos ou escolhas de final**. B volta nos menus reversíveis e a seleção por D-pad mantém o foco/scroll correto. Testes adicionais verificam 9 combinações classe/seed com herói sem atributos reforçados e sem teleporte, IA e salvamento por até 35 turnos; isso não demonstra uma campanha vitoriosa. HTML/PWA clássico e saves não são modificados. Publicação condicionada à CI.
+
 ## Evolução 2.0 (em desenvolvimento)
 
 A evolução está documentada e acompanhada em:

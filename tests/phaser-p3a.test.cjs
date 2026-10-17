@@ -119,7 +119,7 @@ test('controles expõem três classes, duas magias, mira e gamepad; fechamento p
  for(const id of ['class-selection','aim-hint','hero-class','hero-weapon'])assert.match(html,new RegExp('id="'+id+'"'));
  assert.match(scene,/castAt\(/);assert.match(scene,/castNearest\(/);
  assert.match(scene,/chooseClass\(/);assert.match(scene,/this\.aim=/);
- assert.match(scene,/pressed\(3\)/);assert.match(scene,/pressed\(1\)/);
+ assert.match(scene,/this\.padLatch\.consume\(3\)/);assert.match(scene,/this\.padLatch\.consume\(1\)/);
  assert.match(scene,/clearPreview\(storage\(\)\)/);
  assert.doesNotMatch(scene,/carcaca_golzdov_run_v1|carcaca_golzdov_meta_v1/);
 });

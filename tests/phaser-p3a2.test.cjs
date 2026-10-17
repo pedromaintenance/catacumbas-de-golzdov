@@ -124,6 +124,6 @@ test('modal expõe seleção para teclado/toque/Xbox e não altera chaves cláss
  assert.match(html,/A ASCENSÃO/);
  assert.match(scene,/chooseTalentAt\(/);
  assert.match(scene,/data-preview-talent/);
- assert.match(scene,/pressed\(0\)\)this.chooseTalentAt/);
+ assert.match(scene,/this\.padLatch\.consume\(0\)\)this.chooseTalentAt/);
  assert.doesNotMatch(scene,/carcaca_golzdov_run_v1|carcaca_golzdov_meta_v1/);
 });

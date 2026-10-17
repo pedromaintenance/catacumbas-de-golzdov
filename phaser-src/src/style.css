@@ -295,3 +295,9 @@ body::before{content:"";pointer-events:none;position:fixed;inset:0;opacity:.08;b
  font:700 10px/1.6 ui-monospace,monospace;letter-spacing:.05em;
  background:#1c2029;color:#d6bda4;border-top:1px solid #5d4b59}
 @media(max-width:560px){.gamepad-status{font-size:9px;padding:9px 8px}}
+
+/* P5B.2 — ajuda legível em telas estreitas e foco ao navegar pelo controle. */
+.gamepad-hint{margin:0;padding:9px 16px 12px;background:#151821;
+ color:#c5b5ac;font:10px/1.6 ui-monospace,monospace;text-align:center;
+ border-top:1px solid #453944}
+@media(max-width:560px){.gamepad-hint{font-size:10px;text-align:left;padding:10px 12px}}
