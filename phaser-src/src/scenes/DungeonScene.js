@@ -1,8 +1,10 @@
 import Phaser from 'phaser';
 import {initialPreviewRun,previewAction,previewVisible} from '../preview-engine.js';
 import {loadPreview,savePreview,clearPreview} from '../preview-save.js';
-import {ENEMIES,WIDTH,HEIGHT} from '../world.js';
-const TILE=28;
+import {WIDTH,HEIGHT} from '../world.js';
+import {drawClassicMap,drawClassicHero} from '../classic-art.js';
+import {normalizePreviewOutcome} from '../preview-engine.js';
+const TILE=36;
 const P={
  rock:0x11131d,wall:0x2c3343,floor:0x302b38,grid:0x4f4555,
  ghost:0x1b1d27,hero:0xf3c996,halo:0x947251,enemy:0xce777e,
@@ -26,13 +28,19 @@ export class DungeonScene extends Phaser.Scene{
   const existing=loadPreview(storage());
   this.run=existing||initialPreviewRun(fixedSeed(),startFloor());
   this.previewRun=this.run;
+  normalizePreviewOutcome(this.run);
+  normalizePreviewOutcome(this.run);
   this.visible=previewVisible(this.run);
-  this.mapG=this.add.graphics().setDepth(0);
-  this.entityG=this.add.graphics().setDepth(3);
-  this.hero=this.add.container(0,0).setDepth(10);
-  this.hero.add(this.add.circle(0,0,13,P.halo,.28));
-  this.hero.add(this.add.rectangle(0,0,15,17,P.hero).setStrokeStyle(2,0x39272a));
-  this.hero.add(this.add.rectangle(0,-5,5,5,0x39272a));
+  this.worldCanvas=document.createElement('canvas');
+  this.worldCanvas.width=WIDTH*TILE;this.worldCanvas.height=HEIGHT*TILE;
+  this.worldCtx=this.worldCanvas.getContext('2d');this.worldCtx.imageSmoothingEnabled=false;
+  this.textures.addCanvas('classic-world-p3',this.worldCanvas);
+  this.worldImage=this.add.image(0,0,'classic-world-p3').setOrigin(0).setDepth(0);
+  this.heroCanvas=document.createElement('canvas');
+  this.heroCanvas.width=64;this.heroCanvas.height=64;
+  this.heroCtx=this.heroCanvas.getContext('2d');this.heroCtx.imageSmoothingEnabled=false;
+  this.textures.addCanvas('classic-hero-p3',this.heroCanvas);
+  this.hero=this.add.image(0,0,'classic-hero-p3').setDisplaySize(TILE*1.38,TILE*1.38).setDepth(10);
   this.cameras.main.setBounds(0,0,WIDTH*TILE,HEIGHT*TILE);
   this.cameras.main.startFollow(this.hero,true,.17,.17);
   this.cameras.main.roundPixels=true;
@@ -48,6 +56,8 @@ export class DungeonScene extends Phaser.Scene{
    else if(key===' '||key==='.') {e.preventDefault();this.perform({type:'WAIT'});}
    else if(key==='h'||key==='p')this.perform({type:'POTION'});
    else if(key==='f'||key==='enter'){e.preventDefault();this.attackNearest();}
+   else if(key==='r'){e.preventDefault();this.restart();}
+   else if(key==='r'){e.preventDefault();this.restart();}
   };
   document.addEventListener('keydown',onKey);
   const buttons=[];
@@ -113,33 +123,11 @@ export class DungeonScene extends Phaser.Scene{
  }
  report(message){if(el('scene-status'))el('scene-status').textContent=message;}
  draw(){
-  const run=this.run,hero=run.hero;
-  this.mapG.clear();this.entityG.clear();
-  this.mapG.fillStyle(P.rock).fillRect(0,0,WIDTH*TILE,HEIGHT*TILE);
-  for(let y=0;y<HEIGHT;y++)for(let x=0;x<WIDTH;x++){
-   const key=y*WIDTH+x;
-   if(!run.seen[key])continue;
-   const isNow=this.visible.has(key),walk=run.map[key]===1;
-   const color=!isNow?P.ghost:walk?((x+y*3)%6===0?0x413745:P.floor):P.wall;
-   this.mapG.fillStyle(color).fillRect(x*TILE,y*TILE,TILE,TILE);
-   if(walk&&isNow){
-    this.mapG.lineStyle(1,P.grid,.36).strokeRect(x*TILE+.5,y*TILE+.5,TILE-1,TILE-1);
-   }else if(isNow){
-    this.mapG.fillStyle(P.rock,.65).fillRect(x*TILE+4,y*TILE+5,TILE-8,4);
-   }
-  }
-  const pin=(point,color,size=6)=>{
-   if(!point||!this.visible.has(point.y*WIDTH+point.x))return;
-   this.entityG.fillStyle(color).fillRect(point.x*TILE+TILE/2-size/2,point.y*TILE+TILE/2-size/2,size,size);
-  };
-  pin(run.stairs,P.stair,12);pin(run.shrine,P.shrine,10);
-  for(const item of run.items)pin(item,item.kind==='trap'?P.trap:item.kind==='relic'?P.relic:P.item,7);
-  for(const enemy of run.enemies)if(enemy.hp>0&&this.visible.has(enemy.y*WIDTH+enemy.x)){
-   const cx=enemy.x*TILE+TILE/2,cy=enemy.y*TILE+TILE/2;
-   this.entityG.fillStyle(P.enemy).fillCircle(cx,cy,8);
-   this.entityG.lineStyle(1,0xf1bfc0).strokeCircle(cx,cy,8);
-  }
-  this.hero.setPosition(hero.x*TILE+TILE/2,hero.y*TILE+TILE/2);
+  drawClassicMap(this.worldCtx,this.run,this.visible,TILE);
+  this.textures.get('classic-world-p3').refresh();
+  drawClassicHero(this.heroCtx,this.run.hero);
+  this.textures.get('classic-hero-p3').refresh();
+  this.hero.setPosition((this.run.hero.x+.5)*TILE,(this.run.hero.y+.5)*TILE);
  }
  sync(){
   const g=this.run,p=g.hero;
@@ -154,6 +142,18 @@ export class DungeonScene extends Phaser.Scene{
    'scene-seed':g.seed.toString(16).toUpperCase().padStart(8,'0')
   };
   for(const [id,value] of Object.entries(pairs))if(el(id))el(id).textContent=value;
+  const bars={'hp-fill':p.maxhp>0?p.hp/p.maxhp:0,'focus-fill':p.maxmana>0?p.mana/p.maxmana:0};
+  for(const [id,ratio] of Object.entries(bars))if(el(id))el(id).style.width=(Math.max(0,Math.min(1,ratio))*100)+'%';
+  const end=el('run-ending');
+  if(end){
+   end.classList.toggle('hidden',!g.over);
+   if(g.over){
+    const victory=g.previewOutcome==='victory';
+    if(el('ending-kicker'))el('ending-kicker').textContent=victory?'O NOME SEPULTADO':'SUA HISTÓRIA FOI INTERROMPIDA';
+    if(el('ending-title'))el('ending-title').textContent=victory?'O nome resiste.':'O osso vence.';
+    if(el('ending-summary'))el('ending-summary').textContent='Estrato '+g.floor+' · '+g.turn+' turnos · '+g.kills+' abates';
+   }
+  }
   if(el('scene-heading'))el('scene-heading').textContent=title[g.floor-1];
   if(el('scene-status'))el('scene-status').textContent=g.over
    ?g.previewOutcome==='victory'?'VITÓRIA NO RECORTE P2B — reinicie para outra expedição.':'FIM DA EXPEDIÇÃO — reinicie para tentar novamente.'

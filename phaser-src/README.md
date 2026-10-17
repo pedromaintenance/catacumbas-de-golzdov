@@ -1,4 +1,4 @@
-# Phaser P2B — primeira preview jogável
+# Phaser P2B.2 — arte clássica em Phaser (preview jogável)
 
 **Fonte:** `phaser-src/` (Phaser 4.2.1 + Vite 6.3.1). Depois de CI verde
 no branch `main`, a workflow constrói o bundle e atualiza **somente**
@@ -12,6 +12,13 @@ no branch `main`, a workflow constrói o bundle e atualiza **somente**
 - Toque: D-pad e botões ATACAR, ESPERAR, POÇÃO e REINICIAR. Também é possível tocar numa casa adjacente ou inimigo ao alcance no mapa.
 - Gamepad: D-pad ou analógico esquerdo, A atacar, X poção e RB esperar.
 - `?seed=305419896&floor=4` inicia nova expedição nesse estrato **quando não houver save de preview**. REINICIAR apaga apenas o save de preview.
+
+## Novidades P2B.2 — identidade visual restaurada
+
+- Sprites procedurais dos oito inimigos, herói, itens, chão e paredes reaproveitados diretamente das funções Canvas 1.3.6; cores específicas de cada estrato.
+- Palco mais compacto no desktop, barras de vida e foco, modal de derrota/vitória com reinício, tecla R para recomeçar.
+- Compatibilidade com saves anteriores do próprio preview que tenham PV zero mas ainda não tragam flag de morte; encerramento sem turno extra.
+- Renderização em texturas Canvas Phaser em vez de gerar imagens externas. O estado de jogo/RNG não é alterado pelo desenho.
 
 ## O que funciona nesta vertical slice
 

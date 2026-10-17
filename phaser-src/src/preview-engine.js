@@ -22,6 +22,17 @@ export function initialPreviewRun(seed=0x52c4a190,floor=1){
  run.previewOutcome=null;
  return run;
 }
+// Saves P2B anteriores podiam conter PV=0 sem flag de encerramento.
+export function normalizePreviewOutcome(run){
+ if(!run||!run.hero)return false;
+ if(run.hero.hp<=0){
+  run.hero.hp=0;
+  run.over=true;
+  if(!run.previewOutcome)run.previewOutcome='death';
+  return true;
+ }
+ return false;
+}
 export function previewVisible(run){
  const visible=host.GolzdovNavigation.visibleCells(run.map,WIDTH,HEIGHT,run.hero);
  for(const k of visible)run.seen[k]=true;
@@ -109,7 +120,7 @@ function collectBasic(run,events){
 }
 export function previewAction(run,action){
  const events=[];
- if(!run||run.over)return {status:'inactive',consumesTurn:false,events};
+ if(!run||normalizePreviewOutcome(run)||run.over)return {status:'inactive',consumesTurn:false,events};
  const p=run.hero;
  let result;
  if(action?.type==='ATTACK'){
