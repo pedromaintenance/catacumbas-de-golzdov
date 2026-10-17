@@ -176,3 +176,26 @@ body::before{content:"";pointer-events:none;position:fixed;inset:0;opacity:.08;b
  .item-card strong{font-size:12px}
  .item-card span{font-size:11px}
 }
+
+/* P3B.3 — palavras finais, com foco visível e rolagem no celular. */
+.ending{overflow:auto;align-items:start;z-index:16}
+.ending-content{max-width:570px;margin:auto;text-align:left;max-height:100%;overflow:auto}
+.ending-content h2{text-align:center}
+.ending-content #ending-story{font-size:14px;line-height:1.68;color:#e0cfc4}
+.ending-content #ending-substory{font-size:12px;line-height:1.6}
+.ending-content .ending-stats{border-top:1px solid #6b5656;padding-top:10px;
+ font:11px/1.65 ui-monospace,monospace;color:#bcb0a7}
+.ending-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:20px 0}
+.ending-choices button{margin:0;display:flex;flex-direction:column;text-align:left;
+ gap:9px;min-height:125px;letter-spacing:normal}
+.ending-choices button strong{font:700 14px Georgia,serif;color:#ffe0ad}
+.ending-choices button span{font:12px/1.45 Georgia,serif;color:#dcc8c2}
+.ending-choices button:is(:focus-visible,.pad-selected){outline:2px solid #f5c98c;outline-offset:2px}
+.ending-choices button:hover{filter:brightness(1.2)}
+#ending-restart{display:block;margin:18px auto 0}
+@media(max-width:520px){
+ .ending{padding:7px}
+ .ending-content{padding:16px 13px}
+ .ending-choices{grid-template-columns:1fr;gap:7px;margin:12px 0}
+ .ending-choices button{min-height:0;padding:12px}
+}
