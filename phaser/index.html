@@ -6,9 +6,9 @@
 <link rel="manifest" href="./manifest.webmanifest"/>
 <link rel="icon" type="image/png" href="./icons/icon-192.png"/>
 <meta name="description" content="Catacumbas de Golzdov — prévia jogável isolada em Phaser 4"/>
-<title>Golzdov · Phaser P5A.1 — O Osso Permanece</title>
-  <script type="module" crossorigin src="./assets/index-B1Pw0vNf.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-tWTIgzkB.css">
+<title>Golzdov · Phaser P5B.1 — A Travessia dos Vivos</title>
+  <script type="module" crossorigin src="./assets/index-CcpfHGhe.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-rZQi1avr.css">
 </head><body>
 <main class="app">
 <header class="masthead"><p class="eyebrow">CARCAÇA / CATACUMBAS DE GOLZDOV</p>
@@ -24,7 +24,7 @@
 <section class="panel" aria-labelledby="scene-heading">
 <div class="panel-heading"><div><span class="marker">EXPEDIÇÃO EXPERIMENTAL</span>
 <h2 id="scene-heading">Costelas do Silêncio</h2><p class="class-status">⚔ <strong id="hero-class">Vigia de Thargrid</strong> · <span id="hero-weapon">Martelo das Montanhas</span></p></div>
-<span class="prototype">P5A.1 · PRÉVIA OFFLINE</span></div>
+<span class="prototype">P5B.1 · EXPEDIÇÃO E CONTROLE</span></div>
 <div class="hud" aria-label="Estado da expedição">
 <div class="resource hp" aria-label="Pontos de vida"><span>♥ VIDA <b id="hero-hp">43 / 43</b></span><div class="resource-track"><div id="hp-fill" class="resource-fill"></div></div></div>
 <div class="resource focus" aria-label="Foco"><span>✧ FOCO <b id="hero-focus">8 / 8</b></span><div class="resource-track"><div id="focus-fill" class="resource-fill"></div></div></div>
@@ -72,7 +72,7 @@
    <button data-preview-class="arcanista" class="class-card"><strong>夢 ARCANISTA YOKAI</strong><small>LEITOR DOS NOMES ANTIGOS</small><span>27 PV · 19 FOCO · DEF 1</span><em>Glifo de Luz · Sonho Afundado</em><span>Magia e controle de área</span><b>2 · ESCOLHER ARCANISTA</b></button>
    <button data-preview-class="errante" class="class-card"><strong>➶ ERRANTE DE IRONWOOD</strong><small>CAÇADOR DA RESISTÊNCIA</small><span>32 PV · 11 FOCO · DEF 1</span><em>Tiro Fantasma · Círculo de Espinhos</em><span>Arco de longo alcance e raízes</span><b>3 · ESCOLHER ERRANTE</b></button>
   </div>
-  <p class="class-warning">Ao escolher uma classe, uma expedição anterior desta preview será substituída. A campanha HTML permanece intocada.</p>
+  <p class="class-warning">Xbox: direcional/analógico escolhe, A confirma · teclado: setas e Enter ou 1/2/3 · toque: escolha uma carta. Ao confirmar, uma expedição anterior desta preview será substituída. A campanha HTML permanece intocada.</p>
  </div>
 </div></div>
 <div id="route-feedback" class="route-feedback hidden" role="status" aria-live="polite">
@@ -96,6 +96,7 @@
 </div></div>
 <div class="panel-footer"><span id="scene-status" aria-live="polite">Entrando na Carcaça…</span>
 <span>SEED <b id="scene-seed">—</b></span></div>
+<p id="gamepad-status" class="gamepad-status" role="status" aria-live="polite">CONTROLE DESCONECTADO · USE TECLADO OU TOQUE</p>
 <div id="combat-status" class="combat-status" role="status" aria-live="polite" aria-atomic="true">Nenhum confronto registrado nesta expedição.</div>
 <section id="threat-panel" class="threat-panel" aria-labelledby="threat-heading">
  <div class="threat-heading">
@@ -123,7 +124,7 @@
 H/P para poção; E para interagir na casa atual; Espaço para esperar; 1/2/3 para escolher talentos na ascensão. <b>Xbox:</b> D-pad/analógico, A atacar,
 X poção, Y/B habilidades, RB esperar. Clique em um item ou destino explorado para caminhar até ele; o trajeto será destacado no mapa e pausará diante de ameaças próximas. **Xbox: B interrompe a caminhada;** Esc ou o botão PARAR também cancelam.</p>
 <p>Os turnos só avançam após uma ação válida. Save automático independente da versão clássica.
-A preview inclui uma lista de inimigos vistos, estados como atordoamento/raízes/chamas e ação de ataque acessível por toque, além dos sinais de dano, finais Luz 光 / Raiz 根, mercador, navegação e crônicas. Os efeitos visuais não consomem turnos nem alteram os resultados do combate. As estatísticas se acumulam somente ao concluir uma expedição; uma decisão final pendente não é contada. O jogo clássico, seu service worker e seus saves continuam intactos. Esta preview usa seu próprio cache restrito a /phaser/; depois do primeiro carregamento online é possível testar em modo avião.</p>
+A seleção de classe aceita Xbox com direcional + A; manter A pressionado não provoca um ataque acidental. A preview inclui uma lista de inimigos vistos, estados como atordoamento/raízes/chamas e ação de ataque acessível por toque, além dos sinais de dano, finais Luz 光 / Raiz 根, mercador, navegação e crônicas. Os efeitos visuais não consomem turnos nem alteram os resultados do combate. As estatísticas se acumulam somente ao concluir uma expedição; uma decisão final pendente não é contada. O jogo clássico, seu service worker e seus saves continuam intactos. Esta preview usa seu próprio cache restrito a /phaser/; depois do primeiro carregamento online é possível testar em modo avião.</p>
 <a href="../">Voltar ao jogo clássico</a></footer>
 </main>
 </body></html>
