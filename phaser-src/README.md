@@ -15,6 +15,14 @@ no branch `main`, a workflow constrói o bundle e atualiza **somente**
 - Gamepad: D-pad ou analógico esquerdo, A atacar, X poção e RB esperar.
 - `?seed=305419896&floor=4` inicia nova expedição nesse estrato **quando não houver save de preview**. REINICIAR apaga apenas o save de preview.
 
+## Novidades P3B.4 — crônicas de expedições (em validação)
+
+- Abra **VER HISTÓRICO** abaixo dos controles para consultar partidas encerradas. Somente derrotas e epílogos Luz/Raiz confirmados entram na contagem; decisão pendente não conta.
+- Resumo acumulado: expedições, vitórias, derrotas, melhor estrato, abates, Luz e Raiz. Lista de até 20 registros recentes com classe, nível, estrato, turnos, abates, âmbar e seed.
+- Histórico usa exclusivamente `carcaca_golzdov_phaser_history_v1`, diferente do save de execução da preview e dos saves/metas clássicos. REINICIAR mantém o histórico e só substitui a campanha depois da escolha de classe.
+- Recarregar o epílogo não repete a contagem; falhas/indisponibilidade de armazenamento não produzem um resultado fictício.
+- A próxima etapa deve verificar replay completo dos cinco estratos e compatibilidade mobile/PWA real.
+
 ## Novidades P3B.3 — finais Luz/Raiz (integrada, 135/135 testes)
 
 - Ao derrotar o Escrivão Sem Nome, o combate pára e aparece **O NOME SEPULTADO**. Escolha **Revelar o Nome (Luz 光)** ou **Guardar o Nome (Raiz 根)**. As narrativas são as mesmas do HTML clássico.
