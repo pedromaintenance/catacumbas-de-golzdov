@@ -154,18 +154,6 @@ export class DungeonScene extends Phaser.Scene{
     if(el('ending-summary'))el('ending-summary').textContent='Estrato '+g.floor+' · '+g.turn+' turnos · '+g.kills+' abates';
    }
   }
-  const bars={'hp-fill':p.maxhp>0?p.hp/p.maxhp:0,'focus-fill':p.maxmana>0?p.mana/p.maxmana:0};
-  for(const [id,ratio] of Object.entries(bars))if(el(id))el(id).style.width=(Math.max(0,Math.min(1,ratio))*100)+'%';
-  const end=el('run-ending');
-  if(end){
-   end.classList.toggle('hidden',!g.over);
-   if(g.over){
-    const victory=g.previewOutcome==='victory';
-    if(el('ending-kicker'))el('ending-kicker').textContent=victory?'O NOME SEPULTADO':'SUA HISTÓRIA FOI INTERROMPIDA';
-    if(el('ending-title'))el('ending-title').textContent=victory?'O nome resiste.':'O osso vence.';
-    if(el('ending-summary'))el('ending-summary').textContent='Estrato '+g.floor+' · '+g.turn+' turnos · '+g.kills+' abates';
-   }
-  }
   if(el('scene-heading'))el('scene-heading').textContent=title[g.floor-1];
   if(el('scene-status'))el('scene-status').textContent=g.over
    ?g.previewOutcome==='victory'?'VITÓRIA NO RECORTE P2B — reinicie para outra expedição.':'FIM DA EXPEDIÇÃO — reinicie para tentar novamente.'
