@@ -15,11 +15,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Verificar sintaxe dos módulos Phaser antes dos testes
+        run: |
+          node --check phaser-src/src/scenes/DungeonScene.js
+          node --check phaser-src/src/classic-art.js
+          node --check phaser-src/src/preview-engine.js
       - name: Testar RNG, saves, cache e geração de mapas
         run: node --test tests/*.test.cjs
 
       - name: Instalar Phaser/Vite para validar o preview jogável P2B
-        run: npm install --prefix phaser-src --no-audit --no-fund
+        run: npm ci --prefix phaser-src --no-audit --no-fund
       - name: Compilar preview Phaser jogável
         run: npm run --prefix phaser-src build
       - name: Verificar bundle sem CDN e com base relativa
@@ -52,7 +57,7 @@ jobs:
           node-version: '22'
       - name: Construir artefatos isolados
         run: |
-          npm install --prefix phaser-src --no-audit --no-fund
+          npm ci --prefix phaser-src --no-audit --no-fund
           npm run --prefix phaser-src build
           node scripts/verify-phaser-dist.cjs
       - name: Atualizar somente /phaser/ e lockfile do preview
