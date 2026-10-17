@@ -81,6 +81,9 @@ export function resolvePreviewRelicChoice(run,action){
   pending.removing=pending.removing.includes(action.id)
    ?pending.removing.filter(x=>x!==action.id):[...pending.removing,action.id];
  }else if(action.type!=='RELIC_CONFIRM')return {status:'invalid-relic'};
+ // Só alterações de seleção: jamais desmontar a bolsa até CONFIRM.
+ if(action.type==='RELIC_TOGGLE')
+  return {status:'relic-swap-pending'};
  const id=pending.selection,relic=relicById(id),removing=pending.removing||[];
  if(!relic||!pending.offers.includes(id)||removing.some(old=>!p.relics.includes(old)))
   return {status:'invalid-relic'};
