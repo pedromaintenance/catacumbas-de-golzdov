@@ -13,7 +13,7 @@
 - [ ] Verificar via HTTP/visual a atualização no Pages e em Xbox/celular reais; sem presumir confirmação.
 - [ ] Próximos blocos P3: relíquias e gatilhos (`onAttack`, `onRoot`, `onDefend` etc.), loot/altar/mercador, finais Luz/Raiz, importação de cópia e paridade dos replays. **Preview não substitui o jogo clássico.**
 
-## P5B.1 — A Travessia dos Vivos: Xbox na seleção e replays adversariais (17/10/2026; em validação)
+## P5B.1 — A Travessia dos Vivos: Xbox na seleção e replays adversariais (17/10/2026; integrada)
 
 - [x] Corrigir fluxo **sem teclado/mouse**: a tela inicial de classe da preview aceita **D-pad / analógico esquerdo + A** no Xbox, com classe selecionada realçada e texto de instruções. Setas + Enter/tecla Espaço também selecionam e confirmam no teclado; 1/2/3 e toque continuam funcionais.
 - [x] **Proteção contra botão A mantido:** após confirmar classe no controle, suprimir entrada de gamepad enquanto A permanecer pressionado; impede disparar ataque acidental no primeiro turno. Não modifica combat, saves, seed ou RNG.
@@ -21,7 +21,7 @@
 - [x] Extrair `classPickerInput` / `nextClassPickerIndex` como funções puras de Gamepad API para teste de zona morta, D-pad, confirmação, ausência/desconexão e wrap de seleção.
 - [x] Testes integrados de **combate real contra monstros gerados em cada um dos cinco estratos**, inclusive o Escrivão Sem Nome: turnos reais de IA, esquiva/dano, rolagens do núcleo, recompensa/abate, escadas, troca de estrato, save/load e decisão final Luz; três classes e replay repetido de uma seed para conferir determinismo.
 - [x] Limitação explícita desses replays: a fixture reforça os atributos do herói e **o reposiciona** ao lado dos monstros e escadas para isolar lógica de combate/transições. **Não remove a IA nem os inimigos**, mas **não comprova campanha completa jogada naturalmente, balanceamento, UX visual ou controles físicos**.
-- [ ] CI completa, PR verde, build Vite/Phaser e publicação isolada de `/phaser/`, após aprovação.
+- [x] [PR #47](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/47) integrado à `main` (squash `b5da14f`). [CI do PR #39038867060](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/39038867060) **177/177 testes**, build Vite/Phaser e verificador offline PWA aprovados. [Workflow pós-merge #39038943319](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/39038943319) **success**; publicados `phaser/index.html`, `assets/index-CcpfHGhe.js`, `assets/index-rZQi1avr.css` e novo cache `golzdov-phaser-offline-8144f199dc4c` na `main`. QA visual/HTTP e Xbox físico ainda pendentes.
 - [ ] QA manual no Pages/Xbox real: escolher classe só no controle, segurar A após confirmação, reiniciar e escolher outra classe, menus, scroll, toque e gamepad desconectado. QA de campanha integral sem teleporte/atributos reforçados continua pendente.
 - [ ] Próximo P5B.2: testes prolongados de navegação/campanha sem fixture reforçada, desempenho mobile, controle de foco ao trocar modos e relatório de diagnóstico; preservar jogo HTML/PWA clássico.
 

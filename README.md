@@ -42,9 +42,9 @@ A preview Phaser acrescenta um painel expansível com inimigos **realmente visí
 
 A preview de `/phaser/` recebe manifesto próprio, botão **INSTALAR / AJUDA** e cache offline de JS/CSS Phaser, HTML, ícones e manifesto. O service worker é gerado com os arquivos da build e não intercepta rotas ou caches do jogo HTML clássico. Para testar offline, abra online, aguarde o preparo e recarregue; em seguida, desconecte a internet e abra novamente. [PR #46](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/46) integrado com **173/173 testes**; [workflow #39035416868](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/39035416868) concluiu a publicação do cache e manifesto exclusivos em `/phaser/`. Compatibilidade offline em browsers reais e instalação nos dispositivos físicos seguem pendentes de QA.
 
-### P5B.1 — A Travessia dos Vivos (em validação)
+### P5B.1 — A Travessia dos Vivos (integrada)
 
-A prévia Phaser permite escolher a classe **somente com o Xbox** (D-pad/analógico + A), exibindo foco e status do controle. Segurar A após confirmar não executa um ataque automático. A suíte de regressão percorre os cinco estratos enfrentando inimigos gerados de verdade, com IA e saves ativos, inclusive o chefe e a escolha final; a fixture dá buffs ao herói e o reposiciona para isolar essas transições, então não constitui uma campanha natural/balanceada. Jogo clássico e saves intocados. Merge e publicação dependem da CI.
+A prévia Phaser permite escolher a classe **somente com o Xbox** (D-pad/analógico + A), exibindo foco e status do controle. Segurar A após confirmar não executa um ataque automático. A suíte de regressão percorre os cinco estratos enfrentando inimigos gerados de verdade, com IA e saves ativos, inclusive o chefe e a escolha final; a fixture dá buffs ao herói e o reposiciona para isolar essas transições, então não constitui uma campanha natural/balanceada. Jogo clássico e saves intocados. [PR #47](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/47) integrado com **177/177 testes** e [publicação #39038943319](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/39038943319) bem-sucedida em `/phaser/`. Falta verificar a interface num controle Xbox e dispositivo mobile reais.
 
 ## Evolução 2.0 (em desenvolvimento)
 

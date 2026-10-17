@@ -15,7 +15,7 @@ no branch `main`, a workflow constrói o bundle e atualiza **somente**
 - Gamepad: D-pad ou analógico esquerdo, A atacar, X poção e RB esperar.
 - `?seed=305419896&floor=4` inicia nova expedição nesse estrato **quando não houver save de preview**. REINICIAR apaga apenas o save de preview.
 
-## Novidades P5B.1 — A Travessia dos Vivos (em validação)
+## Novidades P5B.1 — A Travessia dos Vivos (integrada, 177/177 testes)
 
 - **Xbox, do zero:** na tela de seleção inicial, use o **D-pad ou analógico esquerdo** para alternar Vigia/Arcanista/Errante e pressione **A** para começar. A opção escolhida recebe contorno âmbar.
 - Segurar **A** depois de escolher a classe não provoca ataque no primeiro turno. O status **CONTROLE CONECTADO / DESCONECTADO** abaixo dos botões mostra se o navegador detecta um gamepad.
