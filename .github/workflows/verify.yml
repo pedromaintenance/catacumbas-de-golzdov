@@ -20,6 +20,8 @@ jobs:
           node --check phaser-src/src/scenes/DungeonScene.js
           node --check phaser-src/src/classic-art.js
           node --check phaser-src/src/preview-engine.js
+          node --check phaser-src/src/preview-classes.js
+          node --check phaser-src/src/world.js
       - name: Testar RNG, saves, cache e geração de mapas
         run: node --test tests/*.test.cjs
 
