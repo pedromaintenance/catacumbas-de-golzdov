@@ -2,9 +2,9 @@
 
 Esta versão é um PWA de verdade: instala a partir do GitHub Pages e funciona depois **sem conexão**, inclusive depois de fechar e reabrir o aplicativo.
 
-## Preview Phaser P2B.1 — primeiros testes
+## Preview Phaser P2B.2 — arte clássica (em validação)
 
-A [**primeira preview interativa**](https://pedromaintenance.github.io/catacumbas-de-golzdov/phaser/) tem movimento, combate básico, espera, poção, HUD, exploração e save próprio. [PR #34](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/34) foi integrado com **90/90 testes verdes**; `phaser/index.html` e os assets estão na `main`. **A propagação pública do Pages ainda depende de verificação em navegador.** A preview é experimental: apenas Vigia, sem equivalência de talentos, mercador, relíquias e finais. Ela **não é PWA independente** e pode exigir conexão. O jogo clássico 1.3.6/cache v20 e seus saves continuam inalterados.
+A [**primeira preview interativa**](https://pedromaintenance.github.io/catacumbas-de-golzdov/phaser/) tem movimento, combate básico, espera, poção, HUD, exploração e save próprio. A atualização **P2B.2** recupera a arte procedural da versão HTML (oito inimigos, chão, paredes, itens e cinco paletas), adiciona barras de PV/foco e exibe a derrota/vitória de forma clara. **Ainda aguardando CI e deploy**; a versão de preview atualmente publicada pode não conter essas melhorias. [PR #34](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/34) foi integrado com **90/90 testes verdes**; `phaser/index.html` e os assets estão na `main`. **A propagação pública do Pages ainda depende de verificação em navegador.** A preview é experimental: apenas Vigia, sem equivalência de talentos, mercador, relíquias e finais. Ela **não é PWA independente** e pode exigir conexão. O jogo clássico 1.3.6/cache v20 e seus saves continuam inalterados.
 
 ## Evolução 2.0 (em desenvolvimento)
 
