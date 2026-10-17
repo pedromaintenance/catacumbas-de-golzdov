@@ -199,3 +199,22 @@ body::before{content:"";pointer-events:none;position:fixed;inset:0;opacity:.08;b
  .ending-choices{grid-template-columns:1fr;gap:7px;margin:12px 0}
  .ending-choices button{min-height:0;padding:12px}
 }
+
+/* P3B.4 — painel de crônicas: metadados da preview, sem afetar a simulação. */
+.chronicle{margin:10px 16px 16px;border:1px solid #6d555b;border-radius:5px;
+ background:linear-gradient(155deg,#211c29,#12151f);color:#e7d6c4}
+.chronicle-heading{display:flex;align-items:center;justify-content:space-between;
+ flex-wrap:wrap;gap:8px;padding:12px 14px}
+.chronicle-heading h3{font:700 12px Georgia,serif;letter-spacing:.07em;margin:0;color:#e8b989}
+.chronicle-heading button{font:700 10px ui-monospace,monospace;border:1px solid #977263;
+ border-radius:4px;padding:9px 12px;background:#3a2a34;color:#f4d0b0;cursor:pointer}
+.chronicle-heading button:focus-visible{outline:2px solid #f6ce95}
+#chronicle-body{border-top:1px solid #5a4554;padding:12px 14px}
+.chronicle-stats{font:11px/1.7 ui-monospace,monospace;color:#ddc9b0;margin:0 0 11px}
+.chronicle-records{display:grid;gap:7px;padding:0;list-style:none;margin:0}
+.chronicle-records li{display:flex;flex-direction:column;gap:5px;border:1px solid #483c4a;
+ border-radius:4px;background:#191824;padding:9px 11px}
+.chronicle-records li strong{font:700 12px Georgia,serif;color:#eac293}
+.chronicle-records li span{font:11px/1.5 ui-monospace,monospace;color:#bcaeae;overflow-wrap:anywhere}
+.chronicle-note{font:italic 11px/1.6 Georgia,serif;color:#b4a5a1;margin:12px 0 0}
+@media(max-width:560px){.chronicle{margin:8px}.chronicle-heading{padding:10px}}

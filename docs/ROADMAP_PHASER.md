@@ -13,6 +13,19 @@
 - [ ] Verificar via HTTP/visual a atualização no Pages e em Xbox/celular reais; sem presumir confirmação.
 - [ ] Próximos blocos P3: relíquias e gatilhos (`onAttack`, `onRoot`, `onDefend` etc.), loot/altar/mercador, finais Luz/Raiz, importação de cópia e paridade dos replays. **Preview não substitui o jogo clássico.**
 
+## P3B.4 — Crônicas e pós-jogo persistente (16/10/2026; em validação)
+
+- [x] Criar **arquivo de crônicas da preview**, separado do save de execução e das duas chaves do jogo clássico: `carcaca_golzdov_phaser_history_v1`, sem importar ou substituir metadados HTML.
+- [x] Acumular estatísticas canônicas via `GolzdovEndings.updateMeta`: expedições encerradas, vitórias, melhor estrato e abates; detalhar separadamente derrotas e caminhos Luz 光 / Raiz 根.
+- [x] Arquivar somente derrotas e epílogos **já confirmados**, nunca decisão final pendente; preservar registro definitivo após recarregar a página ou iniciar outra classe.
+- [x] Histórico limitado a **20 registros recentes**, mantendo totais agregados de todas as partidas. Capturar classe, estrato, nível, turnos, abates, âmbar e seed; IDs por expedição evitam contar a mesma vitória repetidamente. Saves antigos sem ID recebem chave derivada estável.
+- [x] Painel expansível de crônicas, responsivo, acessível e construído com `textContent` (sem conteúdo HTML injetado). Reiniciar apenas substitui a run quando o jogador confirma nova classe; histórico permanece intacto.
+- [x] Reorganizar `REINICIAR` para funcionar mesmo após a vitória/derrota e com modais abertos, sem destruir a campanha ao apenas abrir o seletor.
+- [x] Testes: vitória Luz/Raiz, derrota, decisão pendente, idempotência, limite de registros, saves isolados, reinício, dados corrompidos e indisponibilidade de armazenamento.
+- [ ] CI, bundle Vite/Phaser e PR aprovados; publicar isoladamente na pasta `/phaser/` após merge.
+- [ ] QA real no GitHub Pages e mobile/Xbox: conferir o painel antes, durante e após cada encerramento.
+- [ ] Próximo: replays completos dos cinco estratos, evolução de navegação e QA do PWA/compilação mobile antes do corte da versão clássica.
+
 ## P3B.3 — O Nome Sepultado: Luz e Raiz (16/10/2026; integrada)
 
 - [x] Substituir o término genérico ao derrotar o Escrivão Sem Nome pela **decisão final**: revelar o Nome (Luz 光) ou guardar o Nome (Raiz 根), com os textos originais de `showFinalChoice` e `showVictoryEnding` da versão HTML.
