@@ -15,6 +15,14 @@ no branch `main`, a workflow constrói o bundle e atualiza **somente**
 - Gamepad: D-pad ou analógico esquerdo, A atacar, X poção e RB esperar.
 - `?seed=305419896&floor=4` inicia nova expedição nesse estrato **quando não houver save de preview**. REINICIAR apaga apenas o save de preview.
 
+## Novidades P4A.2 — marcas de combate (em validação)
+
+- Ao atacar, o mapa exibe dano real causado sobre o inimigo; **CRÍTICO**, **ERROU**, **ABATIDO**, **ESQUIVA** e dano recebido pelo herói usam sinais separados.
+- O resumo textual do último combate aparece abaixo dos controles, incluindo `aria-live` para leitores de tela.
+- Se o sistema pedir **reduzir movimento**, o texto não flutua; permanece legível por um curto período.
+- Os indicadores são efêmeros e não são gravados no save: animações não gastam turnos/RNG nem mudam chances de acerto/dano.
+- Testar diferentes classes, armadilhas, falhas de ataque e ataques inimigos. QA visual real no Pages/mobile/Xbox ainda será necessário.
+
 ## Novidades P4A.1 — caminhos visíveis e interrupção segura (integrada, 151/151 testes)
 
 - Clique/toque em um ponto explorado para ver **a rota desenhada no mapa**, destino marcado e contador de passos.
