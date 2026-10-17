@@ -2,6 +2,7 @@
  * DOM é somente um adaptador: escolhas e transações acontecem no previewAction.
  */
 import {availablePreviewRelics,relicById} from './preview-relics.js';
+import {PREVIEW_SHOP_GOODS} from './preview-shop.js';
 const el=id=>document.getElementById(id);
 export class PreviewItemUI{
  constructor(scene){
@@ -17,7 +18,7 @@ export class PreviewItemUI{
  destroy(){this.list?.removeEventListener('click',this.onClick);}
  active(){
   const run=this.scene.run;
-  return !!(run?.pendingRelicOffer||run?.pendingShrineChoice||run?.pendingStairs);
+  return !!(run?.pendingRelicOffer||run?.pendingShrineChoice||run?.pendingShop||run?.pendingStairs);
  }
  choices(run){
   const hero=run.hero,pending=run.pendingRelicOffer,rules=window.GolzdovRelicOffers;
@@ -48,9 +49,24 @@ export class PreviewItemUI{
    {type:'CHOOSE_SHRINE',id:'focus',title:'✧ CLAREZA DE LUZ 光',desc:'Recupera todo o foco.'},
    {type:'CHOOSE_SHRINE',id:'relic',title:'✥ TRIBUTO DE OSSO',desc:'Duas inscrições de relíquias à escolha.'}
   ];
+  if(run.pendingShop){
+   return [
+    ...PREVIEW_SHOP_GOODS.map(g=>({
+     type:g.id==='relic'?'SHOP_RELIC':'SHOP_BUY',
+     id:g.id,title:g.icon+' '+g.name+' · ◈ '+g.cost,
+     desc:g.desc+(hero.coins<g.cost?' (Âmbar insuficiente: faltam '+(g.cost-hero.coins)+'.)':'')+
+      (g.id==='relic'&&Array.isArray(run.shopOffers)&&
+       !run.shopOffers.some(id=>!hero.relics.includes(id))?' (Estoque esgotado.)':'')
+    })),
+    {type:'SHOP_CLOSE',title:'← VOLTAR À ESCADA',
+     desc:'Sair do mercador sem gastar outro turno.'}
+   ];
+  }
   if(run.pendingStairs)return [
    ...(run.floor<5?[{type:'STAIRS_DESCEND',title:'↓ DESCER',
-    desc:'Seguir ao estrato '+(run.floor+1)+' e deixar este andar para trás.'}]:[]),
+    desc:'Seguir ao estrato '+(run.floor+1)+' e deixar este andar para trás.'},
+    {type:'SHOP_OPEN',title:'◈ MERCADOR',
+     desc:'Comprar provisões, aprimoramentos ou relíquias com âmbar ósseo.'}]:[]),
    {type:'STAIRS_CANCEL',title:'← CONTINUAR EXPLORANDO',
     desc:run.floor===5?'O selo exige vencer o Escrivão Sem Nome.':
     'Ficar aqui. Pressione E quando quiser abrir a escadaria novamente.'}
@@ -65,18 +81,21 @@ export class PreviewItemUI{
   if(!open){this.cache='';this.items=[];return;}
   const pending=run.pendingRelicOffer;
   const title=pending?(pending.selection?'BOLSA DE RELÍQUIAS':'O RELICÁRIO'):
-   run.pendingShrineChoice?'ALTAR ESQUECIDO':'A ESCADARIA';
+   run.pendingShrineChoice?'ALTAR ESQUECIDO':run.pendingShop?'OS COMERCIANTES NÃO MORREM':'A ESCADARIA';
   const desc=pending?(pending.selection?'Marque as relíquias que deseja trocar antes de confirmar. ':
    'Escolha uma inscrição para sua bolsa. ')+
-   window.GolzdovRelicOffers.occupied(run.hero)+'/'+window.GolzdovRelicOffers.capacity(run.hero)+' espaços ocupados.':
+   window.GolzdovRelicOffers.occupied(run.hero)+'/'+window.GolzdovRelicOffers.capacity(run.hero)+
+   ' espaços ocupados.'+(pending.source==='mercador'?' Preço: ◈ '+(pending.cost??54)+' na confirmação.':''):
    run.pendingShrineChoice?'O altar oferece uma única bênção.':
+   run.pendingShop?'Uma figura envolta em peles oferece bens recuperados dos mortos. Seu âmbar: ◈ '+run.hero.coins+'.':
    'Decida se deseja prosseguir ou continuar explorando.';
   const items=this.choices(run),key=JSON.stringify([title,desc,items]);
   if(key===this.cache)return;
   this.cache=key;this.items=items;this.selection=0;
   el('item-title').textContent=title;el('item-desc').textContent=desc;
   el('item-kicker').textContent=pending?'INSCRIÇÕES GRAVADAS NO OSSO':
-   run.pendingShrineChoice?'O OSSO CONCEDE UMA BÊNÇÃO':'UM CAMINHO PARA O ESCURO';
+   run.pendingShrineChoice?'O OSSO CONCEDE UMA BÊNÇÃO':
+   run.pendingShop?'TROCAS NO ESCURO':'UM CAMINHO PARA O ESCURO';
   this.list.replaceChildren();
   for(const [i,item] of items.entries()){
    const button=document.createElement('button');
@@ -111,7 +130,7 @@ export class PreviewItemUI{
   if(['arrowdown','arrowright','s','d'].includes(key))this.move(1);
   if(key==='enter')this.choose(this.selection);
   if(key==='escape'){
-   const i=this.items.findIndex(item=>item.type==='RELIC_SKIP'||item.type==='STAIRS_CANCEL');
+   const i=this.items.findIndex(item=>item.type==='RELIC_SKIP'||item.type==='SHOP_CLOSE'||item.type==='STAIRS_CANCEL');
    if(i>=0)this.choose(i);
   }
  }
