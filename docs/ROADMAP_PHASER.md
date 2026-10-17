@@ -13,6 +13,18 @@
 - [ ] Verificar via HTTP/visual a atualização no Pages e em Xbox/celular reais; sem presumir confirmação.
 - [ ] Próximos blocos P3: relíquias e gatilhos (`onAttack`, `onRoot`, `onDefend` etc.), loot/altar/mercador, finais Luz/Raiz, importação de cópia e paridade dos replays. **Preview não substitui o jogo clássico.**
 
+## P5B.1 — A Travessia dos Vivos: Xbox na seleção e replays adversariais (17/10/2026; em validação)
+
+- [x] Corrigir fluxo **sem teclado/mouse**: a tela inicial de classe da preview aceita **D-pad / analógico esquerdo + A** no Xbox, com classe selecionada realçada e texto de instruções. Setas + Enter/tecla Espaço também selecionam e confirmam no teclado; 1/2/3 e toque continuam funcionais.
+- [x] **Proteção contra botão A mantido:** após confirmar classe no controle, suprimir entrada de gamepad enquanto A permanecer pressionado; impede disparar ataque acidental no primeiro turno. Não modifica combat, saves, seed ou RNG.
+- [x] Status textual acessível de controle conectado/desconectado; foco visual consistente das opções com contraste e layout mobile. Teclas usadas em crônicas, ameaças ou painel de instalação não são reinterpretadas como ações de combate.
+- [x] Extrair `classPickerInput` / `nextClassPickerIndex` como funções puras de Gamepad API para teste de zona morta, D-pad, confirmação, ausência/desconexão e wrap de seleção.
+- [x] Testes integrados de **combate real contra monstros gerados em cada um dos cinco estratos**, inclusive o Escrivão Sem Nome: turnos reais de IA, esquiva/dano, rolagens do núcleo, recompensa/abate, escadas, troca de estrato, save/load e decisão final Luz; três classes e replay repetido de uma seed para conferir determinismo.
+- [x] Limitação explícita desses replays: a fixture reforça os atributos do herói e **o reposiciona** ao lado dos monstros e escadas para isolar lógica de combate/transições. **Não remove a IA nem os inimigos**, mas **não comprova campanha completa jogada naturalmente, balanceamento, UX visual ou controles físicos**.
+- [ ] CI completa, PR verde, build Vite/Phaser e publicação isolada de `/phaser/`, após aprovação.
+- [ ] QA manual no Pages/Xbox real: escolher classe só no controle, segurar A após confirmação, reiniciar e escolher outra classe, menus, scroll, toque e gamepad desconectado. QA de campanha integral sem teleporte/atributos reforçados continua pendente.
+- [ ] Próximo P5B.2: testes prolongados de navegação/campanha sem fixture reforçada, desempenho mobile, controle de foco ao trocar modos e relatório de diagnóstico; preservar jogo HTML/PWA clássico.
+
 ## P5A.1 — O Osso Permanece: PWA offline exclusivo da preview (17/10/2026; integrada)
 
 - [x] Manifesto `phaser-src/public/manifest.webmanifest` com identidade, nome, `start_url` e `scope` **exclusivos da pasta /phaser/**, sem substituir a instalação do HTML clássico. Ícones locais de 192/512 copiados do projeto durante a compilação para `/phaser/icons/`.
