@@ -15,6 +15,14 @@ no branch `main`, a workflow constrói o bundle e atualiza **somente**
 - Gamepad: D-pad ou analógico esquerdo, A atacar, X poção e RB esperar.
 - `?seed=305419896&floor=4` inicia nova expedição nesse estrato **quando não houver save de preview**. REINICIAR apaga apenas o save de preview.
 
+## Novidades P3B.1 — itens do cenário (em validação)
+
+- Armas, armaduras, poções, ouro, foco, vida, armadilhas e relicários agora passam pelas regras oficiais de coleta do núcleo, sem objetos falsamente interativos.
+- Relíquias: raridade e slots oficiais, sorteio persistente, escolha/recusa/substituição com confirmação; gatilhos de ataque, dano, morte, salas, raízes e turno conectados ao motor.
+- Altar: uma bênção entre cura, foco e relicário; escada: confirmar descida ou seguir explorando, sem gastar turno na escolha.
+- Interação: tecla **E**, botão INTERAGIR, clique/toque na casa atual; clique em destino já explorado inicia caminhada automática por turnos (para ao encontrar obstáculo, combate ou decisão).
+- Preview ainda não tem mercador integrado ou finais narrativos completos; estes são marcos subsequentes.
+
 ## Novidades P3A.2 — evolução por escolha
 
 - Ao subir de nível, selecione um dos três talentos; 1/2/3 no teclado, toque nas cartas, D-pad/analógico e A no gamepad.
