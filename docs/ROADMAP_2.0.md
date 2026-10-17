@@ -6,6 +6,10 @@ Atualizado em: 15/10/2026. Planejamento detalhado: [GAME_DESIGN_2.0.md](GAME_DES
 
 ## Histórico de execução
 
+- 16/10/2026: **P3B.2 — mercador da preview Phaser (em validação)**. Na escada, seis ofertas idênticas ao HTML clássico; compras usam âmbar e não geram turnos, preços preservados. O relicário possui sorteio determinístico persistido por estrato (sem reroll ao cancelar/recarregar), quatro slots e troca com débito de ◈54 apenas ao confirmar. UI usa controles de escolha existentes. Testes e publicação dependem do PR/CI; finais narrativos continuam pendentes.
+
+
+
 - 16/10/2026: **P3B.1 Phaser — correção de interação com itens (integrada)**. Completar todas as oito categorias de coleta pelo núcleo de loot, relicários com catálogo canônico, quatro slots e trocas confirmadas, altares, escadas com opção e caminhada até o item pelo mapa conhecido. HUD com âmbar/bolsa, controles por teclado/toque/Xbox, eventos de relicário integrados. [PR #39](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/39) integrado; **117/117 testes** e compilação verde. Workflow pós-merge publicou a nova build em `/phaser/`, sem alterar o HTML clássico; QA de navegador/dispositivo físico continua pendente.
 
 

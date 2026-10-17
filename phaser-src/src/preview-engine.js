@@ -1,7 +1,7 @@
 /* P2B vertical slice: movimentação, ataque, espera, poção e turno inimigo.
  * Reutiliza o dispatcher/IA/RNG/combate da build principal.
  * Sem navegador, Phaser, timers, áudio ou storage; nunca avança no render.
- * P3A.2 oferece progressão por escolha; relíquias, mercador e finais completos: P3B.
+ * P3B.2 integra o mercador; finais narrativos completos permanecem em P3C.
  */
 import './world.js';
 import '../../core/combat.js';
@@ -17,6 +17,7 @@ import {createPreviewWorld,ENEMIES,WIDTH,HEIGHT} from './world.js';
 import {PREVIEW_CLASSES} from './preview-classes.js';
 import {beginPreviewLevelUp,choosePreviewTalent} from './preview-talents.js';
 import {PREVIEW_RELICS,ensurePreviewRelicOffer,resolvePreviewRelicChoice} from './preview-relics.js';
+import {buyPreviewShopGood,shopGood} from './preview-shop.js';
 const host=typeof window!=='undefined'?window:globalThis;
 const idx=(x,y)=>y*WIDTH+x;
 const dist=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y);
@@ -29,6 +30,7 @@ export function initialPreviewRun(seed=0x52c4a190,floor=1,classId='vigia'){
  run.pendingTalentChoices=null;
  run.pendingShrineChoice=false;
  run.pendingStairs=false;
+ run.pendingShop=false;
  return run;
 }
 // Saves P2B anteriores podiam conter PV=0 sem flag de encerramento.
@@ -215,7 +217,8 @@ export function previewAction(run,action){
  if(type?.startsWith('RELIC_')){
   const out=resolvePreviewRelicChoice(run,action);
   if(out.status==='relic-equipped'){
-   note(run,out.relic.name+' equipada.'+(out.removed.length?' Substituídas: '+out.removed.join(', ')+'.':''),events);
+   note(run,out.relic.name+' equipada.'+(out.cost?' ◈ '+out.cost+' pagos.':'')+
+    (out.removed.length?' Substituídas: '+out.removed.join(', ')+'.':''),events);
    for(const synergy of out.synergies)note(run,'Sinergia: '+synergy.name+'.',events);
   }else if(out.status==='relic-skipped')note(run,'Você abandona o relicário.',events);
   return {status:out.status,consumesTurn:false,events};
@@ -238,6 +241,38 @@ export function previewAction(run,action){
   return {status:'shrine-used',consumesTurn:false,events};
  }
  if(run.pendingShrineChoice)return {status:'shrine-choice-required',consumesTurn:false,events};
+ // O comerciante é acessível apenas pela escada, antes de descer.
+ if(type==='SHOP_OPEN'){
+  if(!run.pendingStairs||!at(run,run.stairs)||run.floor===5)
+   return {status:'no-shop',consumesTurn:false,events};
+  run.pendingStairs=false;run.pendingShop=true;
+  note(run,'Um mercador de ossos revela suas mercadorias.',events);
+  return {status:'shop-opened',consumesTurn:false,events};
+ }
+ if(type==='SHOP_CLOSE'){
+  if(!run.pendingShop)return {status:'no-shop',consumesTurn:false,events};
+  run.pendingShop=false;run.pendingStairs=true;
+  note(run,'Você retorna à escadaria.',events);
+  return {status:'shop-closed',consumesTurn:false,events};
+ }
+ if(type==='SHOP_BUY'){
+  const out=buyPreviewShopGood(run,action.id);
+  if(out.status==='shop-bought')note(run,'Compra: '+out.good.name+'. ◈ '+out.good.cost+' pagos.',events);
+  return {status:out.status,consumesTurn:false,events};
+ }
+ if(type==='SHOP_RELIC'){
+  if(!run.pendingShop)return {status:'no-shop',consumesTurn:false,events};
+  const price=shopGood('relic').cost;
+  if(run.hero.coins<price)return {status:'insufficient-coins',consumesTurn:false,events};
+  if(Array.isArray(run.shopOffers)&&!run.shopOffers.some(id=>!run.hero.relics.includes(id)))
+   return {status:'shop-sold-out',consumesTurn:false,events};
+  run.pendingRelicOffer={source:'mercador',cost:price,offers:null};
+  prepareInteractions(run,events);
+  if(!run.pendingRelicOffer)return {status:'shop-sold-out',consumesTurn:false,events};
+  note(run,'O mercador oferece duas inscrições.',events);
+  return {status:'shop-relic-opened',consumesTurn:false,events};
+ }
+ if(run.pendingShop)return {status:'shop-choice-required',consumesTurn:false,events};
  if(type==='STAIRS_CANCEL'){
   run.pendingStairs=false;
   note(run,'Você permanece no estrato atual.',events);

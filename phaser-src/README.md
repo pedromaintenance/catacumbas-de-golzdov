@@ -15,6 +15,14 @@ no branch `main`, a workflow constrói o bundle e atualiza **somente**
 - Gamepad: D-pad ou analógico esquerdo, A atacar, X poção e RB esperar.
 - `?seed=305419896&floor=4` inicia nova expedição nesse estrato **quando não houver save de preview**. REINICIAR apaga apenas o save de preview.
 
+## Novidades P3B.2 — mercador entre estratos (em validação)
+
+- Na escada dos estratos 1–4, escolha **MERCADOR** para abrir seis serviços pelos preços oficiais do HTML: 20/16/16/38/38/54 âmbar.
+- O estoque de duas inscrições é único por estrato. Recusar, reabrir e recarregar o save não muda a oferta. Troca de relíquias só debita 54 após confirmar a equipagem e as substituições.
+- Sem saldo, compras não modificam estado, RNG ou turnos. Ao sair, volte à escada sem descer automaticamente.
+- Use 1–9, setas e Enter, clique/toque ou direcional e A no controle, com Esc para retornar.
+- Finais Luz/Raiz completos e QA físico permanecem na fila.
+
 ## Novidades P3B.1 — itens do cenário (integrada, 117/117 testes)
 
 - Armas, armaduras, poções, ouro, foco, vida, armadilhas e relicários agora passam pelas regras oficiais de coleta do núcleo, sem objetos falsamente interativos.
