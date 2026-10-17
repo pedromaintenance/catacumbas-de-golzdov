@@ -15,7 +15,7 @@ no branch `main`, a workflow constrói o bundle e atualiza **somente**
 - Gamepad: D-pad ou analógico esquerdo, A atacar, X poção e RB esperar.
 - `?seed=305419896&floor=4` inicia nova expedição nesse estrato **quando não houver save de preview**. REINICIAR apaga apenas o save de preview.
 
-## Novidades P4A.3 — Olhos na Escuridão (em validação)
+## Novidades P4A.3 — Olhos na Escuridão (integrada, 165/165 testes)
 
 - Abra **VER AMEAÇAS** abaixo do combate para inspecionar até oito inimigos atualmente visíveis: vida, posição e distância. O painel não mostra inimigos escondidos pela neblina.
 - Ícones no mapa + rótulos no painel identificam **atordoamento (✧)**, **raízes (根)**, **chamas (✹)** e **recarga (⌛)** do inimigo. Efeitos do herói como Bastião/Revanche/Exaustão aparecem no resumo.
