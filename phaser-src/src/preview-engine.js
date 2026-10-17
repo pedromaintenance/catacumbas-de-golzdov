@@ -68,9 +68,16 @@ function relicEvent(run,event,details,events){
  host.GolzdovRelicEffects?.dispatch(event,ctx);
  return ctx;
 }
-function applyDamage(run,enemy,damage,label,events,source='effect'){
+function applyDamage(run,enemy,damage,label,events,source='effect',critical=false){
  if(!enemy||enemy.hp<=0)return;
- for(const impact of host.GolzdovCombat.damageEnemy(run,enemy,damage,label,ENEMIES,source)){
+ const beforeHp=enemy.hp;
+ const foe={id:enemy.id,x:enemy.x,y:enemy.y,name:ENEMIES[enemy.type]?.name||enemy.type};
+ const impacts=host.GolzdovCombat.damageEnemy(run,enemy,damage,label,ENEMIES,source);
+ const dealt=Math.max(0,beforeHp-enemy.hp);
+ if(dealt>0)events.push({type:'combat-feedback',kind:'enemy-hit',
+  ...foe,amount:dealt,critical:!!critical});
+ if(enemy.hp<=0)events.push({type:'combat-feedback',kind:'enemy-defeat',...foe});
+ for(const impact of impacts){
   if(impact.type==='log')note(run,impact.text,events);
   if(impact.type==='defeat-enemy'){
    for(const reward of host.GolzdovRewards.defeat(run,enemy,ENEMIES,source)){
@@ -87,7 +94,7 @@ function applyHeroHit(run,enemy,damage,label,events,source='basic',critical=fals
  const hit=relicEvent(run,'onAttack',{
   enemy,damage,kind:source,critical,wasSmoldering:(enemy.smolder||0)>0
  },events);
- applyDamage(run,enemy,Math.max(1,Math.floor(hit.damage)),label,events,source);
+ applyDamage(run,enemy,Math.max(1,Math.floor(hit.damage)),label,events,source,critical);
 }
 function doAttack(run,enemy,melee,events){
  if(!enemy||enemy.hp<=0)return false;
@@ -96,11 +103,16 @@ function doAttack(run,enemy,melee,events){
   melee,lineOfSight:host.GolzdovNavigation.lineClear(run.map,WIDTH,HEIGHT,run.hero.x,run.hero.y,enemy.x,enemy.y),
   predator:run.hero.talents.includes('e_predador'),muralha:run.hero.talents.includes('v_muralha')
  });
+ let connected=false;
  for(const event of hit.events){
   if(event.type==='log')note(run,event.text,events);
-  if(event.type==='hero-hit')
+  if(event.type==='hero-hit'){
+   connected=true;
    applyHeroHit(run,enemy,event.damage,event.label,events,event.source,event.critical);
+  }
  }
+ if(hit.consumesTurn&&!connected)events.push({type:'combat-feedback',kind:'miss',
+  id:enemy.id,x:enemy.x,y:enemy.y,name:ENEMIES[enemy.type]?.name||enemy.type});
  return hit.consumesTurn;
 }
 function doSkill(run,action,events){
@@ -132,9 +144,13 @@ function doSkill(run,action,events){
 function damageHero(run,value,message,events){
  const reduced=host.GolzdovDefense.reduce(run,value,{muralha:run.hero.talents.includes('v_muralha')});
  const damage=relicEvent(run,'onDefend',{damage:reduced},events).damage;
+ const hpBefore=run.hero.hp;
  for(const e of host.GolzdovDefense.apply(run,damage,message)){
   if(e.type==='log')note(run,e.text,events);
  }
+ const taken=Math.max(0,hpBefore-run.hero.hp);
+ if(taken>0)events.push({type:'combat-feedback',kind:'hero-hit',
+  x:run.hero.x,y:run.hero.y,amount:taken});
  relicEvent(run,'onHurt',{damage},events);
  for(const e of host.GolzdovDefense.afterHurt(run,{juramento:run.hero.talents.includes('v_juramento')})){
   if(e.type==='die')run.hero.hp=0;
@@ -149,6 +165,7 @@ function enemyStep(run,e,events){
    const roll=host.GolzdovCombat.enemyMelee(run,foe);
    if(roll.dodge){
     note(run,'Você esquiva de '+ENEMIES[foe.type].name+'.',events);
+    events.push({type:'combat-feedback',kind:'dodge',x:run.hero.x,y:run.hero.y});
     relicEvent(run,'onDodge',{enemy:foe},events);
    }else damageHero(run,roll.damage,ENEMIES[foe.type].name+' atinge você.',events);
   },

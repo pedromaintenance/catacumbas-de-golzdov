@@ -13,6 +13,17 @@
 - [ ] Verificar via HTTP/visual a atualização no Pages e em Xbox/celular reais; sem presumir confirmação.
 - [ ] Próximos blocos P3: relíquias e gatilhos (`onAttack`, `onRoot`, `onDefend` etc.), loot/altar/mercador, finais Luz/Raiz, importação de cópia e paridade dos replays. **Preview não substitui o jogo clássico.**
 
+## P4A.2 — Marcas do Combate: feedback de impacto e acessibilidade (17/10/2026; em validação)
+
+- [x] Emitir sinais `combat-feedback` **a partir de mutações reais do motor**: acerto e dano de inimigos, crítico, erro, abate, dano sofrido e esquiva; sem interpretar mensagens para inferir resultados, alterar cálculos, turno ou RNG.
+- [x] Projeção pura em `preview-combat-feedback.js`, validando coordenadas/valores, limitando a 12 efeitos recentes por ação e gerando anúncio curto para leitores de tela.
+- [x] Renderer Phaser desenha texto flutuante no mapa **somente após a ação ser resolvida**, sem afetar o estado da expedição. Críticos, esquivas, falhas e dano têm identificação visual distinta. Limpeza de objetos temporários ao reiniciar ou sair da cena.
+- [x] Suporte a `prefers-reduced-motion: reduce` sem movimento flutuante; status textual `aria-live` permanece disponível mesmo com animações reduzidas ou não renderizadas.
+- [x] Testes de resultados canônicos: crítico, falha, abate, dano real de armadilha, esquiva e pureza/limite da projeção; checagem de integração do status e da UI.
+- [ ] CI, build Vite/Phaser, PR e publicação na pasta `/phaser/` após validação.
+- [ ] QA manual no Pages (cores, legibilidade, efeitos em inimigos e herói, tela estreita, opção de movimento reduzido, Xbox e toque).
+- [ ] Próximos: leitura visual de condições de combate, replays reais com inimigos pelos cinco estratos, PWA offline e QA mobile; versão HTML clássica permanece a referência.
+
 ## P4A.1 — Caminhos do Osso: navegação, feedback e segurança (17/10/2026; integrada)
 
 - [x] A rota automática de clique/toque mostra **quadrados do trajeto, marcador de destino e passos restantes**, desenhados em overlay Phaser, sem mutação de mapa, RNG ou save.

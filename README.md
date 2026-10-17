@@ -30,6 +30,10 @@ A preview Phaser ganhou histórico próprio dos 20 últimos resultados e um pain
 
 A preview Phaser destaca o caminho quando você clica ou toca em uma casa explorada, marca o destino, mostra os passos restantes e oferece o botão **PARAR CAMINHADA**. Esc, B no Xbox ou comandos manuais interrompem a rota; inimigos visíveis próximos também pausam o avanço, sem gasto adicional de turno ou RNG pela UI. Incluídos testes de transição por cinco estratos/3 seeds sem inimigos, para validar topologia, menus e saves. **Não são uma prova de balanceamento de combate.** O HTML estável e seus saves não são alterados. [PR #43](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/43) integrado, **151/151 testes aprovados** e [publicação pós-merge #39024968353](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/39024968353) concluída em `/phaser/`. QA visual no navegador e dispositivos físicos ainda pendente.
 
+### P4A.2 — Marcas do Combate (em validação)
+
+A preview Phaser apresenta sinais de dano real, acerto crítico, erro, abate e esquiva sobre o tabuleiro, com resumo textual acessível e respeito à preferência de movimento reduzido. Todos os indicadores vêm dos eventos da simulação, sem acrescentar RNG, turnos ou mudanças de combate. Código e testes ficam isolados da versão HTML. A publicação permanece condicionada à CI.
+
 ## Evolução 2.0 (em desenvolvimento)
 
 A evolução está documentada e acompanhada em:

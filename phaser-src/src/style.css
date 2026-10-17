@@ -231,3 +231,9 @@ body::before{content:"";pointer-events:none;position:fixed;inset:0;opacity:.08;b
 .route-feedback.hidden{display:none}
 @media(max-width:540px){.route-feedback{padding:8px;flex-wrap:wrap}
  .route-feedback button{width:100%}}
+
+/* P4A.2 — log de impacto acessível para mouse, touch e leitores de tela. */
+.combat-status{padding:10px 16px;border-top:1px solid #52404c;
+ background:linear-gradient(100deg,#2d252d,#151922);color:#ecd1b2;
+ font:600 12px/1.55 ui-monospace,monospace;min-height:39px;overflow-wrap:anywhere}
+@media(max-width:560px){.combat-status{padding:9px 11px;font-size:11px}}
