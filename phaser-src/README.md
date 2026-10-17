@@ -15,6 +15,14 @@ no branch `main`, a workflow constrói o bundle e atualiza **somente**
 - Gamepad: D-pad ou analógico esquerdo, A atacar, X poção e RB esperar.
 - `?seed=305419896&floor=4` inicia nova expedição nesse estrato **quando não houver save de preview**. REINICIAR apaga apenas o save de preview.
 
+## Novidades P4A.3 — Olhos na Escuridão (em validação)
+
+- Abra **VER AMEAÇAS** abaixo do combate para inspecionar até oito inimigos atualmente visíveis: vida, posição e distância. O painel não mostra inimigos escondidos pela neblina.
+- Ícones no mapa + rótulos no painel identificam **atordoamento (✧)**, **raízes (根)**, **chamas (✹)** e **recarga (⌛)** do inimigo. Efeitos do herói como Bastião/Revanche/Exaustão aparecem no resumo.
+- **⚔ ATACAR** escolhe diretamente o inimigo, inclusive no toque, somente quando estiver à vista, dentro do alcance, com linha de visão livre e sem modal ou mira ativos. Alvos inválidos têm o botão desabilitado.
+- O painel é visual e não mexe no save/RNG; atacar continua usando a lógica de turnos original. Testes incluem cenário encoberto por parede, inimigos mortos e renderização dos estados.
+- QA no Pages precisa confirmar legibilidade dos marcadores em dispositivos físicos e persistência das condições entre turnos.
+
 ## Novidades P4A.2 — marcas de combate (integrada, 157/157 testes)
 
 - Ao atacar, o mapa exibe dano real causado sobre o inimigo; **CRÍTICO**, **ERROU**, **ABATIDO**, **ESQUIVA** e dano recebido pelo herói usam sinais separados.
