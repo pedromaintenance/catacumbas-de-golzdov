@@ -4,18 +4,18 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
 <meta name="theme-color" content="#0b0c11"/>
 <meta name="description" content="Catacumbas de Golzdov — prévia jogável isolada em Phaser 4"/>
-<title>Golzdov · Phaser P2B — Expedição</title>
-  <script type="module" crossorigin src="./assets/index-DyEWuZGx.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-Dq7KlHNq.css">
+<title>Golzdov · Phaser P3A.2 — Talentos</title>
+  <script type="module" crossorigin src="./assets/index-VYWbE8gZ.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-B9Wb8Tj2.css">
 </head><body>
 <main class="app">
 <header class="masthead"><p class="eyebrow">CARCAÇA / CATACUMBAS DE GOLZDOV</p>
 <h1>O osso ainda <em>respira.</em></h1>
-<p class="subtitle">PRÉVIA JOGÁVEL · PHASER 4 · TRÊS CLASSES</p></header>
+<p class="subtitle">PRÉVIA JOGÁVEL · PHASER 4 · CLASSES E TALENTOS</p></header>
 <section class="panel" aria-labelledby="scene-heading">
 <div class="panel-heading"><div><span class="marker">EXPEDIÇÃO EXPERIMENTAL</span>
 <h2 id="scene-heading">Costelas do Silêncio</h2><p class="class-status">⚔ <strong id="hero-class">Vigia de Thargrid</strong> · <span id="hero-weapon">Martelo das Montanhas</span></p></div>
-<span class="prototype">P3A.1 · CLASSES E MAGIA</span></div>
+<span class="prototype">P3A.2 · ASCENSÃO E TALENTOS</span></div>
 <div class="hud" aria-label="Estado da expedição">
 <div class="resource hp" aria-label="Pontos de vida"><span>♥ VIDA <b id="hero-hp">43 / 43</b></span><div class="resource-track"><div id="hp-fill" class="resource-fill"></div></div></div>
 <div class="resource focus" aria-label="Foco"><span>✧ FOCO <b id="hero-focus">8 / 8</b></span><div class="resource-track"><div id="focus-fill" class="resource-fill"></div></div></div>
@@ -28,6 +28,15 @@
   <h2 id="ending-title">O osso vence.</h2><p id="ending-summary"></p>
   <p class="ending-hint">Sua história ainda ecoa na Carcaça.</p>
   <button data-preview-action="restart">↺ NOVA EXPEDIÇÃO</button></div>
+</div>
+<div id="talent-selection" class="talent-selection hidden" role="dialog" aria-modal="true" aria-labelledby="talent-title">
+ <div class="talent-selection-content">
+  <span class="marker">A ASCENSÃO · O OSSO APRENDE SEU NOME</span>
+  <h2 id="talent-title">Escolha o que sobrevive.</h2>
+  <p id="talent-desc" class="class-copy">Escolha um talento para continuar sua expedição.</p>
+  <div id="talent-options" class="talent-options" aria-label="Talentos disponíveis"></div>
+  <p class="class-warning">O combate permanece pausado até sua escolha. Use 1, 2 ou 3; no controle, direcional e A.</p>
+ </div>
 </div>
 <div id="class-selection" class="class-selection hidden" role="dialog" aria-modal="true" aria-labelledby="class-title">
  <div class="class-selection-content">
@@ -61,11 +70,10 @@
 <div id="recent-log" class="log" aria-live="polite"></div>
 </section>
 <footer class="note"><p><b>Teclado:</b> setas/WASD para mover; 1/2 para habilidades, clique no alvo ou F para confirmar, Esc cancela mira; F/Enter para atacar;
-H/P para poção; Espaço para esperar. <b>Xbox:</b> D-pad/analógico, A atacar,
+H/P para poção; Espaço para esperar; 1/2/3 para escolher talentos na ascensão. <b>Xbox:</b> D-pad/analógico, A atacar,
 X poção, Y/B habilidades, RB esperar. Toque nos botões ou clique em uma casa adjacente.</p>
 <p>Os turnos só avançam após uma ação válida. Save automático independente da versão clássica.
-Esta é uma prévia de combate e exploração para três classes e seis habilidades; talentos, mercador, relíquias,
-escolhas narrativas e balanceamento completo virão nas próximas etapas.</p>
+A preview inclui três classes, seis habilidades e escolhas de ascensão com nove talentos exclusivos de classe e três melhorias universais. Relíquias, mercador, escolhas narrativas e finais completos ainda virão nas próximas etapas.</p>
 <a href="../">Voltar ao jogo clássico</a></footer>
 </main>
 </body></html>
