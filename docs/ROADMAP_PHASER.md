@@ -13,7 +13,7 @@
 - [ ] Verificar via HTTP/visual a atualização no Pages e em Xbox/celular reais; sem presumir confirmação.
 - [ ] Próximos blocos P3: relíquias e gatilhos (`onAttack`, `onRoot`, `onDefend` etc.), loot/altar/mercador, finais Luz/Raiz, importação de cópia e paridade dos replays. **Preview não substitui o jogo clássico.**
 
-## P3B.4 — Crônicas e pós-jogo persistente (16/10/2026; em validação)
+## P3B.4 — Crônicas e pós-jogo persistente (16/10/2026; integrada)
 
 - [x] Criar **arquivo de crônicas da preview**, separado do save de execução e das duas chaves do jogo clássico: `carcaca_golzdov_phaser_history_v1`, sem importar ou substituir metadados HTML.
 - [x] Acumular estatísticas canônicas via `GolzdovEndings.updateMeta`: expedições encerradas, vitórias, melhor estrato e abates; detalhar separadamente derrotas e caminhos Luz 光 / Raiz 根.
@@ -22,7 +22,7 @@
 - [x] Painel expansível de crônicas, responsivo, acessível e construído com `textContent` (sem conteúdo HTML injetado). Reiniciar apenas substitui a run quando o jogador confirma nova classe; histórico permanece intacto.
 - [x] Reorganizar `REINICIAR` para funcionar mesmo após a vitória/derrota e com modais abertos, sem destruir a campanha ao apenas abrir o seletor.
 - [x] Testes: vitória Luz/Raiz, derrota, decisão pendente, idempotência, limite de registros, saves isolados, reinício, dados corrompidos e indisponibilidade de armazenamento.
-- [ ] CI, bundle Vite/Phaser e PR aprovados; publicar isoladamente na pasta `/phaser/` após merge.
+- [x] [PR #42](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/42) integrado (squash `cae7d22`). [CI de PR #38993777912](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/38993777912): **145/145 testes** e build Vite/Phaser. [Workflow pós-merge #38993888149](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/38993888149): publicação **success** de `phaser/index.html`, `assets/index-BE0NbQp3.js` e `assets/index-DajqIWb5.css` na `main`; teste HTTP/visual em navegador real ainda pendente.
 - [ ] QA real no GitHub Pages e mobile/Xbox: conferir o painel antes, durante e após cada encerramento.
 - [ ] Próximo: replays completos dos cinco estratos, evolução de navegação e QA do PWA/compilação mobile antes do corte da versão clássica.
 

@@ -15,7 +15,7 @@ no branch `main`, a workflow constrói o bundle e atualiza **somente**
 - Gamepad: D-pad ou analógico esquerdo, A atacar, X poção e RB esperar.
 - `?seed=305419896&floor=4` inicia nova expedição nesse estrato **quando não houver save de preview**. REINICIAR apaga apenas o save de preview.
 
-## Novidades P3B.4 — crônicas de expedições (em validação)
+## Novidades P3B.4 — crônicas de expedições (integrada, 145/145 testes)
 
 - Abra **VER HISTÓRICO** abaixo dos controles para consultar partidas encerradas. Somente derrotas e epílogos Luz/Raiz confirmados entram na contagem; decisão pendente não conta.
 - Resumo acumulado: expedições, vitórias, derrotas, melhor estrato, abates, Luz e Raiz. Lista de até 20 registros recentes com classe, nível, estrato, turnos, abates, âmbar e seed.

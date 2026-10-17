@@ -22,9 +22,9 @@ O mercador está disponível na escada dos estratos I–IV da preview Phaser, co
 
 A preview Phaser agora apresenta a decisão final **Luz 光 / Raiz 根** quando o Escrivão Sem Nome cai, usando as narrativas clássicas, estatísticas e escolhas acessíveis por teclado, toque e controle. O resultado ou decisão pendente fica salvo somente na preview; vitórias anteriores com encerramento genérico são migradas para esta escolha, sem sobrescrever os saves clássicos. [PR #41](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/41) integrado com **135/135 testes verdes** e novo bundle publicado em `/phaser/` via [workflow #38993049907](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/38993049907). Teste real no navegador ainda pendente.
 
-### P3B.4 — Crônicas de expedições (em validação)
+### P3B.4 — Crônicas de expedições (integrada)
 
-A preview Phaser ganhou histórico próprio dos 20 últimos resultados e um painel expansível de estatísticas de expedições, vitórias, derrotas, melhor estrato, abates e caminhos Luz/Raiz. Só o final definitivo é arquivado, sem duplicar contagens ao recarregar a página. O histórico fica na chave `carcaca_golzdov_phaser_history_v1`, separada da run experimental e dos dados do jogo clássico. O botão REINICIAR passa a funcionar também nos estados finais. Testes e publicação dependem da CI.
+A preview Phaser ganhou histórico próprio dos 20 últimos resultados e um painel expansível de estatísticas de expedições, vitórias, derrotas, melhor estrato, abates e caminhos Luz/Raiz. Só o final definitivo é arquivado, sem duplicar contagens ao recarregar a página. O histórico fica na chave `carcaca_golzdov_phaser_history_v1`, separada da run experimental e dos dados do jogo clássico. O botão REINICIAR passa a funcionar também nos estados finais. [PR #42](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/42) integrado com **145/145 testes** e [workflow #38993888149](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/38993888149) aprovado. Bundles da P3B.4 publicados somente em `/phaser/`; QA visual no Pages ainda pendente.
 
 ## Evolução 2.0 (em desenvolvimento)
 

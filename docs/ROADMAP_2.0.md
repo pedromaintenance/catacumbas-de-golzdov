@@ -6,7 +6,7 @@ Atualizado em: 15/10/2026. Planejamento detalhado: [GAME_DESIGN_2.0.md](GAME_DES
 
 ## Histórico de execução
 
-- 16/10/2026: **P3B.4 Phaser — crônicas e pós-jogo (em validação)**. Painel expansível com totais de expedições, vitórias, derrotas, Luz/Raiz, melhor estrato e abates, além dos 20 últimos registros. Contagem idempotente apenas para morte e vitória confirmada, seguindo `core/endings.js`. Histórico separado do save da preview e do HTML clássico; reiniciar após um final fica disponível. CI/QA real pendentes de confirmação.
+- 16/10/2026: **P3B.4 Phaser — crônicas e pós-jogo (integrada)**. Painel expansível com totais de expedições, vitórias, derrotas, Luz/Raiz, melhor estrato e abates, além dos 20 últimos registros. Contagem idempotente apenas para morte e vitória confirmada, seguindo `core/endings.js`. Histórico separado do save da preview e do HTML clássico; reiniciar após um final fica disponível. [PR #42](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/42) integrado com **145/145 testes**, compilação Vite verde e [workflow #38993888149](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/38993888149) publicando novos bundles apenas em `/phaser/`. QA real no navegador e dispositivos ainda pendente.
 
 
 
