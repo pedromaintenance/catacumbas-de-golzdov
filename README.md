@@ -38,6 +38,10 @@ A preview Phaser apresenta sinais de dano real, acerto crítico, erro, abate e e
 
 A preview Phaser acrescenta um painel expansível com inimigos **realmente visíveis**, PV, distância e condições de combate: atordoamento, enraizamento, chamas e recarga. Também mostra Bastião, Revanche e Exaustão do herói, além de permitir atacar diretamente uma ameaça válida no toque. Corrigidos os glifos que não apareciam no mapa por uso de coordenadas fracionárias; a leitura é pura, sem alteração de RNG ou turnos. [PR #45](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/45) integrado com **165/165 testes**, compilação Phaser/Vite e [workflow de publicação #39033331654](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/39033331654) aprovados. Bundle atualizado somente em `/phaser/`; QA visual público ainda pendente. O HTML/PWA clássico continua intocado.
 
+### P5A.1 — O Osso Permanece: PWA independente da preview (em validação)
+
+A preview de `/phaser/` recebe manifesto próprio, botão **INSTALAR / AJUDA** e cache offline de JS/CSS Phaser, HTML, ícones e manifesto. O service worker é gerado com os arquivos da build e não intercepta rotas ou caches do jogo HTML clássico. Para testar offline, abra online, aguarde o preparo e recarregue; em seguida, desconecte a internet e abra novamente. Compatibilidade e instalação em navegadores/dispositivos físicos seguem pendentes de QA. Publicação condicionada à CI.
+
 ## Evolução 2.0 (em desenvolvimento)
 
 A evolução está documentada e acompanhada em:
