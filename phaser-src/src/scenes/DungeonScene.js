@@ -458,6 +458,56 @@ export class DungeonScene extends Phaser.Scene{
    (g.previewLog?.at(-1)||'Explore os corredores do osso.'));
   if(el('recent-log'))el('recent-log').textContent=(g.previewLog||[]).slice(-3).join(' · ');
  }
+ syncThreats(){
+  const list=el('threat-list'),summary=el('threat-summary'),heroStatus=el('hero-condition-summary');
+  if(!list||!summary||!heroStatus)return;
+  const data=previewThreats(this.run,this.visible);
+  summary.textContent=data.total?
+   data.total+' ameaça(s) à vista · '+data.threats.filter(e=>e.canAttack).length+
+   ' entre as exibidas ao alcance do ataque.':'Nenhum inimigo à vista.';
+  heroStatus.textContent=data.hero.length?
+   'Seu estado: '+data.hero.map(s=>s.label+
+    (s.turns?' '+s.turns+'t':s.stacks?' ×'+s.stacks:'')).join(' · ')+'.':
+   'Seu estado: normal.';
+  if(list.classList.contains('hidden'))return;
+  list.replaceChildren();
+  if(!data.threats.length){
+   const li=document.createElement('li');
+   li.className='threat-empty';li.textContent='A escuridão está silenciosa por enquanto.';
+   list.append(li);return;
+  }
+  for(const target of data.threats){
+   const li=document.createElement('li');li.className='threat-row';
+   const info=document.createElement('div');info.className='threat-info';
+   const heading=document.createElement('strong');
+   heading.textContent=(target.boss?'☠ ':'')+target.name+' · '+target.hp+'/'+target.maxhp+' PV';
+   const sub=document.createElement('span');sub.className='threat-distance';
+   sub.textContent='DISTÂNCIA '+target.distance+' · '+target.x+','+target.y;
+   info.append(heading,sub);
+   if(target.conditions.length){
+    const states=document.createElement('div');states.className='threat-states';
+    for(const condition of target.conditions){
+     const label=document.createElement('span');
+     label.className='threat-state state-'+condition.kind;
+     label.textContent=condition.label+' · '+condition.turns+'t';
+     states.append(label);
+    }
+    info.append(states);
+   }
+   const button=document.createElement('button');button.type='button';
+   button.dataset.previewEnemyId=String(target.id);
+   button.textContent=target.canAttack?'⚔ ATACAR':'FORA DE ALCANCE';
+   button.disabled=!target.canAttack||this.classSelectionOpen||this.run.over||
+    !!this.run.pendingTalentChoices?.length||this.itemUI.active()||this.aim!==null;
+   button.setAttribute('aria-label','Atacar '+target.name);
+   li.append(info,button);list.append(li);
+  }
+  if(data.total>data.threats.length){
+   const li=document.createElement('li');li.className='threat-empty';
+   li.textContent='Exibindo '+data.threats.length+' de '+data.total+' ameaças próximas.';
+   list.append(li);
+  }
+ }
  syncHistory(){
   const body=el('chronicle-body'),stats=el('chronicle-stats'),list=el('chronicle-records');
   if(!body||!stats||!list)return;
