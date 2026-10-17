@@ -8,6 +8,7 @@ import {normalizePreviewOutcome} from '../preview-engine.js';
 import {pendingTalents} from '../preview-talents.js';
 import {PreviewItemUI} from '../preview-item-ui.js';
 import {PREVIEW_ENDING_COPY,normalizePreviewEnding} from '../preview-endings.js';
+import {newPreviewSessionId,readPreviewHistory,archivePreviewRun,finishedPreviewRun} from '../preview-history.js';
 const TILE=36;
 const P={
  rock:0x11131d,wall:0x2c3343,floor:0x302b38,grid:0x4f4555,
@@ -136,6 +137,17 @@ export class DungeonScene extends Phaser.Scene{
    if(button&&talentList.contains(button))this.chooseTalent(button.dataset.previewTalent);
   };
   talentList?.addEventListener('click',onTalentClick);
+  const chronicleToggle=el('chronicle-toggle');
+  const onChronicleToggle=()=>{
+   const body=el('chronicle-body');
+   if(!body)return;
+   const open=body.classList.contains('hidden');
+   body.classList.toggle('hidden',!open);
+   chronicleToggle.setAttribute('aria-expanded',String(open));
+   chronicleToggle.firstChild.textContent=open?'OCULTAR HISTÓRICO ':'VER HISTÓRICO ';
+   if(open)this.syncHistory();
+  };
+  chronicleToggle?.addEventListener('click',onChronicleToggle);
   const finalChoices=el('ending-choices');
   const onEndingClick=e=>{
    const button=e.target.closest('button[data-preview-ending]');
@@ -150,6 +162,7 @@ export class DungeonScene extends Phaser.Scene{
    this.input.off('pointerdown',pointerClick);
    this.itemUI?.destroy();
    talentList?.removeEventListener('click',onTalentClick);
+   chronicleToggle?.removeEventListener('click',onChronicleToggle);
    finalChoices?.removeEventListener('click',onEndingClick);
   });
   this.draw();this.sync();
@@ -157,7 +170,10 @@ export class DungeonScene extends Phaser.Scene{
   if(existing)savePreview(storage(),this.run);
  }
  command(command){
-  if(this.classSelectionOpen||this.run.pendingTalentChoices?.length||this.itemUI.active())return;
+  // REINICIAR sempre abre a seleção, inclusive após morte, epílogo ou
+  // durante um modal. O save atual só é trocado ao confirmar outra classe.
+  if(command==='restart'){this.restart();return;}
+  if(this.classSelectionOpen||this.run.pendingTalentChoices?.length||this.itemUI.active()||this.run.over)return;
   this.autoPath=[];
   const dirs={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};
   if(dirs[command]){
@@ -169,7 +185,6 @@ export class DungeonScene extends Phaser.Scene{
   if(command==='interact')this.perform({type:'INTERACT'});
   if(command==='attack'){if(this.aim!==null)this.castNearest();else this.attackNearest();}
   if(command==='skill0'||command==='skill1')this.selectSkill(Number(command.slice(-1)));
-  if(command==='restart')this.restart();
  }
  syncClassPicker(){
   const picker=el('class-selection');
@@ -179,6 +194,7 @@ export class DungeonScene extends Phaser.Scene{
   if(!PREVIEW_CLASSES[classId])return;
   clearPreview(storage());
   this.run=initialPreviewRun(fixedSeed(),startFloor(),classId);
+  this.run.previewSessionId=newPreviewSessionId();
   this.previewRun=this.run;this.visible=previewVisible(this.run);
   this.aim=null;this.classSelectionOpen=false;this.autoPath=[];
   this.talentSelectedIndex=0;this.lastTalentKey='';this.finalSelectedIndex=0;
@@ -267,6 +283,11 @@ export class DungeonScene extends Phaser.Scene{
  }
  sync(){
   const g=this.run,p=g.hero;
+  if(finishedPreviewRun(g)){
+   const archive=archivePreviewRun(storage(),g);
+   if(archive.status==='archived')savePreview(storage(),g);
+  }
+  this.syncHistory();
   const pairs={
    'hero-hp':p.hp+' / '+p.maxhp,
    'hero-focus':p.mana+' / '+p.maxmana,
@@ -333,6 +354,35 @@ export class DungeonScene extends Phaser.Scene{
    this.itemUI.active()?'Escolha uma opção no painel para continuar.':
    (g.previewLog?.at(-1)||'Explore os corredores do osso.'));
   if(el('recent-log'))el('recent-log').textContent=(g.previewLog||[]).slice(-3).join(' · ');
+ }
+ syncHistory(){
+  const body=el('chronicle-body'),stats=el('chronicle-stats'),list=el('chronicle-records');
+  if(!body||!stats||!list)return;
+  const meta=readPreviewHistory(storage());
+  stats.textContent='EXPEDIÇÕES '+meta.runs+' · VITÓRIAS '+meta.wins+
+   ' · DERROTAS '+meta.deaths+' · MELHOR ESTRATO '+meta.best+'/5 · ABATES '+meta.kills+
+   ' · LUZ 光 '+meta.luz+' · RAIZ 根 '+meta.raiz;
+  // Evita reconstruir a lista em cada turno com o painel fechado.
+  if(body.classList.contains('hidden'))return;
+  const fingerprint=JSON.stringify(meta.records);
+  if(list.dataset.recordsHash===fingerprint)return;
+  list.dataset.recordsHash=fingerprint;
+  list.replaceChildren();
+  for(const record of meta.records){
+   const li=document.createElement('li');
+   const title=document.createElement('strong'),details=document.createElement('span');
+   const result=record.outcome==='luz'?'光 LUZ':record.outcome==='raiz'?'根 RAIZ':'† DERROTA';
+   const cls=PREVIEW_CLASSES[record.classId]?.name||record.classId;
+   title.textContent=result+' · '+cls+' · Estrato '+record.floor+'/5';
+   details.textContent='Nível '+record.level+' · '+record.turns+' turnos · '+
+    record.kills+' abates · ◈ '+record.treasure+' · seed '+record.seed.toString(16).toUpperCase().padStart(8,'0');
+   li.append(title,details);list.append(li);
+  }
+  if(!meta.records.length){
+   const li=document.createElement('li');
+   li.textContent='Nenhuma expedição concluída nesta preview.';
+   list.append(li);
+  }
  }
  chooseEnding(id){
   if(!this.run.pendingFinalChoice)return;
