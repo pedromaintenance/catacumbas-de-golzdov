@@ -4,9 +4,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
 <meta name="theme-color" content="#0b0c11"/>
 <meta name="description" content="Catacumbas de Golzdov — prévia jogável isolada em Phaser 4"/>
-<title>Golzdov · Phaser P4A.2 — Marcas do Combate</title>
-  <script type="module" crossorigin src="./assets/index-CE_qBH2R.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-Si4L97zV.css">
+<title>Golzdov · Phaser P4A.3 — Olhos na Escuridão</title>
+  <script type="module" crossorigin src="./assets/index-DWCa3hmR.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-gfGRQNgw.css">
 </head><body>
 <main class="app">
 <header class="masthead"><p class="eyebrow">CARCAÇA / CATACUMBAS DE GOLZDOV</p>
@@ -15,7 +15,7 @@
 <section class="panel" aria-labelledby="scene-heading">
 <div class="panel-heading"><div><span class="marker">EXPEDIÇÃO EXPERIMENTAL</span>
 <h2 id="scene-heading">Costelas do Silêncio</h2><p class="class-status">⚔ <strong id="hero-class">Vigia de Thargrid</strong> · <span id="hero-weapon">Martelo das Montanhas</span></p></div>
-<span class="prototype">P4A.2 · IMPACTO E COMBATE</span></div>
+<span class="prototype">P4A.3 · AMEAÇAS E ESTADOS</span></div>
 <div class="hud" aria-label="Estado da expedição">
 <div class="resource hp" aria-label="Pontos de vida"><span>♥ VIDA <b id="hero-hp">43 / 43</b></span><div class="resource-track"><div id="hp-fill" class="resource-fill"></div></div></div>
 <div class="resource focus" aria-label="Foco"><span>✧ FOCO <b id="hero-focus">8 / 8</b></span><div class="resource-track"><div id="focus-fill" class="resource-fill"></div></div></div>
@@ -88,6 +88,15 @@
 <div class="panel-footer"><span id="scene-status" aria-live="polite">Entrando na Carcaça…</span>
 <span>SEED <b id="scene-seed">—</b></span></div>
 <div id="combat-status" class="combat-status" role="status" aria-live="polite" aria-atomic="true">Nenhum confronto registrado nesta expedição.</div>
+<section id="threat-panel" class="threat-panel" aria-labelledby="threat-heading">
+ <div class="threat-heading">
+  <div><h3 id="threat-heading">✧ OLHOS NA ESCURIDÃO</h3>
+   <p id="threat-summary" aria-live="polite">Nenhum inimigo à vista.</p>
+   <p id="hero-condition-summary">Seu estado: normal.</p></div>
+  <button id="threat-toggle" type="button" aria-expanded="false" aria-controls="threat-list">VER AMEAÇAS ▾</button>
+ </div>
+ <ul id="threat-list" class="threat-list hidden" aria-label="Inimigos atualmente visíveis"></ul>
+</section>
 <div id="recent-log" class="log" aria-live="polite"></div>
 <section id="chronicle" class="chronicle" aria-labelledby="chronicle-title">
  <div class="chronicle-heading">
@@ -105,7 +114,7 @@
 H/P para poção; E para interagir na casa atual; Espaço para esperar; 1/2/3 para escolher talentos na ascensão. <b>Xbox:</b> D-pad/analógico, A atacar,
 X poção, Y/B habilidades, RB esperar. Clique em um item ou destino explorado para caminhar até ele; o trajeto será destacado no mapa e pausará diante de ameaças próximas. **Xbox: B interrompe a caminhada;** Esc ou o botão PARAR também cancelam.</p>
 <p>Os turnos só avançam após uma ação válida. Save automático independente da versão clássica.
-A preview inclui sinais visuais de dano, acerto crítico, esquiva e abate, além dos finais Luz 光 / Raiz 根, mercador, relicários, navegação e crônicas. Os efeitos visuais não consomem turnos nem alteram os resultados do combate. As estatísticas se acumulam somente ao concluir uma expedição; uma decisão final pendente não é contada. O jogo clássico e seus saves continuam intactos.</p>
+A preview inclui uma lista de inimigos vistos, estados como atordoamento/raízes/chamas e ação de ataque acessível por toque, além dos sinais de dano, finais Luz 光 / Raiz 根, mercador, navegação e crônicas. Os efeitos visuais não consomem turnos nem alteram os resultados do combate. As estatísticas se acumulam somente ao concluir uma expedição; uma decisão final pendente não é contada. O jogo clássico e seus saves continuam intactos.</p>
 <a href="../">Voltar ao jogo clássico</a></footer>
 </main>
 </body></html>
