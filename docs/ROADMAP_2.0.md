@@ -6,7 +6,7 @@ Atualizado em: 15/10/2026. Planejamento detalhado: [GAME_DESIGN_2.0.md](GAME_DES
 
 ## Histórico de execução
 
-- 17/10/2026: **P4A.1 Phaser — Caminhos do Osso (em validação)**. Navegação por clique/toque agora destaca a rota e o destino, mostra passos restantes e fornece botão de parada. Esc/B Xbox ou comandos manuais sobrepõem a navegação automática; inimigos próximos avistados interrompem a rota. Novos testes da topologia e transições dos cinco estratos com três seeds e save/reload (fixtures sem inimigos, portanto não substituem playtest de combate). CI e publicação condicionadas à validação. Jogo clássico/saves intactos.
+- 17/10/2026: **P4A.1 Phaser — Caminhos do Osso (integrada)**. Navegação por clique/toque agora destaca a rota e o destino, mostra passos restantes e fornece botão de parada. Esc/B Xbox ou comandos manuais sobrepõem a navegação automática; inimigos próximos avistados interrompem a rota. Novos testes da topologia e transições dos cinco estratos com três seeds e save/reload (fixtures sem inimigos, portanto não substituem playtest de combate). [PR #43](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/43) integrado com **151/151 testes**, build Vite/Phaser e [workflow pós-merge #39024968353](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/39024968353) verdes. Novos assets publicados apenas em `/phaser/`; QA visual e controle físico ainda pendentes. Jogo clássico/saves intactos.
 
 
 

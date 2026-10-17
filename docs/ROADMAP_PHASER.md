@@ -13,7 +13,7 @@
 - [ ] Verificar via HTTP/visual a atualização no Pages e em Xbox/celular reais; sem presumir confirmação.
 - [ ] Próximos blocos P3: relíquias e gatilhos (`onAttack`, `onRoot`, `onDefend` etc.), loot/altar/mercador, finais Luz/Raiz, importação de cópia e paridade dos replays. **Preview não substitui o jogo clássico.**
 
-## P4A.1 — Caminhos do Osso: navegação, feedback e segurança (17/10/2026; em validação)
+## P4A.1 — Caminhos do Osso: navegação, feedback e segurança (17/10/2026; integrada)
 
 - [x] A rota automática de clique/toque mostra **quadrados do trajeto, marcador de destino e passos restantes**, desenhados em overlay Phaser, sem mutação de mapa, RNG ou save.
 - [x] Botão contextual **PARAR CAMINHADA** com área de toque acessível e estado de rota em `aria-live`. Tecla Esc, botão B do controle Xbox, D-pad/analógico ou ataque manual interrompem a caminhada automaticamente.
@@ -21,7 +21,7 @@
 - [x] Interromper rota quando surgir inimigo vivo, visível, a até três casas; a simulação não ataca sozinha nem muda a ordem de resolução de turnos. Escolhas de relicário/altar/escada continuam interrompendo o trajeto.
 - [x] Planejamento em `preview-route.js` reaproveita BFS canônica `GolzdovNavigation.findPath`, rejeitando paredes, neblina, inimigos e destinos inválidos. Cursor/caminhada automática só existe na interface, jamais no save.
 - [x] Testes puros de rota/ameaça e integração de passagem por **cinco estratos gerados de verdade, três seeds**, com caminhada até escadas, menus, descida, recarga de save, verificação de estoque e decisão final. Para isolar topologia, esse teste remove inimigos/itens: **não é teste de balanceamento de combate nem playtest visual completo**.
-- [ ] CI, build Vite/Phaser e PR verdes, seguida de publicação somente em `/phaser/`.
+- [x] [PR #43](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/43) integrado (squash `91fb408`). [CI #39024903627](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/39024903627): **151/151 testes verdes**, Vite/Phaser build e verificação de bundle aprovadas. [Workflow pós-merge #39024968353](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/39024968353) **success**; publicados `phaser/index.html`, `assets/index-CbfeBsyd.js`, `assets/index-CRL77jBx.css` na `main`. QA manual no Pages, celular e Xbox físico ainda pendente.
 - [ ] QA físico no Pages, Android/iOS e Xbox (câmera/ponteiro, ameaça, B durante caminhada e acessibilidade).
 - [ ] P4A.2/P5: feedback visual de combate, otimização mobile, PWA/offline da preview e replays integrais com inimigos reais. Preservar rota clássica até aprovação formal da P6.
 

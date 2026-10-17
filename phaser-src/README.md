@@ -15,7 +15,7 @@ no branch `main`, a workflow constrói o bundle e atualiza **somente**
 - Gamepad: D-pad ou analógico esquerdo, A atacar, X poção e RB esperar.
 - `?seed=305419896&floor=4` inicia nova expedição nesse estrato **quando não houver save de preview**. REINICIAR apaga apenas o save de preview.
 
-## Novidades P4A.1 — caminhos visíveis e interrupção segura (em validação)
+## Novidades P4A.1 — caminhos visíveis e interrupção segura (integrada, 151/151 testes)
 
 - Clique/toque em um ponto explorado para ver **a rota desenhada no mapa**, destino marcado e contador de passos.
 - Toque **PARAR CAMINHADA**, pressione **Esc**, **B no Xbox** ou execute movimento/ataque manual para interromper. O B cancela sem conjurar a habilidade 2 acidentalmente.
