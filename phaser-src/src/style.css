@@ -269,3 +269,19 @@ body::before{content:"";pointer-events:none;position:fixed;inset:0;opacity:.08;b
 @media(max-width:700px){.threat-list{grid-template-columns:1fr}}
 @media(max-width:520px){.threat-panel{padding:10px}.threat-heading{align-items:stretch;flex-direction:column}
  .threat-heading button{width:100%}.threat-row{flex-wrap:wrap}.threat-row button{width:100%}}
+
+/* P5A.1 — instalação independente da preview e diagnóstico offline. */
+.pwa-panel{max-width:790px;margin:0 auto 14px;display:flex;align-items:center;
+ justify-content:space-between;gap:12px;padding:13px 16px;
+ border:1px solid #806555;border-radius:5px;
+ background:linear-gradient(105deg,#2e2832,#161b22);color:#e8d5c0}
+.pwa-panel h2{font:700 13px Georgia,serif;letter-spacing:.08em;color:#f2c79b;margin:0 0 4px}
+.pwa-panel p{font:11px/1.55 ui-monospace,monospace;margin:0;color:#d5c1b5}
+#pwa-guide{margin-top:9px;color:#eed9c6;max-width:520px}
+.pwa-panel button{min-height:45px;flex-shrink:0;border:1px solid #ba967e;
+ background:#513844;color:#ffe0c3;border-radius:6px;padding:9px 13px;
+ font:700 11px ui-monospace,monospace;cursor:pointer;touch-action:manipulation}
+.pwa-panel button:focus-visible{outline:2px solid #ffd5ae;outline-offset:2px}
+.pwa-panel button:disabled{cursor:default;opacity:.65}
+@media(max-width:560px){.pwa-panel{flex-direction:column;align-items:stretch;padding:12px}
+ .pwa-panel button{width:100%}}
