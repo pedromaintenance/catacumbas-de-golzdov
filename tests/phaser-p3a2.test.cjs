@@ -108,7 +108,11 @@ test('Último Juramento resiste a um golpe fatal; descida reinicia a condição'
  assert.equal(r.hero.oathWeakened,true);
  assert.equal(r.over,false);
  r.enemies=[];r.hero.x=r.stairs.x;r.hero.y=r.stairs.y;
- m.previewAction(r,{type:'WAIT'});
+ const turn=r.turn;
+ assert.equal(m.previewAction(r,{type:'INTERACT'}).status,'stairs-opened');
+ assert.equal(r.floor,1,'não desce automaticamente');
+ assert.equal(m.previewAction(r,{type:'STAIRS_DESCEND'}).status,'descended');
+ assert.equal(r.turn,turn,'escolha de escada não gasta turno');
  assert.equal(r.floor,2);
  assert.equal(r.hero.lastOathUsed,false);
  assert.equal(r.hero.oathWeakened,false);

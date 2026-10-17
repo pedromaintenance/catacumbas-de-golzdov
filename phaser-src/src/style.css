@@ -149,3 +149,30 @@ body::before{content:"";pointer-events:none;position:fixed;inset:0;opacity:.08;b
  .talent-card span{font-size:11px}
  .talent-card b{padding-top:5px}
 }
+
+/* P3B.1 — artefatos e decisões in-game; mesma hierarquia da ascensão. */
+.item-selection{position:absolute;inset:0;z-index:12;overflow:auto;padding:18px;
+ display:grid;place-items:center;background:#09070ded;backdrop-filter:blur(4px)}
+.item-selection-content{width:min(100%,690px);padding:22px;background:
+ linear-gradient(150deg,#32232e,#10131b 80%);border:1px solid #a47b61;
+ box-shadow:0 25px 78px #000d}
+.item-selection-content h2{font:normal clamp(22px,4vw,34px) Georgia,serif;
+ color:#edcfad;margin:8px 0}
+.item-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(190px,100%),1fr));
+ gap:9px;margin:16px 0}
+.item-card{display:flex;flex-direction:column;gap:8px;min-height:120px;padding:12px;
+ border-radius:5px;border:1px solid #766066;background:#26222d;color:#e7d4c2;
+ cursor:pointer;text-align:left}
+.item-card strong{font:bold 14px Georgia,serif;color:#edc792}
+.item-card span{font:12px/1.4 Georgia,serif;flex:1;color:#c3b3b2}
+.item-card b{font:bold 10px ui-monospace,monospace;color:#d9b081}
+.item-card:is(:hover,:focus-visible,.pad-selected){outline:2px solid #efc17e;
+ outline-offset:0;background:#45353f}
+@media(max-width:650px){
+ .item-selection{padding:7px;align-items:start}
+ .item-selection-content{padding:12px}
+ .item-options{grid-template-columns:1fr;gap:7px}
+ .item-card{min-height:0;gap:5px}
+ .item-card strong{font-size:12px}
+ .item-card span{font-size:11px}
+}

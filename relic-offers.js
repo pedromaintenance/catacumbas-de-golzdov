@@ -48,4 +48,4 @@ function canFit(hero,newId,removing=[]){
   return current.reduce((n,id)=>n+(DATA[id]?.slots||1),0)+cost<=capacity(hero);
 }
 root.GolzdovRelicOffers=Object.freeze({MAX_SLOTS,RARITIES,DATA,info,occupied,capacity,available,offered,canFit});
-})(window);
+})(typeof window!=='undefined'?window:globalThis);
