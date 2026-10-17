@@ -6,7 +6,7 @@ Atualizado em: 15/10/2026. Planejamento detalhado: [GAME_DESIGN_2.0.md](GAME_DES
 
 ## Histórico de execução
 
-- 16/10/2026: **P3B.1 Phaser — correção de interação com itens (em validação)**. Completar todas as oito categorias de coleta pelo núcleo de loot, relicários com catálogo canônico, quatro slots e trocas confirmadas, altares, escadas com opção e caminhada até o item pelo mapa conhecido. HUD com âmbar/bolsa, controles por teclado/toque/Xbox, eventos de relicário integrados. Testes e publicação no Pages dependem da CI verde do PR; o HTML clássico não muda.
+- 16/10/2026: **P3B.1 Phaser — correção de interação com itens (integrada)**. Completar todas as oito categorias de coleta pelo núcleo de loot, relicários com catálogo canônico, quatro slots e trocas confirmadas, altares, escadas com opção e caminhada até o item pelo mapa conhecido. HUD com âmbar/bolsa, controles por teclado/toque/Xbox, eventos de relicário integrados. [PR #39](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/39) integrado; **117/117 testes** e compilação verde. Workflow pós-merge publicou a nova build em `/phaser/`, sem alterar o HTML clássico; QA de navegador/dispositivo físico continua pendente.
 
 
 

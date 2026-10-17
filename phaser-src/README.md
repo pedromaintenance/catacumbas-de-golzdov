@@ -15,7 +15,7 @@ no branch `main`, a workflow constrói o bundle e atualiza **somente**
 - Gamepad: D-pad ou analógico esquerdo, A atacar, X poção e RB esperar.
 - `?seed=305419896&floor=4` inicia nova expedição nesse estrato **quando não houver save de preview**. REINICIAR apaga apenas o save de preview.
 
-## Novidades P3B.1 — itens do cenário (em validação)
+## Novidades P3B.1 — itens do cenário (integrada, 117/117 testes)
 
 - Armas, armaduras, poções, ouro, foco, vida, armadilhas e relicários agora passam pelas regras oficiais de coleta do núcleo, sem objetos falsamente interativos.
 - Relíquias: raridade e slots oficiais, sorteio persistente, escolha/recusa/substituição com confirmação; gatilhos de ataque, dano, morte, salas, raízes e turno conectados ao motor.
