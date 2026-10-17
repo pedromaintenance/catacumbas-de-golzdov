@@ -24,12 +24,20 @@ export const relicById=id=>PREVIEW_RELICS.find(r=>r.id===id)||null;
 export function ensurePreviewRelicOffer(run){
  const pending=run.pendingRelicOffer;
  if(!pending||Array.isArray(pending.offers))return false;
- const offers=rules().offered(PREVIEW_RELICS,run.hero,()=>host.GolzdovCoreRng.next(run));
- pending.offers=offers.map(r=>r.id);
+ let offers;
+ if(pending.source==='mercador'){
+  if(!Array.isArray(run.shopOffers))
+   run.shopOffers=rules().offered(PREVIEW_RELICS,run.hero,()=>host.GolzdovCoreRng.next(run)).map(r=>r.id);
+  offers=run.shopOffers.filter(id=>!run.hero.relics.includes(id));
+ }else{
+  offers=rules().offered(PREVIEW_RELICS,run.hero,()=>host.GolzdovCoreRng.next(run)).map(r=>r.id);
+ }
+ pending.offers=offers;
  pending.selection=null;pending.removing=[];
  if(!pending.offers.length){
   run.pendingRelicOffer=null;
-  run.hero.coins+=12;
+  // O mercador nunca concede âmbar de graça quando esgota o estoque.
+  if(pending.source!=='mercador')run.hero.coins+=12;
  }
  return true;
 }
@@ -63,6 +71,7 @@ export function resolvePreviewRelicChoice(run,action){
  const pending=run?.pendingRelicOffer;
  if(!pending)return {status:'no-relic-offer'};
  const p=run.hero;
+ const price=pending.source==='mercador'?(pending.cost??54):0;
  if(action.type==='RELIC_SKIP'){
   run.pendingRelicOffer=null;
   return {status:'relic-skipped'};
@@ -74,6 +83,7 @@ export function resolvePreviewRelicChoice(run,action){
  if(action.type==='RELIC_SELECT'){
   if(!pending.offers?.includes(action.id)||p.relics.includes(action.id))
    return {status:'invalid-relic'};
+  if(p.coins<price)return {status:'insufficient-coins'};
   pending.selection=action.id;pending.removing=[];
  }else if(action.type==='RELIC_TOGGLE'){
   if(!pending.selection||!p.relics.includes(action.id))return {status:'invalid-relic'};
@@ -88,6 +98,7 @@ export function resolvePreviewRelicChoice(run,action){
  if(!relic||!pending.offers.includes(id)||removing.some(old=>!p.relics.includes(old)))
   return {status:'invalid-relic'};
  if(!rules().canFit(p,id,removing))return {status:'relic-swap-required'};
+ if(p.coins<price)return {status:'insufficient-coins'};
  const oldSynergies=new Set(host.GolzdovRelicEffects?.synergiesFor(p).map(x=>x.id)||[]);
  for(const oldId of removing){
   const old=relicById(oldId);
@@ -97,9 +108,10 @@ export function resolvePreviewRelicChoice(run,action){
  }
  p.relics.push(id);
  changeStats(p,relic,1);
+ p.coins-=price;
  run.pendingRelicOffer=null;
  const newSynergies=host.GolzdovRelicEffects?.synergiesFor(p).filter(x=>!oldSynergies.has(x.id))||[];
- return {status:'relic-equipped',relic,removed:removing,synergies:newSynergies};
+ return {status:'relic-equipped',relic,removed:removing,synergies:newSynergies,cost:price};
 }
 export function availablePreviewRelics(run){
  const offer=run?.pendingRelicOffer;
