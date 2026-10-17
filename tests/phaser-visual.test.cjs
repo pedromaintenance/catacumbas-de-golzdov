@@ -17,8 +17,10 @@ test('visuais P3 portam paletas dos cinco estratos e os oito sprites Canvas lega
  const original=legacy.match(/const THEMES=\[[^\n]+?\];/);
  assert.ok(original);
  assert.ok(ported.includes(original[0]),'paleta precisa coincidir com jogo HTML');
- const kinds=['rat','guard','slime','specter','kappa','archer','boss','knight'];
- for(const kind of kinds)assert.match(ported,new RegExp(kind));
+ const named=['rat','slime','specter','kappa','archer','boss','knight'];
+ for(const kind of named)assert.match(ported,new RegExp(kind));
+ // Guard usa o desenho genérico do ramo `else`, exatamente como no legado.
+ assert.match(ported,/else\{const dark=type==='knight'/);
  assert.match(ported,/function drawSprite\(/);
  assert.match(ported,/function drawFloor\(/);
  assert.match(ported,/function drawWall\(/);
