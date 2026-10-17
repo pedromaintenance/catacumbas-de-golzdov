@@ -2,15 +2,15 @@
  * Gerado com assets da build. Não administra o cache do Golzdov clássico.
  */
 const PREFIX='golzdov-phaser-offline-';
-const CACHE=PREFIX+'8144f199dc4c';
+const CACHE=PREFIX+'4118482b5517';
 const PRECACHE=[
   "./",
   "./index.html",
   "./manifest.webmanifest",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
-  "./assets/index-CcpfHGhe.js",
-  "./assets/index-rZQi1avr.css"
+  "./assets/index-BsYlV7XK.js",
+  "./assets/index-DGxYFL3T.css"
 ];
 
 self.addEventListener('install',event=>{
