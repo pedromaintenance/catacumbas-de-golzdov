@@ -28,9 +28,9 @@ test('P5B.1: cena não ataca com A segurado após confirmar e limpa marcação',
  const scene=read('phaser-src/src/scenes/DungeonScene.js');
  const html=read('phaser-src/index.html');
  const css=read('phaser-src/src/style.css');
- assert.match(scene,/if\(this\.classSelectionOpen\)\{\s*if\(!pad\|\|time-this\.lastPadAt<175\)return/);
+ assert.match(scene,/if\(this\.classSelectionOpen\)\{\s*if\(!gamepad\|\|time-this\.lastPadAt<175\)return/);
  assert.match(scene,/this\.waitClassARelease=true/);
- assert.match(scene,/if\(this\.waitClassARelease\)\{\s*if\(pad\?\.buttons\?\.\[0\]\?\.pressed\)return/);
+ assert.match(scene,/if\(this\.waitClassARelease\)\{\s*if\(gamepad\?\.buttons\?\.\[0\]\?\.pressed\)return/);
  assert.match(scene,/this\.chooseClass\(PREVIEW_CLASS_IDS\[this\.classPickerIndex\]\)/);
  assert.match(scene,/this\.moveClassPicker\(input\.delta\)/);
  assert.match(scene,/this\.syncGamepadState\(!!pad\)/);
