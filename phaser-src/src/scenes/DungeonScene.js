@@ -11,6 +11,7 @@ import {PREVIEW_ENDING_COPY,normalizePreviewEnding} from '../preview-endings.js'
 import {newPreviewSessionId,readPreviewHistory,archivePreviewRun,finishedPreviewRun} from '../preview-history.js';
 import {planPreviewRoute,nearPreviewThreat,routeCoordinates} from '../preview-route.js';
 import {combatCues,combatAnnouncement} from '../preview-combat-feedback.js';
+import {previewThreats} from '../preview-status.js';
 const TILE=36;
 const P={
  rock:0x11131d,wall:0x2c3343,floor:0x302b38,grid:0x4f4555,
