@@ -15,6 +15,15 @@ no branch `main`, a workflow constrói o bundle e atualiza **somente**
 - Gamepad: D-pad ou analógico esquerdo, A atacar, X poção e RB esperar.
 - `?seed=305419896&floor=4` inicia nova expedição nesse estrato **quando não houver save de preview**. REINICIAR apaga apenas o save de preview.
 
+## Novidades P5B.2 — O Gesto Preciso (em validação)
+
+- **Ações discretas:** A confirma/ataca, B volta ou usa habilidade, X consome poção, Y usa habilidade e RB espera — somente **uma vez por pressão física**. É necessário soltar e apertar de novo para repetir. D-pad/analógico mantêm movimento contínuo, com a cadência normal do jogo.
+- Dentro de relicário, mercador e escadas, **B volta/cancela** sem aceitar mais de uma escolha. Ao substituir uma relíquia, B prioriza VOLTAR, sem abandonar a oferta; no altar o jogo exige escolher uma bênção, como na regra original.
+- A escolha selecionada pelo Xbox ganha `aria-current` e é rolada até aparecer no menu. Interação via teclado com botões da página não ativa combate paralelo ao Enter/Espaço.
+- Teste de pressão longa: segure A na compra de mercador e veja que compra apenas uma vez; segure B para fechar menu, e confirme que o jogo não ativa habilidade. Teste conectar/reconectar gamepad, alternar escolhas e voltar com B. No celular, confira se as cartas não ficam fora da tela.
+- Testes automatizados incluem 9 combinações classe/seed repetidas com herói **não reforçado e não teleportado**, IA e saves durante 35 turnos ou até morrer. Esses testes usam ESPERAR, não comprovam expedição jogada naturalmente até o final.
+- `/phaser/` continua com seu próprio `sw.js` e manifesto PWA; a versão HTML clássica segue inalterada.
+
 ## Novidades P5B.1 — A Travessia dos Vivos (integrada, 177/177 testes)
 
 - **Xbox, do zero:** na tela de seleção inicial, use o **D-pad ou analógico esquerdo** para alternar Vigia/Arcanista/Errante e pressione **A** para começar. A opção escolhida recebe contorno âmbar.
