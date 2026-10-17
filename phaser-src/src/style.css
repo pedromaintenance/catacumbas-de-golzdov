@@ -84,3 +84,40 @@ body::before{content:"";pointer-events:none;position:fixed;inset:0;opacity:.08;b
  .hud{justify-content:space-between;gap:10px;padding:12px}
  .hud>span{font-size:10px}
 }
+
+/* P3A.1: seletor de origem, conjuração e feedback de mira. */
+.class-status{font:11px ui-monospace,monospace;letter-spacing:.03em;color:#bea89c;margin:7px 0 0}
+.class-status strong{color:#edd0a3}
+.class-selection{position:absolute;inset:0;z-index:14;overflow:auto;padding:18px;
+ display:grid;place-items:center;background:#06070bea;backdrop-filter:blur(3px)}
+.class-selection-content{width:min(100%,660px);background:linear-gradient(160deg,#2d2029,#0d1018 85%);
+ border:1px solid #936b63;padding:22px;box-shadow:0 20px 80px #000c}
+.class-selection-content h2{font:normal clamp(25px,4vw,34px) Georgia,serif;color:#f1d3c2;margin:9px 0}
+.class-copy,.class-warning{color:#aa9b99;font-size:12px;line-height:1.5}
+.class-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:17px 0}
+.class-card{background:#211e27;border:1px solid #64525b;cursor:pointer;text-align:left;
+ color:#d1bcb0;display:flex;flex-direction:column;gap:8px;align-items:stretch;
+ padding:13px 12px;min-height:185px;border-radius:6px}
+.class-card:hover,.class-card:focus-visible{border-color:#d5a67f;background:#332833}
+.class-card strong{font:700 13px Georgia,serif;color:#e7c99a}
+.class-card small{font:9px ui-monospace,monospace;color:#b9977f;letter-spacing:.06em}
+.class-card span{font:11px ui-monospace,monospace}
+.class-card em{font:italic 12px Georgia,serif;color:#d4b6be}
+.class-card b{margin-top:auto;border-top:1px solid #68515c;padding-top:8px;
+ font:700 10px ui-monospace,monospace;color:#f3c992}
+.aim-hint{font:700 10px ui-monospace,monospace;color:#f1d29c;
+ letter-spacing:.08em;text-align:center;padding:10px 8px;
+ background:#3f2c32;border-top:1px solid #80525b}
+.actions button.aiming{background:#795452;border-color:#eac390;box-shadow:0 0 14px #d3a16e80}
+.actions button:disabled{opacity:.4;cursor:not-allowed}
+@media(max-width:650px){
+ .class-selection{padding:7px;align-items:start}
+ .class-selection-content{padding:12px}
+ .class-cards{grid-template-columns:1fr;gap:7px;margin:10px 0}
+ .class-card{min-height:0;gap:4px;padding:9px 12px}
+ .class-card span,.class-card em{font-size:11px}
+ .class-card b{margin:0}
+ .class-copy,.class-warning{font-size:10px;margin:8px 0}
+ .class-selection-content h2{font-size:24px;margin:4px 0}
+ .class-status{font-size:10px}
+}
