@@ -3,6 +3,7 @@
  */
 import {availablePreviewRelics,relicById} from './preview-relics.js';
 import {PREVIEW_SHOP_GOODS} from './preview-shop.js';
+import {previewBackChoiceIndex} from './preview-pad-latch.js';
 const el=id=>document.getElementById(id);
 export class PreviewItemUI{
  constructor(scene){
@@ -110,17 +111,23 @@ export class PreviewItemUI{
   this.list.querySelector('button')?.focus({preventScroll:true});
  }
  highlight(){
-  for(const [i,button] of [...(this.list?.children||[])].entries())
-   button.classList.toggle('pad-selected',i===this.selection);
+  for(const [i,button] of [...(this.list?.children||[])].entries()){
+   const selected=i===this.selection;
+   button.classList.toggle('pad-selected',selected);
+   button.setAttribute('aria-current',selected?'true':'false');
+   if(selected&&this.gamepadNavigation)button.scrollIntoView?.({block:'nearest',inline:'nearest'});
+  }
  }
- move(delta){
+ move(delta,fromGamepad=false){
   if(!this.items.length)return;
+  this.gamepadNavigation=fromGamepad;
   this.selection=(this.selection+delta+this.items.length)%this.items.length;
   this.highlight();
+  this.gamepadNavigation=false;
  }
  choose(index){
   const item=this.items[index];if(!item)return;
-  this.scene.autoPath=[];
+  this.scene.cancelAutoRoute();
   this.cache='';this.selection=0;
   this.scene.perform({type:item.type,id:item.id});
  }
@@ -134,11 +141,15 @@ export class PreviewItemUI{
    if(i>=0)this.choose(i);
   }
  }
- pad(pad){
-  const press=i=>!!pad.buttons[i]?.pressed,axis=i=>pad.axes[i]||0;
-  if(press(12)||press(14)||axis(1)<-.55||axis(0)<-.55)this.move(-1);
-  else if(press(13)||press(15)||axis(1)>.55||axis(0)>.55)this.move(1);
-  else if(press(0))this.choose(this.selection);
+ pad(pad,latch){
+  const press=i=>!!pad.buttons?.[i]?.pressed,axis=i=>pad.axes?.[i]||0;
+  if(press(12)||press(14)||axis(1)<-.55||axis(0)<-.55)this.move(-1,true);
+  else if(press(13)||press(15)||axis(1)>.55||axis(0)>.55)this.move(1,true);
+  else if(latch.consume(1)){
+   const back=previewBackChoiceIndex(this.items);
+   if(back<0)return false;
+   this.choose(back);
+  }else if(latch.consume(0))this.choose(this.selection);
   else return false;
   return true;
  }
