@@ -1,6 +1,6 @@
-# Phaser P3A.2 — ascensão e talentos (branch em validação)
+# Phaser P3A.2 — ascensão e talentos (integrada; 107/107 testes)
 
-A P3A.1 está integrada à main (CI 100/100). A P3A.2 adiciona ascensão por três alternativas, nove talentos exclusivos + três melhorias universais, e bloqueio de ações enquanto a escolha estiver pendente. As opções ficam no mesmo save de preview (sem modificar a versão estável). Após o teste e merge, o workflow recompila somente `/phaser/`; verifique o Pages antes de considerar a publicação confirmada.
+A P3A.1 está integrada à main (CI 100/100). A P3A.2 adiciona ascensão por três alternativas, nove talentos exclusivos + três melhorias universais, e bloqueio de ações enquanto a escolha estiver pendente. As opções ficam no mesmo save de preview (sem modificar a versão estável). [PR #38](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/38) integrado com 107/107 testes e build Vite/Phaser aprovados. O workflow pós-merge já atualizou somente `/phaser/` na main; verificar a execução no Pages e controles físicos antes de declarar QA concluído.
 
 **Fonte:** `phaser-src/` (Phaser 4.2.1 + Vite 6.3.1). Depois de CI verde
 no branch `main`, a workflow constrói o bundle e atualiza **somente**
