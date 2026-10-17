@@ -44,7 +44,7 @@ test('as cinco compras normais conservam turno, RNG e reabrem o mesmo mercado',a
   assert.equal(r.pendingShop,true);
  }
  assert.equal(p.potions,initial.potions+1);
- assert.equal(p.hp,initial.hp+18);
+ assert.equal(p.hp,Math.min(p.maxhp,initial.hp+18));
  assert.equal(p.mana,p.maxmana);
  assert.equal(p.atk,initial.atk+1);
  assert.equal(p.def,initial.def+1);
