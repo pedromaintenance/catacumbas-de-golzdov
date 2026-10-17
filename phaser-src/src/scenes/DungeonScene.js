@@ -55,6 +55,8 @@ export class DungeonScene extends Phaser.Scene{
   const resize=()=>this.cameras.main.setZoom(Math.max(.85,Math.min(1.6,this.scale.width/650)));
   resize();this.scale.on('resize',resize);
   const onKey=e=>{
+   // Teclas usadas para abrir as crônicas não devem atacar ou passar turnos.
+   if(e.target instanceof Element&&e.target.closest('#chronicle'))return;
    const key=e.key.toLowerCase();
    if(this.classSelectionOpen){
     const classes={1:'vigia',2:'arcanista',3:'errante'};
