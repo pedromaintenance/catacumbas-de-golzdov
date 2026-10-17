@@ -13,6 +13,18 @@
 - [ ] Verificar via HTTP/visual a atualização no Pages e em Xbox/celular reais; sem presumir confirmação.
 - [ ] Próximos blocos P3: relíquias e gatilhos (`onAttack`, `onRoot`, `onDefend` etc.), loot/altar/mercador, finais Luz/Raiz, importação de cópia e paridade dos replays. **Preview não substitui o jogo clássico.**
 
+## P3B.1 — Interação de itens no Phaser (16/10/2026, CI em validação)
+
+- [x] Corrigir o recorte P3A que desenhava objetos, mas ignorava quatro tipos de coleta: arma, armadura, armadilha e relicário. Agora todas as oito categorias passam por `GolzdovActions.dispatch(COLLECT)` e `core/loot.js` (incluindo RNG determinístico, dano, status e consumo único).
+- [x] Usar o catálogo canônico de **11 relíquias**, ofertas ponderadas, quatro espaços e substituição **transacional** com confirmação, sem perder itens antes da escolha. As ofertas pendentes persistem no save independente e não são sorteadas novamente ao reabrir.
+- [x] Integrar eventos de domínio das relíquias (`onAttack/onKill/onRoot/onEnterRoom/onTurnStart/onDodge/onDefend/onHurt`) e recompensas de inimigos ao núcleo da preview.
+- [x] Fazer o altar oferecer cura, foco ou relicário; impedir a descida automática pela escada (explorar/descer com confirmação).
+- [x] Implementar `E` / botão **INTERAGIR** na casa atual e clique no mapa com caminho BFS até posições conhecidas, um turno por passo e interrupção quando houver escolha, obstáculo ou combate.
+- [x] Exibir âmbar e capacidade da bolsa no HUD; modal responsivo para mouse, toque, teclado e Xbox.
+- [ ] Aprovação final da suíte Node, build Phaser/Vite e PR. Só publicar em `/phaser/` após CI verde.
+- [ ] QA manual no Pages/celular/Xbox e checagem de instalação/atualização do cache.
+- [ ] P3B seguinte: mercador completo, narrativa de finais Luz/Raiz, fluxo integral de batalha, importação segura de cópia de save, paridade de replays contra HTML. Rota principal e saves clássicos preservados.
+
 **Data do diagnóstico:** 15/10/2026.
 **Acompanhamento GitHub:** [issue #11 — migração Phaser](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/11); [issue #12 — corrigir roteamento PWA](https://github.com/pedromaintenance/catacumbas-de-golzdov/issues/12).
 **Objetivo:** migrar a apresentação, a composição das cenas e a entrada para Phaser 4 sem alterar silenciosamente as regras do roguelike, perder os saves ou bloquear o GitHub Pages.
