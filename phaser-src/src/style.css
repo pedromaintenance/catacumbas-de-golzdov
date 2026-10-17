@@ -285,3 +285,13 @@ body::before{content:"";pointer-events:none;position:fixed;inset:0;opacity:.08;b
 .pwa-panel button:disabled{cursor:default;opacity:.65}
 @media(max-width:560px){.pwa-panel{flex-direction:column;align-items:stretch;padding:12px}
  .pwa-panel button{width:100%}}
+
+/* P5B.1 — estados inequívocos na escolha por gamepad e diagnóstico de conexão. */
+.class-card.pad-selected{outline:3px solid #f1c387;outline-offset:3px;
+ border-color:#edba83;background:linear-gradient(145deg,#4b3540,#252530);
+ box-shadow:0 0 0 5px #12111b,0 0 18px #d8a76a77}
+.class-card.pad-selected b{color:#ffe6ba}
+.gamepad-status{margin:0;padding:9px 16px;text-align:center;
+ font:700 10px/1.6 ui-monospace,monospace;letter-spacing:.05em;
+ background:#1c2029;color:#d6bda4;border-top:1px solid #5d4b59}
+@media(max-width:560px){.gamepad-status{font-size:9px;padding:9px 8px}}
