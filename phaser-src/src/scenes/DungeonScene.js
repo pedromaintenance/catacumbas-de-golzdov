@@ -158,6 +158,29 @@ export class DungeonScene extends Phaser.Scene{
    if(open)this.syncHistory();
   };
   chronicleToggle?.addEventListener('click',onChronicleToggle);
+  const threatToggle=el('threat-toggle'),threatList=el('threat-list');
+  const onThreatToggle=()=>{
+   if(!threatToggle||!threatList)return;
+   const expanded=threatList.classList.contains('hidden');
+   threatList.classList.toggle('hidden',!expanded);
+   threatToggle.setAttribute('aria-expanded',String(expanded));
+   threatToggle.textContent=expanded?'OCULTAR AMEAÇAS ▴':'VER AMEAÇAS ▾';
+   if(expanded)this.syncThreats();
+  };
+  const onThreatClick=e=>{
+   const button=e.target.closest('button[data-preview-enemy-id]');
+   if(!button||!threatList?.contains(button)||button.disabled)return;
+   if(this.classSelectionOpen||this.run.over||this.aim!==null||
+    this.run.pendingTalentChoices?.length||this.itemUI.active())return;
+   const id=Number(button.dataset.previewEnemyId);
+   const target=previewThreats(this.run,this.visible,30).threats
+    .find(t=>t.id===id&&t.canAttack);
+   if(!target)return this.report('O alvo não está mais ao alcance ou à vista.');
+   this.cancelAutoRoute();
+   this.perform({type:'ATTACK',enemyId:id});
+  };
+  threatToggle?.addEventListener('click',onThreatToggle);
+  threatList?.addEventListener('click',onThreatClick);
   const finalChoices=el('ending-choices');
   const onEndingClick=e=>{
    const button=e.target.closest('button[data-preview-ending]');
