@@ -128,6 +128,8 @@ export function previewAction(run,action){
   }else if(e.type==='collect-at-player')collectBasic(run,events);
   else if(e.type==='turn'){if(consumed)stepWorld(run,events);}
  }
+ // MOVE com inimigo só emite 'attack' (sem 'turn'): avançar uma única vez.
+ if(result.status==='enemy'&&consumed)stepWorld(run,events);
  if(consumed&&!run.over&&run.stairs&&p.x===run.stairs.x&&p.y===run.stairs.y){
   if(run.floor<5){
    run.floor++;
