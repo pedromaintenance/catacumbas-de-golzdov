@@ -15,7 +15,7 @@ no branch `main`, a workflow constrói o bundle e atualiza **somente**
 - Gamepad: D-pad ou analógico esquerdo, A atacar, X poção e RB esperar.
 - `?seed=305419896&floor=4` inicia nova expedição nesse estrato **quando não houver save de preview**. REINICIAR apaga apenas o save de preview.
 
-## Novidades P5B.2 — O Gesto Preciso (em validação)
+## Novidades P5B.2 — O Gesto Preciso (integrada, 185/185 testes)
 
 - **Ações discretas:** A confirma/ataca, B volta ou usa habilidade, X consome poção, Y usa habilidade e RB espera — somente **uma vez por pressão física**. É necessário soltar e apertar de novo para repetir. D-pad/analógico mantêm movimento contínuo, com a cadência normal do jogo.
 - Dentro de relicário, mercador e escadas, **B volta/cancela** sem aceitar mais de uma escolha. Ao substituir uma relíquia, B prioriza VOLTAR, sem abandonar a oferta; no altar o jogo exige escolher uma bênção, como na regra original.

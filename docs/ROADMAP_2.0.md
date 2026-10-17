@@ -6,7 +6,7 @@ Atualizado em: 15/10/2026. Planejamento detalhado: [GAME_DESIGN_2.0.md](GAME_DES
 
 ## Histórico de execução
 
-- 17/10/2026: **P5B.2 Phaser — O Gesto Preciso (em validação)**. Entradas de botão Xbox agora usam borda de pressionamento e contexto, impedindo repetição acidental de ataques, compras, talentos e decisão Luz/Raiz com A segurado; o direcional continua repetindo. B volta nos modais reversíveis, foco e scroll melhorados. Suíte adicional de replays com herói sem buff/teleporte, saves e IA natural durante até 35 turnos para nove combinações de classes/seeds (duas passagens por combinação). Não substitui expedição vitoriosa ou QA físico. Rota HTML e PWA clássico permanecem intactos; publicação condicionada à CI.
+- 17/10/2026: **P5B.2 Phaser — O Gesto Preciso (integrada)**. Entradas de botão Xbox agora usam borda de pressionamento e contexto, impedindo repetição acidental de ataques, compras, talentos e decisão Luz/Raiz com A segurado; o direcional continua repetindo. B volta nos modais reversíveis, foco e scroll melhorados. Suíte adicional de replays com herói sem buff/teleporte, saves e IA natural durante até 35 turnos para nove combinações de classes/seeds (duas passagens por combinação). Não substitui expedição vitoriosa ou QA físico. [PR #48](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/48) integrado, **185/185 testes verdes**; [workflow pós-merge #39045815677](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/39045815677) publicou novos bundles e cache exclusivo em `/phaser/`. Rota HTML e PWA clássico permanecem intactos. QA físico ainda pendente.
 
 
 

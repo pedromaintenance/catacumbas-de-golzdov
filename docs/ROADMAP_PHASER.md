@@ -13,14 +13,14 @@
 - [ ] Verificar via HTTP/visual a atualização no Pages e em Xbox/celular reais; sem presumir confirmação.
 - [ ] Próximos blocos P3: relíquias e gatilhos (`onAttack`, `onRoot`, `onDefend` etc.), loot/altar/mercador, finais Luz/Raiz, importação de cópia e paridade dos replays. **Preview não substitui o jogo clássico.**
 
-## P5B.2 — O Gesto Preciso: comandos Xbox sem repetição, foco seguro e replays naturais (17/10/2026; em validação)
+## P5B.2 — O Gesto Preciso: comandos Xbox sem repetição, foco seguro e replays naturais (17/10/2026; integrada)
 
 - [x] Adicionar `preview-pad-latch.js` com leitura das **bordas de pressionamento** de ações Xbox e separação por contexto (classe, talentos, relicário/mercador/altar/escada, decisão final, rota e exploração). Segurar A/B/X/Y/RB não deve repetir compras, confirmar duas vezes nem gastar turnos adicionais. Um toque breve durante a janela de 175 ms fica enfileirado; botões segurados durante troca de tela **não atravessam o modal**.
 - [x] Preservar repetição natural de **D-pad/analógico para navegação** e movimento; trava de borda aplica-se apenas a ações discretas, sem alterar FPS do Phaser, regras de combate ou save.
 - [x] **B volta em menus reversíveis:** no relicário com troca selecionada B escolhe VOLTAR antes de RECUSAR; em relicário inicial B recusa; no mercador B fecha e retorna à escada; na escada B continua explorando. No altar, B não inventa cancelamento de bênção inexistente no núcleo.
 - [x] Melhoria de acessibilidade e mobile: opção destacada no modal acompanha o scroll ao navegar com D-pad, `aria-current` identifica escolha, atalhos do jogo não capturam Enter/Espaço quando o foco está em botões HTML externos aos diálogos. Ajuda Xbox responsiva na preview.
 - [x] Testar estado puro da trava, reconexão, mudança de contexto, botões de volta e estrutura de cena; testar replays **sem reforços e sem teleporte de herói**, com inimigos e RNG canônicos, save/load após cada turno, três classes × três seeds × duas execuções iguais, até morte ou 35 turnos. **Limitação:** são simulações defensivas de espera, não campanhas completas vitoriosas ou QA físico.
-- [ ] CI PR verde, build Vite/Phaser e publicação isolada de `/phaser/`; identificar bundle e novo cache SW e registrar no roadmap depois do merge.
+- [x] [PR #48](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/48) integrado (squash `504ddac`). [CI #39045766191](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/39045766191): **185/185 testes**, Vite/Phaser e verificador offline PWA aprovados. [Workflow pós-merge #39045815677](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/39045815677) **success**: publicou `phaser/index.html`, `assets/index-BsYlV7XK.js`, `assets/index-DGxYFL3T.css` e cache offline `golzdov-phaser-offline-4118482b5517`. Testes em navegador, toque e Xbox físico ainda pendentes.
 - [ ] QA físico em Xbox e mobile: pressionar A prolongadamente em mercador/relicário/talento/final, B voltar, troca de foco entre botões, scroll vertical e toque rápido, perder e reconectar controle.
 - [ ] P5B.3: expansão dos replays **com decisões táticas naturais**, verificação de performance e tempo de resposta mobile; P6 só após revisão de paridade e testes visuais. Preservar HTML/PWA clássico, seus caches e saves.
 
