@@ -15,7 +15,7 @@ no branch `main`, a workflow constrói o bundle e atualiza **somente**
 - Gamepad: D-pad ou analógico esquerdo, A atacar, X poção e RB esperar.
 - `?seed=305419896&floor=4` inicia nova expedição nesse estrato **quando não houver save de preview**. REINICIAR apaga apenas o save de preview.
 
-## Novidades P3B.3 — finais Luz/Raiz (em validação)
+## Novidades P3B.3 — finais Luz/Raiz (integrada, 135/135 testes)
 
 - Ao derrotar o Escrivão Sem Nome, o combate pára e aparece **O NOME SEPULTADO**. Escolha **Revelar o Nome (Luz 光)** ou **Guardar o Nome (Raiz 根)**. As narrativas são as mesmas do HTML clássico.
 - Use 1/2, setas e Enter, toque/clique nas cartas ou direcional e A no Xbox. A escolha é definitiva na expedição, sem gastar um turno.

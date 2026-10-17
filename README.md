@@ -18,9 +18,9 @@ O Phaser passa a usar o núcleo canônico de loot para coletar moedas, poções,
 
 O mercador está disponível na escada dos estratos I–IV da preview Phaser, com os seis produtos/preços da versão HTML clássica. As duas ofertas de relíquia não são ressorteadas ao recusar ou reabrir; o custo de ◈54 só sai da bolsa quando a equipagem é confirmada, inclusive em trocas com slots cheios. Compras não gastam turno e saldo insuficiente não altera a expedição. A versão estável HTML e suas chaves de save permanecem intocadas. [PR #40](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/40) integrado com **127/127 testes verdes**. Bundle publicado na pasta `/phaser/` da main via [workflow #38992297739](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/38992297739); QA externo do Pages continua pendente.
 
-### P3B.3 — O Nome Sepultado (em validação)
+### P3B.3 — O Nome Sepultado (integrada)
 
-A preview Phaser agora apresenta a decisão final **Luz 光 / Raiz 根** quando o Escrivão Sem Nome cai, usando as narrativas clássicas, estatísticas e escolhas acessíveis por teclado, toque e controle. O resultado ou decisão pendente fica salvo somente na preview; vitórias anteriores com encerramento genérico são migradas para esta escolha, sem sobrescrever os saves clássicos. Testes completos, CI e publicação do bundle ainda dependem de validação.
+A preview Phaser agora apresenta a decisão final **Luz 光 / Raiz 根** quando o Escrivão Sem Nome cai, usando as narrativas clássicas, estatísticas e escolhas acessíveis por teclado, toque e controle. O resultado ou decisão pendente fica salvo somente na preview; vitórias anteriores com encerramento genérico são migradas para esta escolha, sem sobrescrever os saves clássicos. [PR #41](https://github.com/pedromaintenance/catacumbas-de-golzdov/pull/41) integrado com **135/135 testes verdes** e novo bundle publicado em `/phaser/` via [workflow #38993049907](https://github.com/pedromaintenance/catacumbas-de-golzdov/actions/runs/38993049907). Teste real no navegador ainda pendente.
 
 ## Evolução 2.0 (em desenvolvimento)
 
