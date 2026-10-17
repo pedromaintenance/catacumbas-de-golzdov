@@ -88,7 +88,10 @@ async function replay(seed,classId){
    const out=m.previewAction(run,{type:'ATTACK',enemyId:initialEnemyId});
    assert.equal(out.status,'applied');
    assert.equal(out.consumesTurn,true);
-   assert.equal(run.turn,beforeTurn+1);
+   // O núcleo encerra imediatamente quando o golpe derruba o chefe:
+   // neste caso a escolha final não avança outro turno.
+   if(run.bossDown)assert.equal(run.turn,beforeTurn);
+   else assert.equal(run.turn,beforeTurn+1);
    hadCombatEvent ||=out.events.some(x=>x.type==='combat-feedback'&&
     ['enemy-hit','miss','enemy-defeat'].includes(x.kind));
   }
